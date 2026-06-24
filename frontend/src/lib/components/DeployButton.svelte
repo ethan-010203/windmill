@@ -2,6 +2,7 @@
 	import { Button } from '$lib/components/common'
 	import { Save, CornerDownLeft } from 'lucide-svelte'
 	import { createEventDispatcher } from 'svelte'
+	import { t } from '$lib/i18n/t.svelte'
 
 	const {
 		loading = false,
@@ -54,12 +55,12 @@
 		dropdownOpen = detail
 	}}
 >
-	Deploy
+	{t('editor.deploy')}
 	{#snippet tooltip()}
 		<div class="flex flex-row gap-2 w-80 p-4 bg-surface rounded-lg shadow-lg dark:border z-[5001]">
 			<input
 				type="text"
-				placeholder="Deployment message"
+				placeholder={t('editor.deployment_message')}
 				bind:value={deploymentMsg}
 				onkeydown={async (e) => {
 					if (e.key === 'Enter') {
@@ -75,7 +76,7 @@
 				endIcon={{ icon: CornerDownLeft }}
 				loading={loadingSave}
 			>
-				Deploy
+				{t('editor.deploy')}
 			</Button>
 		</div>
 	{/snippet}

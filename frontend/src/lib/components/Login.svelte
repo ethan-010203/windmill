@@ -22,6 +22,7 @@
 	import Button from './common/button/Button.svelte'
 	import { sameTopDomainOrigin } from '$lib/cookies'
 	import { isValidLogoutRedirect, toSameOriginRelativePath } from '$lib/logoutRedirect'
+	import { t } from '$lib/i18n/t.svelte'
 
 	interface Props {
 		rd?: string | undefined
@@ -105,7 +106,7 @@
 
 	async function login(): Promise<void> {
 		if (!email || !password) {
-			sendUserToast('Please fill in both email and password', true)
+			sendUserToast(t('login.fill_email_password'), true)
 			return
 		}
 
@@ -117,7 +118,7 @@
 		try {
 			await UserService.login({ requestBody })
 		} catch (err) {
-			sendUserToast('Invalid credentials', true)
+			sendUserToast(t('login.invalid_credentials'), true)
 			return
 		}
 
@@ -235,7 +236,7 @@
 				autoRedirecting = true
 				if (!storeRedirect(autoLogin)) {
 					autoRedirecting = false
-					sendUserToast('Popup blocked — please click the sign-in button to continue.', true)
+					sendUserToast(t('login.popup_blocked'), true)
 				}
 			}
 		}
@@ -419,7 +420,7 @@
 
 	function redirectSaml(): boolean {
 		if (!saml) {
-			sendUserToast('No SAML login available', true)
+			sendUserToast(t('login.no_saml'), true)
 			return false
 		}
 		let target = saml
@@ -459,7 +460,7 @@
 
 <div class="bg-surface px-4 py-8 border sm:rounded-lg sm:px-10">
 	{#if autoRedirecting}
-		<p class="text-sm text-center text-secondary py-4">Signing you in…</p>
+		<p class="text-sm text-center text-secondary py-4">{t('login.signing_in')}</p>
 	{/if}
 	<div
 		class="grid {logins && logins.length > 2 ? 'grid-cols-2' : ''} gap-4 {autoRedirecting
@@ -505,7 +506,7 @@
 					showPassword = !showPassword
 				}}
 			>
-				Log in without third-party
+				{t('login.password_login')}
 			</Button>
 		</div>
 	{/if}
@@ -514,7 +515,7 @@
 		<div>
 			{#if firstTime}
 				<p class="text-xs text-center w-full pb-4 text-secondary">
-					Welcome! Default credentials admin@windmill.dev / changeme have been prefilled.
+					{t('login.default_credentials')}
 				</p>
 			{/if}
 			<div class="space-y-6">
@@ -525,14 +526,18 @@
 					</p>
 				{/if}
 				<div class="space-y-1">
-					<label for="email" class="block text-xs font-semibold text-emphasis"> Email </label>
+					<label for="email" class="block text-xs font-semibold text-emphasis">
+						{t('login.email')}
+					</label>
 					<div>
 						<input type="email" bind:value={email} id="email" autocomplete="email" />
 					</div>
 				</div>
 
 				<div class="space-y-1">
-					<label for="password" class="block text-xs font-semibold text-emphasis"> Password </label>
+					<label for="password" class="block text-xs font-semibold text-emphasis">
+						{t('login.password')}
+					</label>
 					<div>
 						<input
 							onkeyup={handleKeyUp}
@@ -548,14 +553,16 @@
 								href="{base}/user/forgot-password"
 								class="text-2xs text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
 							>
-								Forgot password?
+								{t('login.forgot_password')}
 							</a>
 						</div>
 					{/if}
 				</div>
 
 				<div class="pt-2">
-					<Button onClick={login} variant="accent" disabled={!email || !password}>Sign in</Button>
+					<Button onClick={login} variant="accent" disabled={!email || !password}>
+						{t('login.sign_in')}
+					</Button>
 				</div>
 			</div>
 

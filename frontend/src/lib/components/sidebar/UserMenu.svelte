@@ -11,13 +11,16 @@
 	import { USER_SETTINGS_HASH } from './settings'
 	import { isCloudHosted } from '$lib/cloud'
 	import { twMerge } from 'tailwind-merge'
-	import { Crown, ServerCog, LogOut, Moon, Settings, Sun, User } from 'lucide-svelte'
+	import { Crown, ServerCog, LogOut, Moon, Settings, Sun, User, Languages } from 'lucide-svelte'
 	import DarkModeObserver from '../DarkModeObserver.svelte'
 	import MenuButton from './MenuButton.svelte'
 	import { Menu, MenuItem } from '$lib/components/meltComponents'
 	import { type MenubarBuilders } from '@melt-ui/svelte'
+	import { t, getLocale, setLocale } from '$lib/i18n/t.svelte'
+	import { SUPPORTED_LOCALES, LOCALE_NAMES } from '$lib/i18n/index'
 
 	let darkMode: boolean = $state(false)
+	let showLanguages = $state(false)
 
 	interface Props {
 		isCollapsed?: boolean
@@ -53,16 +56,16 @@
 			</p>
 			<span class="text-xs text-primary flex flex-row gap-2 items-center">
 				{#if $userStore?.is_admin}
-					Admin of this workspace <Crown size={14} />
+					{t('user.admin_of_workspace')} <Crown size={14} />
 				{:else if $userStore?.operator}
-					Operator in this workspace <ServerCog size={14} />
+					{t('user.operator_in_workspace')} <ServerCog size={14} />
 				{/if}
 			</span>
 		</div>
 		<div class="py-1">
 			<MenuItem href={USER_SETTINGS_HASH} class={itemClass} {item}>
 				<Settings size={16} />
-				Account settings
+				{t('user.account_settings')}
 			</MenuItem>
 
 			<MenuItem
@@ -83,12 +86,43 @@
 				{:else}
 					<Moon size={16} />
 				{/if}
-				Switch theme
+				{t('user.switch_theme')}
 			</MenuItem>
+
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				class={twMerge(itemClass, 'cursor-pointer')}
+				role="button"
+				tabindex="0"
+				onclick={(e) => {
+					e.stopPropagation()
+					showLanguages = !showLanguages
+				}}
+			>
+				<Languages size={16} />
+				{t('user.language')}: {LOCALE_NAMES[getLocale()]}
+			</div>
+			{#if showLanguages}
+				<div class="border-t border-b py-1">
+					{#each SUPPORTED_LOCALES as loc (loc)}
+						<MenuItem
+							onClick={() => setLocale(loc)}
+							class={twMerge(
+								itemClass,
+								'pl-8',
+								getLocale() === loc ? 'font-semibold text-primary' : ''
+							)}
+							{item}
+						>
+							{LOCALE_NAMES[loc]}
+						</MenuItem>
+					{/each}
+				</div>
+			{/if}
 
 			<MenuItem onClick={() => logout()} class={itemClass} {item}>
 				<LogOut size={16} />
-				Sign out
+				{t('user.sign_out')}
 			</MenuItem>
 		</div>
 
@@ -125,7 +159,7 @@
 							}}
 							{item}
 						>
-							Upgrade
+							{t('user.upgrade')}
 						</MenuItem>
 					{/if}
 				{:else}
@@ -136,7 +170,7 @@
 						}}
 						{item}
 					>
-						Premium plan
+						{t('user.premium_plan')}
 					</MenuItem>
 				{/if}
 			</div>

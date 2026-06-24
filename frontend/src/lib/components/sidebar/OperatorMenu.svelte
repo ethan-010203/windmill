@@ -38,6 +38,7 @@
 	import MenuButton, { sidebarClasses } from './MenuButton.svelte'
 	import MenuLink from './MenuLink.svelte'
 	import type { FavoriteKind } from './FavoriteMenu.svelte'
+	import { label as tl } from '$lib/i18n/t.svelte'
 	let darkMode: boolean = $state(false)
 	let showExtraTriggers = $state(false)
 	let menubarEl: HTMLElement | undefined = $state()
@@ -221,7 +222,14 @@
 					</div>
 
 					{#each mainMenuLinks as menuLink (menuLink.href ?? menuLink.label)}
-						<MenuLink class="!text-xs" {...menuLink} {isCollapsed} {item} lightMode />
+						<MenuLink
+							class="!text-xs"
+							{...menuLink}
+							label={tl(menuLink.label)}
+							{isCollapsed}
+							{item}
+							lightMode
+						/>
 					{/each}
 
 					<div class="divide-y" role="none">
@@ -237,7 +245,7 @@
 								{item}
 							>
 								<Settings size={14} />
-								Account settings
+								{tl('Account settings')}
 							</MenuItem>
 						</div>
 
@@ -265,7 +273,7 @@
 								{:else}
 									<Moon size={14} />
 								{/if}
-								Switch theme
+								{tl('Switch theme')}
 							</MenuItem>
 							<MenuItem
 								href="{base}/user/workspaces"
@@ -279,7 +287,7 @@
 								{item}
 							>
 								<Building size={14} />
-								All workspaces
+								所有工作区
 							</MenuItem>
 
 							{#if $superadmin}
@@ -294,7 +302,7 @@
 									{item}
 								>
 									<ServerCog size={14} />
-									Instance settings
+									{tl('Instance')} {tl('Settings')}
 								</MenuItem>
 							{/if}
 
@@ -309,7 +317,7 @@
 								{item}
 							>
 								<LogOut size={14} />
-								Sign out
+								{tl('Sign out')}
 							</MenuItem>
 						</div>
 						<div role="none">
@@ -323,7 +331,7 @@
 										)}
 										{item}
 									>
-										{menuLink.label}
+										{tl(menuLink.label)}
 									</MenuItem>
 								{/each}
 							{/snippet}
@@ -347,7 +355,7 @@
 												}}
 											>
 												<Plus size={12} />
-												<span class="text-2xs">More triggers</span>
+												<span class="text-2xs">更多触发器</span>
 											</div>
 											{#if showExtraTriggers}
 												{#each extraTriggerLinks as menuLink (menuLink.href)}
@@ -359,7 +367,7 @@
 														)}
 														{item}
 													>
-														{menuLink.label}
+														{tl(menuLink.label)}
 													</MenuItem>
 												{/each}
 											{/if}

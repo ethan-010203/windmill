@@ -82,6 +82,7 @@
 	import MenuButton from './MenuButton.svelte'
 	import GoogleCloudIcon from '../icons/GoogleCloudIcon.svelte'
 	import AzureIcon from '../icons/AzureIcon.svelte'
+	import { label as tl } from '$lib/i18n/t.svelte'
 
 	async function leaveWorkspace() {
 		await WorkspaceService.leaveWorkspace({ workspace: $workspaceStore ?? '' })
@@ -650,13 +651,13 @@
 	<div class={twMerge('pt-4 flex flex-col grow')}>
 		<div class="space-y-1">
 			{#each mainMenuLinks as menuLink (menuLink.href ?? menuLink.label)}
-				<MenuLink class="!text-xs" {...menuLink} {isCollapsed} />
+				<MenuLink class="!text-xs" {...menuLink} label={tl(menuLink.label)} {isCollapsed} />
 			{/each}
 		</div>
 		<div class="pt-4">
 			{#if isCollapsed}
 				<div class="text-secondary text-[0.5rem] uppercase transition-opacity opacity-0">
-					Triggers
+					{tl('Triggers')}
 				</div>
 			{:else}
 				<button
@@ -665,7 +666,7 @@
 					class="text-secondary text-[0.5rem] uppercase flex flex-row items-center gap-1 rounded px-1 -mx-1 py-0.5 hover:bg-surface-hover focus:outline-none"
 					aria-expanded={!triggersCollapsed.val}
 				>
-					Triggers
+					{tl('Triggers')}
 					{#if triggersCollapsed.val}
 						<ChevronRight size={10} />
 					{:else}
@@ -678,7 +679,7 @@
 					<Menubar class="flex flex-col gap-1">
 						{#snippet children({ createMenu })}
 							{#each triggerMenuLinks as menuLink (menuLink.href ?? menuLink.label)}
-								<MenuLink class="!text-xs" {...menuLink} {isCollapsed} />
+								<MenuLink class="!text-xs" {...menuLink} label={tl(menuLink.label)} {isCollapsed} />
 							{/each}
 							{#if extraTriggerLinks.length > 0 && !$userStore?.operator}
 								<Menu {createMenu} usePointerDownOutside>
@@ -712,7 +713,7 @@
 													{#if subItem.icon}
 														<subItem.icon size={16} />
 													{/if}
-													{subItem.label}
+													{tl(subItem.label)}
 												</div>
 											</MenuItem>
 										{/each}
@@ -742,6 +743,7 @@
 										<MenuButton
 											class="!text-2xs"
 											{...menuLink}
+											label={tl(menuLink.label)}
 											{isCollapsed}
 											{notificationsCount}
 											{trigger}
@@ -764,7 +766,7 @@
 													{#if subItem.icon}
 														<subItem.icon size={16} />
 													{/if}
-													{subItem.label}
+													{tl(subItem.label)}
 													{#if subItem?.['notificationCount']}
 														<div class="ml-auto">
 															<SideBarNotification
@@ -780,7 +782,7 @@
 							{:else}
 								<MenuSingleItem>
 									{#snippet children({})}
-										<MenuLink class="!text-2xs" {...menuLink} {isCollapsed} />
+										<MenuLink class="!text-2xs" {...menuLink} label={tl(menuLink.label)} {isCollapsed} />
 									{/snippet}
 								</MenuSingleItem>
 							{/if}
@@ -800,7 +802,13 @@
 												}
 											}}
 										>
-											<MenuButton class="!text-2xs" {...menuLink} {isCollapsed} {trigger} />
+											<MenuButton
+												class="!text-2xs"
+												{...menuLink}
+												label={tl(menuLink.label)}
+												{isCollapsed}
+												{trigger}
+											/>
 											{#if menuLink.label === 'Help' && hasNewChangelogs}
 												<span
 													class={twMerge(
@@ -830,13 +838,13 @@
 														<subItem.icon size={16} />
 													{/if}
 
-													{subItem.label}
+													{tl(subItem.label)}
 												</div>
 											</MenuItem>
 										{/each}
 										{#if recentChangelogs.length > 0}
 											<div class="w-full h-1 border-t"></div>
-											<span class="text-xs px-4 font-bold"> Latest changelogs </span>
+											<span class="text-xs px-4 font-bold"> 最新更新 </span>
 											{#each recentChangelogs as changelog}
 												<MenuItem href={changelog.href} class={itemClass} target="_blank" {item}>
 													<div class="flex flex-row items-center gap-2">
@@ -858,8 +866,8 @@
 
 <ConfirmationModal
 	open={leaveWorkspaceModal}
-	title="Leave workspace"
-	confirmationText="Leave workspace"
+	title="退出工作区"
+	confirmationText="退出工作区"
 	on:canceled={() => {
 		leaveWorkspaceModal = false
 	}}
@@ -868,15 +876,15 @@
 	}}
 >
 	<div class="flex flex-col w-full space-y-4">
-		<span>Are you sure you want to leave this workspace?</span>
+		<span>确定要退出这个工作区吗？</span>
 	</div>
 </ConfirmationModal>
 
 {#if $workspaceStore?.startsWith('wm-fork-')}
 	<ConfirmationModal
 		open={deleteWorkspaceForkModal}
-		title="Delete forked workspace"
-		confirmationText="Remove"
+		title="删除派生工作区"
+		confirmationText="删除"
 		on:canceled={() => {
 			deleteWorkspaceForkModal = false
 		}}
@@ -886,7 +894,7 @@
 		}}
 	>
 		<div class="flex flex-col w-full space-y-4">
-			<span>Are you sure you want to delete this workspace fork? (deleting {$workspaceStore})</span>
+			<span>确定要删除这个派生工作区吗？正在删除 {$workspaceStore}</span>
 			{#if forkedDescendants.length > 0}
 				<div class="border rounded-md divide-y">
 					<div class="px-4 py-2 flex items-center justify-between gap-2">
