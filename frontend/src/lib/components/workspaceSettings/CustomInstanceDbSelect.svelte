@@ -52,7 +52,7 @@
 		bind:open
 		bind:value
 		onCreateItem={(i) => (value = i)}
-		placeholder="Search or create..."
+		placeholder="搜索或创建..."
 		showPlaceholderOnOpen
 		items={onlySelectedTags}
 		id="custom-instance-db-select"
@@ -97,11 +97,11 @@
 	>
 		{#if !status}
 			<span class="text-yellow-600 dark:text-yellow-400">
-				Setup <ArrowRight class="inline" size={14} />
+					设置 <ArrowRight class="inline" size={14} />
 			</span>
 		{:else if !status.success}
 			<span class="text-red-400 flex gap-1">
-				Error <TriangleAlert class="inline" size={16} />
+					错误 <TriangleAlert class="inline" size={16} />
 			</span>
 		{:else}
 			<div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
@@ -116,12 +116,10 @@
 			<TriangleAlert
 				class="text-orange-500 dark:text-orange-400"
 				size={16}
-				aria-label="Database is shared with other workspaces"
+				aria-label="数据库已与其他工作区共享"
 			/>
 			{#snippet text()}
-				This database is also used by workspace{others.length > 1 ? 's' : ''}
-				<span class="font-semibold">{others.join(', ')}</span>. Any data written here will be shared
-				with {others.length > 1 ? 'them' : 'it'}.
+				此数据库也被工作区 <span class="font-semibold">{others.join(', ')}</span> 使用。写入这里的任何数据都会与这些工作区共享。
 			{/snippet}
 		</Tooltip>
 	{/if}

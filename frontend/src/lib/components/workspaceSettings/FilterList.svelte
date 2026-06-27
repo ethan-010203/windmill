@@ -40,7 +40,7 @@
 				<button
 					class="ml-2 text-gray-400 hover:text-red-500 focus:outline-none"
 					onclick={() => removeItem(idx)}
-					aria-label="Remove filter"
+					aria-label="移除筛选规则"
 				>
 					<X size={14} />
 				</button>
@@ -58,7 +58,7 @@
 		<button
 			class="ml-1 text-primary hover:bg-primary/10 rounded-full p-1"
 			onclick={addItem}
-			aria-label="Add filter"
+			aria-label="添加筛选规则"
 		>
 			<Plus size={14} />
 		</button>

@@ -114,8 +114,26 @@
 		include_type = Array.from(newTypes)
 	}
 
-	function capitalize(str: string) {
-		return str.charAt(0).toUpperCase() + str.slice(1)
+	function getTypeLabel(key: keyof GitSyncTypeMap) {
+		return (
+			{
+				scripts: '脚本',
+				flows: '流程',
+				apps: '应用',
+				folders: '文件夹',
+				resourceTypes: '资源类型',
+				resources: '资源',
+				variables: '变量',
+				secrets: '密钥变量',
+				schedules: '定时任务',
+				users: '用户',
+				groups: '用户组',
+				triggers: '触发器',
+				settings: '工作区设置',
+				key: '加密密钥',
+				workspaceDependencies: '工作区依赖'
+			} satisfies Record<keyof GitSyncTypeMap, string>
+		)[key]
 	}
 </script>
 
@@ -124,17 +142,14 @@
 	<div class="flex items-center justify-between min-h-10 px-4 py-1 border-b">
 		<div class="flex items-center gap-2">
 			<Filter size={14} class="text-primary" />
-			<span class="font-semibold text-xs text-emphasis">Git Sync filter settings</span>
+			<span class="font-semibold text-xs text-emphasis">Git 同步筛选设置</span>
 			{#if isLegacyRepo}
 				<Tooltip>
-					This repository uses legacy configuration format and inherits settings from
-					workspace-level defaults. Excluded types are filtered out from inherited types. Save to
-					migrate to the new format.
+					此仓库使用旧版配置格式，并继承工作区级默认设置。排除类型会从继承类型中移除。保存后会迁移到新版格式。
 				</Tooltip>
 			{:else if !isEditable}
-				<Tooltip documentationLink="https://www.windmill.dev/docs/advanced/cli/sync#wmillyaml">
-					These settings are controlled by the wmill.yaml file in your git repository. Click "Pull
-					from repo" to check for settings drift and pull settings from repo.
+				<Tooltip>
+					这些设置由 Git 仓库中的 wmill.yaml 文件控制。点击“从仓库拉取”可检查配置差异，并从仓库同步设置。
 				</Tooltip>
 			{/if}
 		</div>
@@ -156,57 +171,52 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 md:gap-32">
 					<div class="flex flex-col gap-2">
 						<Tabs bind:selected={filtersTab}>
-							<Tab value="includes" label="Includes"></Tab>
-							<Tab value="excludes" label="Excludes"></Tab>
+							<Tab value="includes" label="包含"></Tab>
+							<Tab value="excludes" label="排除"></Tab>
 						</Tabs>
 
 						{#if filtersTab === 'includes'}
 							<FilterList
-								title="Include path filters"
+								title="包含路径筛选"
 								bind:items={include_path}
-								placeholder="Add filter (e.g. f/**)"
+								placeholder="添加筛选规则（例如 f/**）"
 							>
 								{#snippet tooltip()}
 									<Tooltip>
-										Only scripts, flows and apps with their path matching one of those filters will
-										be synced to the Git repositories below. The filters allow '*' and '**'
-										characters, with '*' matching any character allowed in paths until the next
-										slash (/) and '**' matching anything including slashes. By default everything in
-										folders will be synced.
+										只有路径匹配这些规则之一的脚本、流程和应用会同步到下方 Git 仓库。筛选规则支持
+										'*' 和 '**'，其中 '*' 匹配下一个斜杠前的任意路径字符，'**' 可匹配包含斜杠在内的任意内容。默认会同步文件夹中的所有内容。
 									</Tooltip>
 								{/snippet}
 							</FilterList>
 						{:else if filtersTab === 'excludes'}
 							<FilterList
-								title="Exclude path filters"
+								title="排除路径筛选"
 								bind:items={excludes}
-								placeholder="Add filter (e.g. f/**)"
+								placeholder="添加筛选规则（例如 f/**）"
 							>
 								{#snippet tooltip()}
 									<Tooltip>
-										After the include / extra include checks, if a file matches any of these
-										patterns it will be skipped.
+										完成包含规则检查后，如果文件匹配这些排除规则之一，则会跳过同步。
 									</Tooltip>
 								{/snippet}
 							</FilterList>
 						{/if}
 					</div>
-					<!-- Type Filters Section (Right) -->
-					<div>
-						<div class="flex items-center gap-2 mb-3">
-							<h4 class="font-semibold text-sm">Type filters</h4>
-							<Tooltip>
-								On top of the filter path above, you can include only certain type of object to be
-								synced with the Git repository. By default everything is synced.
-							</Tooltip>
-						</div>
+						<!-- Type Filters Section (Right) -->
+						<div>
+							<div class="flex items-center gap-2 mb-3">
+								<h4 class="font-semibold text-sm">类型筛选</h4>
+								<Tooltip>
+									除上方路径筛选外，还可以只同步指定类型的对象。默认会同步全部类型。
+								</Tooltip>
+							</div>
 						<div class="grid grid-cols-2 gap-x-4 gap-y-2">
 							<div class="flex items-center gap-2">
 								<Toggle
 									size="xs"
 									checked={typeToggles.scripts}
 									on:change={(e) => updateIncludeType('scripts', e.detail)}
-									options={{ right: capitalize('scripts') }}
+									options={{ right: getTypeLabel('scripts') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -214,7 +224,7 @@
 									size="xs"
 									checked={typeToggles.flows}
 									on:change={(e) => updateIncludeType('flows', e.detail)}
-									options={{ right: capitalize('flows') }}
+									options={{ right: getTypeLabel('flows') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -222,7 +232,7 @@
 									size="xs"
 									checked={typeToggles.apps}
 									on:change={(e) => updateIncludeType('apps', e.detail)}
-									options={{ right: capitalize('apps') }}
+									options={{ right: getTypeLabel('apps') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -230,7 +240,7 @@
 									size="xs"
 									checked={typeToggles.folders}
 									on:change={(e) => updateIncludeType('folders', e.detail)}
-									options={{ right: capitalize('folders') }}
+									options={{ right: getTypeLabel('folders') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -238,7 +248,7 @@
 									size="xs"
 									checked={typeToggles.resourceTypes}
 									on:change={(e) => updateIncludeType('resourceTypes', e.detail)}
-									options={{ right: capitalize('resourceTypes') }}
+									options={{ right: getTypeLabel('resourceTypes') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -246,7 +256,7 @@
 									size="xs"
 									checked={typeToggles.resources}
 									on:change={(e) => updateIncludeType('resources', e.detail)}
-									options={{ right: capitalize('resources') }}
+									options={{ right: getTypeLabel('resources') }}
 								/>
 							</div>
 							<div class="col-span-2 flex items-center gap-2">
@@ -254,7 +264,7 @@
 									size="xs"
 									checked={typeToggles.variables}
 									on:change={(e) => updateIncludeType('variables', e.detail)}
-									options={{ right: 'Variables' }}
+									options={{ right: getTypeLabel('variables') }}
 								/>
 								<span class="text-gray-400">-</span>
 								<Toggle
@@ -262,7 +272,7 @@
 									disabled={!typeToggles.variables}
 									checked={typeToggles.secrets}
 									on:change={(e) => updateIncludeType('secrets', e.detail)}
-									options={{ left: 'Include secrets' }}
+									options={{ left: '包含密钥变量' }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -270,7 +280,7 @@
 									size="xs"
 									checked={typeToggles.schedules}
 									on:change={(e) => updateIncludeType('schedules', e.detail)}
-									options={{ right: capitalize('schedules') }}
+									options={{ right: getTypeLabel('schedules') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -278,7 +288,7 @@
 									size="xs"
 									checked={typeToggles.users}
 									on:change={(e) => updateIncludeType('users', e.detail)}
-									options={{ right: capitalize('users') }}
+									options={{ right: getTypeLabel('users') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -286,7 +296,7 @@
 									size="xs"
 									checked={typeToggles.groups}
 									on:change={(e) => updateIncludeType('groups', e.detail)}
-									options={{ right: capitalize('groups') }}
+									options={{ right: getTypeLabel('groups') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -294,7 +304,7 @@
 									size="xs"
 									checked={typeToggles.triggers}
 									on:change={(e) => updateIncludeType('triggers', e.detail)}
-									options={{ right: capitalize('triggers') }}
+									options={{ right: getTypeLabel('triggers') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -302,7 +312,7 @@
 									size="xs"
 									checked={typeToggles.settings}
 									on:change={(e) => updateIncludeType('settings', e.detail)}
-									options={{ right: 'Workspace settings' }}
+									options={{ right: getTypeLabel('settings') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -310,7 +320,7 @@
 									size="xs"
 									checked={typeToggles.key}
 									on:change={(e) => updateIncludeType('key', e.detail)}
-									options={{ right: 'Encryption key' }}
+									options={{ right: getTypeLabel('key') }}
 								/>
 							</div>
 							<div class="flex items-center gap-2">
@@ -318,7 +328,7 @@
 									size="xs"
 									checked={typeToggles.workspaceDependencies}
 									on:change={(e) => updateIncludeType('workspaceDependencies', e.detail)}
-									options={{ right: 'Workspace dependencies' }}
+									options={{ right: getTypeLabel('workspaceDependencies') }}
 								/>
 							</div>
 						</div>
@@ -326,9 +336,9 @@
 				</div>
 			</div>
 			<div class="mt-6 p-2 border-t">
-				<div class="text-xs text-primary mb-2">
-					{isInitialSetup ? 'Configure initial sync settings' : 'Review migration settings'}
-				</div>
+					<div class="text-xs text-primary mb-2">
+						{isInitialSetup ? '配置初始同步设置' : '检查迁移设置'}
+					</div>
 			</div>
 		{:else}
 			<!-- Read-only view -->
@@ -336,7 +346,7 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 md:gap-8">
 					<div class="flex flex-col gap-3">
 						<div>
-							<h4 class="font-semibold text-xs text-emphasis mb-1">Include Paths</h4>
+							<h4 class="font-semibold text-xs text-emphasis mb-1">包含路径</h4>
 							{#if include_path.length > 0}
 								<div class="flex flex-wrap gap-1 text-xs">
 									{#each include_path as path}
@@ -346,12 +356,12 @@
 									{/each}
 								</div>
 							{:else}
-								<div class="text-primary text-xs">No include paths configured</div>
+								<div class="text-primary text-xs">未配置包含路径</div>
 							{/if}
 						</div>
 
 						<div>
-							<h4 class="font-semibold text-xs text-emphasis mb-1">Exclude Paths</h4>
+							<h4 class="font-semibold text-xs text-emphasis mb-1">排除路径</h4>
 							{#if excludes.length > 0}
 								<div class="flex flex-wrap gap-1 text-xs">
 									{#each excludes as path}
@@ -359,13 +369,13 @@
 									{/each}
 								</div>
 							{:else}
-								<div class="text-primary text-xs">No exclude paths configured</div>
+								<div class="text-primary text-xs">未配置排除路径</div>
 							{/if}
 						</div>
 					</div>
 
 					<div class="flex flex-col gap-2">
-						<h4 class="font-semibold text-xs text-emphasis">Included Types</h4>
+						<h4 class="font-semibold text-xs text-emphasis">包含类型</h4>
 						<div class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
 							{#each Object.entries(typeToggles) as [key, enabled]}
 								<div class="flex items-center gap-1">
@@ -373,7 +383,7 @@
 										{enabled ? '✓' : '✗'}
 									</div>
 									<span class={enabled ? 'text-primary' : 'text-primary'}>
-										{capitalize(key)}
+										{getTypeLabel(key as keyof GitSyncTypeMap)}
 									</span>
 								</div>
 							{/each}
@@ -390,50 +400,44 @@
 
 				<!-- CLI Instructions (collapsible) -->
 				<div class="border-t pt-2 mt-4">
-					<Section label="Update settings with CLI" collapsable={true} collapsed={true}>
+					<Section label="使用 CLI 更新设置" collapsable={true} collapsed={true}>
 						<div class="mt-3 bg-surface-secondary rounded-lg p-3">
 							<div class="text-xs text-primary mb-2">
-								These filter settings are sourced from the <code
+								这些筛选设置来自 Git 仓库中的 <code
 									class="bg-surface px-1 py-0.5 rounded">wmill.yaml</code
 								>
-								file in your git repository. To modify them, edit the file in your repository, commit
-								the changes, and sync using the commands below. Learn more about
-								<a
-									href="https://www.windmill.dev/docs/advanced/cli/sync#wmillyaml"
-									target="_blank"
-									rel="noopener noreferrer">the wmill.yaml format</a
-								>
+								文件。如需修改，请在仓库中编辑该文件，提交变更，然后使用下方命令同步。
 							</div>
 							<pre
 								class="text-xs bg-surface p-3 rounded overflow-x-auto whitespace-pre-wrap break-all">
-# Make sure your repo is up to date
+# 确保仓库已更新
 git pull
 
-# Edit wmill.yaml file
+# 编辑 wmill.yaml 文件
 vim wmill.yaml
 
-# Commit changes
+# 提交变更
 git add wmill.yaml
 git commit
 git push
 
-# Push changes to workspace or click the pull settings button above{#if useIndividualBranch}
+# 推送变更到工作空间，或点击上方拉取设置按钮{#if useIndividualBranch}
 									wmill gitsync-settings push --workspace {$workspaceStore} --repository {git_repo_resource_path} --promotion main{:else}
 									wmill gitsync-settings push --workspace {$workspaceStore} --repository {git_repo_resource_path}{/if}</pre
 							>
 							{#if useIndividualBranch}
 								<div class="text-xs text-primary mt-3">
-									<div class="font-medium mb-1">Promotion Mode Configuration:</div>
+									<div class="font-medium mb-1">发布模式配置：</div>
 									<div
-										>You can add promotion-specific overrides in your <code
+										>可以在 <code
 											class="bg-surface px-1 py-0.5 rounded">wmill.yaml</code
-										> file:</div
+										> 文件中添加发布模式专用覆盖配置：</div
 									>
 									<pre class="text-xs bg-surface p-2 rounded mt-2 overflow-x-auto"
 										>workspaces:
   main:
     promotionOverrides:
-      # Add your promotion-specific settings here</pre
+	      # 在这里添加发布模式专用设置</pre
 									>
 								</div>
 							{/if}

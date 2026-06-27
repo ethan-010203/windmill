@@ -31,7 +31,7 @@
 				large_file_storage: large_file_storage
 			}
 		})
-		sendUserToast('Volume storage settings saved')
+		sendUserToast('卷存储设置已保存')
 		onSave?.()
 	}
 
@@ -40,9 +40,9 @@
 	)
 
 	let volumeStorageItems: { value: string; label: string }[] = $derived.by(() => {
-		const items: { value: string; label: string }[] = [{ value: '', label: 'Disabled' }]
+		const items: { value: string; label: string }[] = [{ value: '', label: '禁用' }]
 		if (!emptyString(s3ResourceSettings.resourcePath)) {
-			items.push({ value: 'primary', label: 'Primary storage' })
+			items.push({ value: 'primary', label: '主存储' })
 		}
 		for (const [name, s] of s3ResourceSettings.secondaryStorage ?? []) {
 			if (!emptyString(s.resourcePath)) {
@@ -62,9 +62,8 @@
 </script>
 
 <SettingsPageHeader
-	title="Volume storage"
-	description="Select which storage volumes should use. If disabled, scripts with volumes will fail with an error."
-	link="https://www.windmill.dev/docs/core_concepts/volumes"
+	title="卷存储"
+	description="选择脚本卷使用的存储位置。禁用后，使用卷的脚本会执行失败。"
 />
 {#if s3ResourceSettings}
 	{#if hasAvailableStorage}
@@ -86,11 +85,11 @@
 			{hasUnsavedChanges}
 			onSave={saveVolumeStorageSettings}
 			onDiscard={() => onDiscard?.()}
-			saveLabel="Save volume storage settings"
+			saveLabel="保存卷存储设置"
 		/>
 	{:else}
-		<Alert type="info" title="No workspace storage configured" class="mt-4">
-			You need to configure a workspace object storage before you can use volumes.
+		<Alert type="info" title="尚未配置工作空间存储" class="mt-4">
+			使用卷之前，需要先配置工作空间对象存储。
 		</Alert>
 		<Button wrapperClasses="mt-2" variant="default" size="sm" on:click={goToStorageSettings}>
 			Go to Object storage settings

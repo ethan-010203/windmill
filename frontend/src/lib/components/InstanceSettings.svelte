@@ -16,7 +16,7 @@
 	import oauthConnectRegistry from '$oauth_connect_registry'
 	import InstanceSetting from './InstanceSetting.svelte'
 	import { writable, type Writable } from 'svelte/store'
-	import { ExternalLink, Loader2 } from 'lucide-svelte'
+	import { Loader2 } from 'lucide-svelte'
 	import YAML from 'yaml'
 	import Toggle from './Toggle.svelte'
 	import SettingsFooter from './workspaceSettings/SettingsFooter.svelte'
@@ -60,6 +60,29 @@
 	let instanceInputs: Record<string, string> = $state({})
 	let version: string = $state('')
 	let loading = $state(true)
+
+	const categoryLabels: Record<string, string> = {
+		Core: '核心配置',
+		SMTP: '邮件服务',
+		Registries: '私有依赖源',
+		Alerts: '告警',
+		Webhooks: '回调',
+		'OTEL/Prom': '监控指标',
+		Indexer: '全文索引',
+		Telemetry: '遥测',
+		Jobs: '任务',
+		'Object Storage': '对象存储',
+		'Private Hub': '内部模板库',
+		'Secret Storage': '密钥存储',
+		'GitHub Enterprise App': 'GitHub App',
+		'DB Health': '数据库健康',
+		'Auth/OAuth/SAML': '登录认证',
+		'内部模板库': '内部模板库'
+	}
+
+	function categoryLabel(category: string): string {
+		return categoryLabels[category] ?? category
+	}
 
 	export function getVersion(): string {
 		return version
@@ -258,12 +281,12 @@
 			console.error('Values not loaded')
 		}
 		if (shouldReloadPage) {
-			sendUserToast('Settings updated, reloading page...')
+			sendUserToast('设置已更新，正在重新加载页面...')
 			await sleep(1000)
 			window.location.reload()
 		} else if (willRestart) {
 			sendUserToast(
-				'Settings updated. Servers are restarting and changes may take up to a minute to fully propagate.',
+				'设置已更新。服务正在重启，变更完全生效可能需要约一分钟。',
 				false,
 				[],
 				undefined,
@@ -271,7 +294,7 @@
 			)
 			dispatch('saved')
 		} else {
-			sendUserToast('Settings updated')
+			sendUserToast('设置已更新')
 			dispatch('saved')
 		}
 	}
@@ -339,7 +362,7 @@
 		try {
 			sendingStats = true
 			await SettingService.sendStats()
-			sendUserToast('Usage sent')
+		sendUserToast('使用情况已发送')
 		} catch (err) {
 			throw err
 		} finally {
@@ -362,7 +385,7 @@
 			a.click()
 			document.body.removeChild(a)
 			URL.revokeObjectURL(url)
-			sendUserToast('Telemetry data downloaded')
+			sendUserToast('遥测数据已下载')
 		} catch (err) {
 			throw err
 		} finally {
@@ -663,12 +686,12 @@
 		if (licenseKeySet) setLicense()
 
 		if (shouldReloadPage) {
-			sendUserToast('Settings updated, reloading page...')
+			sendUserToast('设置已更新，正在重新加载页面...')
 			await sleep(1000)
 			window.location.reload()
 		} else if (willRestart) {
 			sendUserToast(
-				'Settings updated. Servers are restarting and changes may take up to a minute to fully propagate.',
+				'设置已更新。服务正在重启，变更完全生效可能需要约一分钟。',
 				false,
 				[],
 				undefined,
@@ -676,7 +699,7 @@
 			)
 			dispatch('saved')
 		} else {
-			sendUserToast('Settings updated')
+			sendUserToast('设置已更新')
 			dispatch('saved')
 		}
 	}
@@ -814,7 +837,7 @@
 			}
 			const parsed = YAML.parse(yamlCode)
 			if (typeof parsed !== 'object' || parsed === null) {
-				sendUserToast('YAML must be a mapping (key: value)', true)
+				sendUserToast('YAML 必须是映射结构（key: value）', true)
 				return false
 			}
 
@@ -875,7 +898,7 @@
 			return true
 		} catch (e) {
 			yamlError = String(e)
-			sendUserToast('Invalid YAML: ' + e, true)
+			sendUserToast('YAML 无效：' + e, true)
 			return false
 		}
 	}
@@ -942,19 +965,14 @@
 	{#if yamlMode}
 		<div class="flex flex-row justify-between">
 			<p class="text-2xs text-tertiary">
-				Use this YAML to manage instance settings as code.
-				<a
-					href="https://www.windmill.dev/docs/advanced/instance_settings#kubernetes-operator"
-					target="_blank"
-					rel="noopener noreferrer">Learn more <ExternalLink size={12} class="inline-block" /></a
-				>
+				使用此 YAML 以代码方式管理实例设置。
 			</p>
 			<!-- svelte-ignore a11y_label_has_associated_control -->
 			<div class="flex items-center justify-end gap-4 mb-2">
 				<Toggle
 					checked={showSensitive}
 					on:change={(e) => handleShowSensitiveToggle(e.detail)}
-					options={{ right: 'Show sensitive values' }}
+					options={{ right: '显示敏感值' }}
 					size="xs"
 				/>
 			</div>
@@ -980,7 +998,7 @@
 	{:else}
 		<Tabs bind:selected={tab}>
 			{#each settingsKeys as category}
-				<Tab value={category} label={category}></Tab>
+				<Tab value={category} label={categoryLabel(category)}></Tab>
 			{/each}
 
 			{#snippet content()}
@@ -997,42 +1015,36 @@
 	{#snippet categoryContent(category: string)}
 		{#if category == 'Core'}
 			<SettingsPageHeader
-				title="Core"
-				description="Configure the core settings of your Windmill instance."
-				link="https://www.windmill.dev/docs/advanced/instance_settings"
+				title="核心配置"
+				description="配置当前实例的基础行为。"
 			/>
 		{:else if category == 'SMTP'}
 			<SettingsPageHeader
-				title="SMTP"
-				description="Setting SMTP unlocks sending emails upon adding new users to the workspace or the instance or sending critical alerts via email."
-				link="https://www.windmill.dev/docs/advanced/instance_settings#smtp"
+				title="邮件服务"
+				description="配置 SMTP 后，可以发送用户邀请、成员加入通知和重要告警邮件。"
 			/>
 		{:else if category == 'Registries'}
 			<SettingsPageHeader
-				title="Registries"
-				description="Add private registries for Pip, Bun and npm."
-				link="https://www.windmill.dev/docs/advanced/imports"
+				title="私有依赖源"
+				description="配置 Python、Bun、npm 等运行环境使用的内部依赖源。"
 			/>
 			{#if !$enterpriseLicense}
 				<Alert type="info" title="当前部署未开放私有仓库配置" class="mb-2" />
 			{/if}
 		{:else if category == 'Alerts'}
 			<SettingsPageHeader
-				title="Alerts"
-				description="Critical alerts automatically notify administrators about system events like job crashes, license issues, worker failures, and queue delays through email, Slack, or Teams."
-				link="https://www.windmill.dev/docs/core_concepts/critical_alerts"
+				title="告警"
+				description="配置任务异常、Worker 故障、队列延迟等系统事件的通知方式。"
 			/>
 		{:else if category == 'OTEL/Prom'}
 			<SettingsPageHeader
-				title="OTEL/Prometheus"
-				description="Configure OpenTelemetry and Prometheus metrics export for monitoring your Windmill instance."
-				link="https://www.windmill.dev/docs/misc/guides/otel"
+				title="OpenTelemetry / Prometheus"
+				description="配置 OpenTelemetry 和 Prometheus 指标导出，用于监控当前实例。"
 			/>
 		{:else if category == 'Indexer'}
 			<SettingsPageHeader
-				title="Indexer"
-				description="The indexer service unlocks full text search across jobs and service logs. It requires spinning up its own separate container."
-				link="https://www.windmill.dev/docs/core_concepts/search_bar#setup"
+				title="全文索引"
+				description="配置运行记录和服务日志的全文搜索索引服务。该能力需要单独的索引容器。"
 			/>
 			{#if !$enterpriseLicense}
 				<Alert
@@ -1042,28 +1054,28 @@
 				/>
 			{/if}
 		{:else if category == 'Telemetry'}
-			<SettingsPageHeader title="Telemetry" />
+			<SettingsPageHeader title="遥测" />
 			{#if $enterpriseLicense}
 				<div class="text-primary pb-4 text-xs">
 					启用授权能力时需要保留最小遥测以满足授权合规要求。启用最小遥测后，仅会发送以下数据：
 					<ul class="list-disc list-inside pl-2">
-						<li>version of your instance</li>
-						<li>instance base URL</li>
-						<li>login type usage (login type, count)</li>
-						<li>worker usage (worker, worker instance, vCPUs, memory)</li>
-						<li>user usage (author count, operator count)</li>
-						<li>superadmin email addresses</li>
-						<li>development instance status</li>
+						<li>实例版本</li>
+						<li>实例基础访问地址</li>
+						<li>登录方式使用情况（登录方式、数量）</li>
+						<li>Worker 使用情况（Worker、Worker 实例、vCPU、内存）</li>
+						<li>用户使用情况（开发者数量、操作员数量）</li>
+						<li>超级管理员邮箱地址</li>
+						<li>开发实例状态</li>
 					</ul>
-					<br />When minimal telemetry is disabled, the following is also collected:
+					<br />关闭最小遥测时，还会收集以下数据：
 					<ul class="list-disc list-inside pl-2">
-						<li>job usage (language, total duration, count)</li>
-						<li>git sync repo count (sync vs promotion mode)</li>
+						<li>任务使用情况（语言、总耗时、数量）</li>
+						<li>Git 同步仓库数量（同步模式与发布模式）</li>
 						<li
-							>AI chat usage (provider, model, mode, session count, message count — last 30 days)</li
+							>AI 对话使用情况（供应商、模型、模式、会话数量、消息数量，最近 30 天）</li
 						>
 					</ul>
-					<br />For air-gapped instances, you can download the telemetry data and send it manually.
+					<br />对于隔离网络实例，可以下载遥测数据并手动发送。
 				</div>
 				<div class="flex gap-2 mb-4">
 					<Button
@@ -1073,7 +1085,7 @@
 						loading={sendingStats}
 						size="xs"
 					>
-						Send usage
+						发送使用情况
 					</Button>
 					<Button
 						on:click={downloadStats}
@@ -1082,60 +1094,56 @@
 						loading={downloadingStats}
 						size="xs"
 					>
-						Download usage
+						下载使用情况
 					</Button>
 				</div>
 			{:else}
 				<div class="text-primary pb-4 text-xs">
-					Anonymous usage data is collected to help improve Windmill.
-					<br />The following information is collected:
+					系统会收集匿名使用数据，用于改进产品体验。
+					<br />会收集以下信息：
 					<ul class="list-disc list-inside pl-2">
-						<li>version of your instance</li>
-						<li>instance base URL</li>
-						<li>job usage (language, total duration, count)</li>
-						<li>login type usage (login type, count)</li>
-						<li>worker usage (worker, worker instance, vCPUs, memory)</li>
-						<li>user usage (author count, operator count)</li>
-						<li>development instance status</li>
+						<li>实例版本</li>
+						<li>实例基础访问地址</li>
+						<li>任务使用情况（语言、总耗时、数量）</li>
+						<li>登录方式使用情况（登录方式、数量）</li>
+						<li>Worker 使用情况（Worker、Worker 实例、vCPU、内存）</li>
+						<li>用户使用情况（开发者数量、操作员数量）</li>
+						<li>开发实例状态</li>
 						<li
-							>AI chat usage (provider, model, mode, session count, message count — last 30 days)</li
+							>AI 对话使用情况（供应商、模型、模式、会话数量、消息数量，最近 30 天）</li
 						>
 					</ul>
 				</div>
 			{/if}
 		{:else if category == 'Jobs'}
 			<SettingsPageHeader
-				title="Jobs"
-				description="Configure default timeouts and retention policies for job execution."
-				link="https://www.windmill.dev/docs/advanced/instance_settings#jobs"
+				title="任务"
+				description="配置任务执行的默认超时和数据保留策略。"
 			/>
 		{:else if category == 'Object Storage'}
 			<SettingsPageHeader
-				title="Object Storage"
-				description="Configure S3-compatible storage for large logs and distributed dependency caching."
-				link="https://www.windmill.dev/docs/core_concepts/object_storage_in_windmill"
+				title="对象存储"
+				description="配置兼容 S3 的对象存储，用于大型日志和分布式依赖缓存。"
 			/>
 		{:else if category == 'Private Hub'}
 			<SettingsPageHeader
-				title="Private Hub"
-				description="Connect to a Private Hub instance for sharing custom scripts and integrations."
-				link="https://www.windmill.dev/docs/core_concepts/private_hub"
+				title="内部模板库"
+				description="连接内部模板库，用于共享脚本模板和集成模板。"
 			/>
 		{:else if category == 'Secret Storage'}
 			<SettingsPageHeader
-				title="Secret Storage"
-				description="Configure where secrets (secret variables) are stored."
-				link="https://www.windmill.dev/docs/core_concepts/workspace_secret_encryption"
+				title="密钥存储"
+				description="配置密钥变量的存储位置。"
 			/>
 		{:else if category == 'GitHub Enterprise App'}
 			<SettingsPageHeader
-				title="GitHub Enterprise App"
-				description="Configure a self-managed GitHub App for GitHub Enterprise Server git sync."
+				title="GitHub App"
+				description="配置自管理 GitHub App，用于 Git 同步。"
 			/>
 		{:else if category == 'DB Health'}
 			<SettingsPageHeader
-				title="DB Health"
-				description="On-demand database diagnostics. Analyze table sizes, job retention, connection pool health, vacuum status, and more."
+				title="数据库健康"
+				description="按需执行数据库诊断，分析表大小、任务保留、连接池健康、Vacuum 状态等信息。"
 			/>
 			<DbHealth />
 		{:else if category == 'Auth/OAuth/SAML'}

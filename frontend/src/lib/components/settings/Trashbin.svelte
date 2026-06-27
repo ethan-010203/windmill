@@ -153,19 +153,19 @@
 {:else if items.length === 0}
 	<div class="flex flex-col items-center justify-center py-12 text-tertiary">
 		<Trash2 size={40} class="mb-3 opacity-50" />
-		<p class="text-base">Trashbin is empty</p>
-		<p class="text-sm mt-1">No recently deleted items.</p>
+		<p class="text-base">回收站为空</p>
+		<p class="text-sm mt-1">最近没有删除的项目。</p>
 	</div>
 {:else}
 	<DataTable size="sm">
 		<Head>
 			<tr>
-				<Cell head first>Type</Cell>
-				<Cell head>Path</Cell>
-				<Cell head>Deleted by</Cell>
-				<Cell head>Deleted</Cell>
-				<Cell head>Expires</Cell>
-				<Cell head last>Actions</Cell>
+				<Cell head first>类型</Cell>
+				<Cell head>路径</Cell>
+				<Cell head>删除人</Cell>
+				<Cell head>删除时间</Cell>
+				<Cell head>过期时间</Cell>
+				<Cell head last>操作</Cell>
 			</tr>
 		</Head>
 		{#each items as item (item.id)}
@@ -197,7 +197,7 @@
 							size="xs2"
 							onclick={() => restoreItem(item)}
 						>
-							Restore
+							恢复
 						</Button>
 						<Button
 							startIcon={{ icon: Trash2 }}
@@ -207,7 +207,7 @@
 								deleteConfirmedCallback = () => permanentlyDelete(item)
 							}}
 						>
-							Delete
+							删除
 						</Button>
 					</div>
 				</Cell>
@@ -218,8 +218,8 @@
 
 <ConfirmationModal
 	open={deleteOpen}
-	title="Permanently delete"
-	confirmationText="Delete forever"
+	title="永久删除"
+	confirmationText="永久删除"
 	onCanceled={() => {
 		deleteConfirmedCallback = undefined
 	}}
@@ -230,13 +230,13 @@
 		deleteConfirmedCallback = undefined
 	}}
 >
-	<p>This item will be permanently deleted. This action cannot be undone.</p>
+	<p>该项目将被永久删除，此操作无法撤销。</p>
 </ConfirmationModal>
 
 <ConfirmationModal
 	open={emptyConfirmOpen}
-	title="Empty trashbin"
-	confirmationText="Empty trashbin"
+	title="清空回收站"
+	confirmationText="清空回收站"
 	onCanceled={() => {
 		emptyConfirmOpen = false
 	}}
@@ -245,5 +245,5 @@
 		emptyConfirmOpen = false
 	}}
 >
-	<p>All items in the trashbin will be permanently deleted. This action cannot be undone.</p>
+	<p>回收站中的所有项目都将被永久删除，此操作无法撤销。</p>
 </ConfirmationModal>

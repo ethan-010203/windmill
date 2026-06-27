@@ -82,7 +82,7 @@
 				})
 			}
 			if (labelChanged || scopesChanged) {
-				sendUserToast('Token updated')
+				sendUserToast('令牌已更新')
 			}
 			onSaved?.()
 			open = false

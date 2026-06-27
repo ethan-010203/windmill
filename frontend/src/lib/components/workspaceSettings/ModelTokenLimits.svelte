@@ -100,8 +100,8 @@
 
 {#if Object.keys(aiProviders).length > 0}
 	<SettingCard
-		label="Model output limits"
-		description="Configure maximum token limits for each model. These limits apply to all AI chat interactions in the workspace."
+		label="模型输出限制"
+		description="配置每个模型的最大 token 限制。这些限制适用于工作区内所有 AI 对话。"
 	>
 		<div class="flex flex-col gap-3">
 			{#each Object.entries(modelsByProvider).filter(([provider, models]) => models.length > 0) as [provider, models]}
@@ -116,7 +116,7 @@
 						<div class="flex items-center gap-2">
 							<h4 class="font-medium text-xs capitalize">{provider}</h4>
 							{#if hasCustom}
-								<Badge color="blue">Modified</Badge>
+								<Badge color="blue">已修改</Badge>
 							{/if}
 						</div>
 						{#if isExpanded}
@@ -152,12 +152,12 @@
 													}}
 													class="w-20 px-2 py-1 text-xs text-center border border-gray-200 dark:border-gray-700 rounded bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 												/>
-												<span class="text-xs text-secondary whitespace-nowrap">tokens</span>
+												<span class="text-xs text-secondary whitespace-nowrap">token</span>
 											</div>
 										</div>
 										{#if !isAtDefault}
 											<div class="text-xs text-primary flex flex-row items-center gap-1">
-												<span>Default: {defaultTokens} tokens</span>
+												<span>默认：{defaultTokens} token</span>
 												<Button
 													variant="default"
 													unifiedSize="xs"

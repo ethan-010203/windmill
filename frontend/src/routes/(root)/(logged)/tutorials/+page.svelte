@@ -259,7 +259,6 @@
 	<PageHeader
 		title="教程"
 		tooltip="通过交互式教程学习如何使用部门工具平台"
-		documentationLink="https://www.windmill.dev/docs/intro"
 	>
 		{#if activeTabs.length > 0}
 			<div class="flex gap-2">

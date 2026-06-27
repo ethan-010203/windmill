@@ -29,10 +29,10 @@
 </script>
 
 {#if instanceAiSummary}
-	<SettingCard label="Active instance AI">
+	<SettingCard label="当前实例 AI">
 		<div class="flex flex-col gap-4 p-4 rounded-md border bg-surface-tertiary">
 			<p class="text-xs text-secondary">
-				This workspace is currently using the instance AI defaults shown below.
+				此工作区当前正在使用下方实例 AI 默认设置。
 			</p>
 
 			<div class="flex flex-col gap-3">
@@ -42,7 +42,7 @@
 							<span class="text-xs font-medium">
 								{getProviderLabel(providerSummary.provider)}
 							</span>
-							<Badge color="blue">Instance</Badge>
+							<Badge color="blue">实例</Badge>
 						</div>
 						<div class="flex flex-wrap gap-1">
 							{#each providerSummary.models as model (model)}
@@ -55,7 +55,7 @@
 
 			{#if instanceAiSummary.default_model}
 				<div class="text-xs text-secondary">
-					Default chat model:
+					默认对话模型：
 					<span class="text-primary font-medium">{instanceAiSummary.default_model.model}</span>
 					<span class="text-tertiary">
 						({getProviderLabel(instanceAiSummary.default_model.provider)})
@@ -65,7 +65,7 @@
 
 			{#if instanceAiSummary.metadata_model}
 				<div class="text-xs text-secondary">
-					Metadata generation model:
+					元数据生成模型：
 					<span class="text-primary font-medium">
 						{instanceAiSummary.metadata_model.model}
 					</span>
@@ -77,7 +77,7 @@
 
 			{#if instanceAiSummary.code_completion_model}
 				<div class="text-xs text-secondary">
-					Code completion model:
+					代码补全模型：
 					<span class="text-primary font-medium">
 						{instanceAiSummary.code_completion_model.model}
 					</span>
@@ -90,15 +90,14 @@
 	</SettingCard>
 {/if}
 
-<SettingCard label="Workspace override">
+<SettingCard label="工作区覆盖设置">
 	<div class="flex flex-col gap-3 p-4 rounded-md border bg-surface-tertiary">
 		<p class="text-xs text-secondary">
-			Create workspace-specific AI settings only if this workspace needs to override the active
-			instance defaults.
+			仅当此工作区需要覆盖当前实例默认设置时，才创建工作区专用 AI 设置。
 		</p>
 		<div>
 			<Button onclick={onToggleOverride} variant="default" unifiedSize="sm">
-				{showWorkspaceOverrideEditor ? 'Hide override form' : 'Override for this workspace'}
+				{showWorkspaceOverrideEditor ? '隐藏覆盖表单' : '为此工作区覆盖'}
 			</Button>
 		</div>
 	</div>

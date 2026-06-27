@@ -79,8 +79,8 @@ export interface Setting {
 
 export type SettingStorage = 'setting'
 
-const positiveNumber = z.number().positive('Must be a positive number')
-const nonNegativeNumber = z.number().nonnegative('Must be zero or a positive number')
+const positiveNumber = z.number().positive('必须为正数')
+const nonNegativeNumber = z.number().nonnegative('必须为 0 或正数')
 
 const indexerSettingsSchema = z
 	.object({
@@ -108,8 +108,8 @@ function validateIndexerSettings(v: any): Record<string, string> {
 
 export const scimSamlSetting: Setting[] = [
 	{
-		label: 'SCIM token',
-		description: 'Token used to authenticate requests from the IdP',
+		label: 'SCIM 令牌',
+		description: '用于认证身份提供方请求的令牌。',
 		key: 'scim_token',
 		fieldType: 'password',
 		placeholder: 'mytoken',
@@ -117,8 +117,8 @@ export const scimSamlSetting: Setting[] = [
 		ee_only: ''
 	},
 	{
-		label: 'SAML metadata',
-		description: 'XML metadata url OR content for the SAML IdP',
+		label: 'SAML 元数据',
+		description: 'SAML 身份提供方的 XML 元数据地址或内容。',
 		key: 'saml_metadata',
 		fieldType: 'textarea',
 		placeholder: 'https://dev-2578259.okta.com/app/exkaell8gidiiUWrg5d7/sso/saml/metadata ',
@@ -131,14 +131,14 @@ export const scimSamlSetting: Setting[] = [
 export const settings: Record<string, Setting[]> = {
 	Core: [
 		{
-			label: 'Base url',
+			label: '基础访问地址',
 			description:
 				'实例对用户公开访问的基础地址。',
 			key: 'base_url',
 			fieldType: 'text',
 			placeholder: 'https://windmill.com',
 			storage: 'setting',
-			error: 'Base url must start with http:// or https:// and not end with / or a space',
+			error: '基础访问地址必须以 http:// 或 https:// 开头，且不能以 / 或空格结尾',
 			isValid: (value: string | undefined) =>
 				value == undefined ||
 				(value?.startsWith('http') &&
@@ -147,14 +147,14 @@ export const settings: Record<string, Setting[]> = {
 					!value?.endsWith(' '))
 		},
 		{
-			label: 'Email domain',
-			description: 'Domain to display in webhooks for email triggers (should match the MX record)',
+			label: '邮件域名',
+			description: '邮件触发器 Webhook 中展示的域名，应与 MX 记录匹配。',
 			key: 'email_domain',
 			fieldType: 'text',
 			placeholder: 'mail.windmill.com',
 			storage: 'setting',
 			triggersRestart: true,
-			error: 'Must be a valid domain',
+			error: '必须是有效域名',
 			isValid: (value: string | undefined) =>
 				value == undefined ||
 				value === '' ||
@@ -163,8 +163,8 @@ export const settings: Record<string, Setting[]> = {
 				)
 		},
 		{
-			label: 'Request size limit in MB',
-			description: 'Maximum size of HTTP requests in MB.',
+			label: '请求大小限制（MB）',
+			description: 'HTTP 请求允许的最大大小，单位为 MB。',
 			cloudonly: true,
 			key: 'request_size_limit_mb',
 			fieldType: 'number',
@@ -182,7 +182,7 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting'
 		},
 		{
-			label: 'Non-prod instance',
+			label: '非生产实例',
 			description:
 				'是否将当前实例标记为非生产环境。',
 			key: 'dev_instance',
@@ -192,9 +192,9 @@ export const settings: Record<string, Setting[]> = {
 			hideInQuickSetup: true
 		},
 		{
-			label: 'App workspace prefix',
+			label: '应用路径包含工作空间前缀',
 			description:
-				'When enabled apps will be accessible at /a/{workspace_id}/{custom_path} instead of /a/{custom_path} allowing you to define same custom path for apps in different workspace without conflict',
+				'开启后，应用访问路径会从 /a/{custom_path} 变为 /a/{workspace_id}/{custom_path}，不同工作空间可以使用相同自定义路径且互不冲突。',
 			key: 'app_workspaced_route',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -202,9 +202,9 @@ export const settings: Record<string, Setting[]> = {
 			hideInQuickSetup: true
 		},
 		{
-			label: 'HTTP route workspace prefix',
+			label: 'HTTP 路由包含工作空间前缀',
 			description:
-				'When enabled HTTP routes will be accessible at /api/r/{workspace_id}/{route} instead of /api/r/{route} allowing you to define same route path in different workspaces without conflict',
+				'开启后，HTTP 路由会从 /api/r/{route} 变为 /api/r/{workspace_id}/{route}，不同工作空间可以使用相同路由且互不冲突。',
 			key: 'http_route_workspaced_route',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -212,9 +212,9 @@ export const settings: Record<string, Setting[]> = {
 			hideInQuickSetup: true
 		},
 		{
-			label: 'Audit log retention (days)',
+			label: '审计日志保留时间（天）',
 			key: 'audit_log_retention_days',
-			description: 'How long to keep audit log entries in the database. Default: 365 days.',
+			description: '审计日志在数据库中保留的时间。默认 365 天。',
 			fieldType: 'number',
 			placeholder: '365',
 			storage: 'setting',
@@ -224,7 +224,7 @@ export const settings: Record<string, Setting[]> = {
 	],
 	Jobs: [
 		{
-			label: 'Job isolation',
+			label: '任务隔离',
 			key: 'job_isolation',
 			fieldType: 'select',
 			description:
@@ -232,90 +232,90 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting',
 			select_items: [
 				{
-					label: 'None',
+					label: '无隔离',
 					value: 'none'
 				},
 				{
-					label: 'Unshare',
+					label: 'Unshare 隔离',
 					value: 'unshare'
 				},
 				{
-					label: 'Nsjail',
+					label: 'Nsjail 沙箱',
 					value: 'nsjail_sandboxing'
 				}
 			]
 		},
 		{
-			label: 'Nsjail /tmp backing',
+			label: 'Nsjail /tmp 存储方式',
 			key: 'nsjail_tmp_backing',
 			fieldType: 'select',
 			description:
-				'How <code>/tmp</code> is backed inside the nsjail sandbox. <strong>RAM (tmpfs)</strong> is the default — fast, with a hard size cap from <em>Nsjail tmpfs size</em>, but consumes worker memory. <strong>Disk (bind mount)</strong> uses a per-job directory on the worker disk — no RAM cost, but the only remaining per-file ceiling is <code>rlimit_fsize</code> (~1GB for python/ansible, unbounded for most other languages because they set <code>disable_rl: true</code>); pair with host disk monitoring or quotas.',
+				'配置 nsjail 沙箱内 <code>/tmp</code> 的存储方式。<strong>内存（tmpfs）</strong>速度更快，但会占用 Worker 内存；<strong>磁盘（bind mount）</strong>使用 Worker 磁盘上的任务目录，不占用内存，但需要配合磁盘监控或配额。',
 			storage: 'setting',
 			placeholder: 'tmpfs',
 			defaultValue: () => 'tmpfs',
 			select_items: [
-				{ label: 'RAM (tmpfs) — default', value: 'tmpfs' },
-				{ label: 'Disk (bind mount)', value: 'disk' }
+				{ label: '内存（tmpfs，默认）', value: 'tmpfs' },
+				{ label: '磁盘（bind mount）', value: 'disk' }
 			]
 		},
 		{
-			label: 'Nsjail tmpfs size (MB)',
+			label: 'Nsjail tmpfs 大小（MB）',
 			key: 'nsjail_tmpfs_size_mb',
 			description:
-				'Override the size of the <code>/tmp</code> tmpfs mount inside the nsjail sandbox (in MB). When left empty, defaults to 800MB. Only applies when <em>Nsjail /tmp backing</em> is RAM (tmpfs).',
+				'覆盖 nsjail 沙箱内 <code>/tmp</code> tmpfs 挂载大小，单位为 MB。留空时默认为 800MB，仅在 /tmp 使用内存（tmpfs）时生效。',
 			fieldType: 'number',
 			placeholder: '800',
 			storage: 'setting'
 		},
 		{
-			label: 'Sandbox image max size (MB)',
+			label: '沙箱镜像最大大小（MB）',
 			key: 'sandbox_image_max_size_mb',
 			description:
-				'Reject a <code># sandbox &lt;image&gt;</code> whose compressed download size exceeds this many MB, before any layer is downloaded. Leave empty for no limit.',
+				'当 <code># sandbox &lt;image&gt;</code> 的压缩下载大小超过该限制时拒绝拉取。留空表示不限制。',
 			fieldType: 'number',
-			placeholder: 'no limit',
+			placeholder: '不限制',
 			storage: 'setting'
 		},
 		{
-			label: 'Sandbox image cache cap (MB)',
+			label: '沙箱镜像缓存上限（MB）',
 			key: 'sandbox_image_cache_max_mb',
 			description:
-				"Best-effort cap on the worker's cached sandbox rootfs tars. When exceeded, the oldest (by creation time) are evicted after a run. Leave empty for unbounded.",
+				'Worker 沙箱 rootfs 缓存的软上限。超过上限后，运行结束时会按创建时间清理最旧缓存。留空表示不限制。',
 			fieldType: 'number',
-			placeholder: 'unbounded',
+			placeholder: '不限制',
 			storage: 'setting'
 		},
 		{
-			label: 'Sandbox image pull policy',
+			label: '沙箱镜像拉取策略',
 			key: 'sandbox_image_pull_policy',
 			description:
-				'When to re-pull a <code># sandbox</code> image. <strong>newer</strong> (default) re-pulls only when the registry digest changed, so moving tags like <code>:latest</code> stay fresh without re-downloading unchanged layers. <strong>missing</strong> pulls only if absent (fastest, tags can go stale). <strong>always</strong> re-checks every job.',
+				'配置何时重新拉取 <code># sandbox</code> 镜像。<strong>newer</strong>（默认）仅在镜像摘要变化时重新拉取；<strong>missing</strong> 仅在本地不存在时拉取；<strong>always</strong> 每次任务都检查。',
 			fieldType: 'select',
 			storage: 'setting',
 			placeholder: 'newer',
 			defaultValue: () => 'newer',
 			select_items: [
-				{ label: 'Newer (default)', value: 'newer' },
-				{ label: 'Missing', value: 'missing' },
-				{ label: 'Always', value: 'always' },
-				{ label: 'Never', value: 'never' }
+				{ label: '有新版本时（默认）', value: 'newer' },
+				{ label: '缺失时', value: 'missing' },
+				{ label: '总是检查', value: 'always' },
+				{ label: '从不检查', value: 'never' }
 			]
 		},
 		{
-			label: 'Sandbox image default registry',
+			label: '沙箱镜像默认仓库',
 			key: 'sandbox_image_default_registry',
 			description:
-				'If set, unqualified <code># sandbox</code> images (e.g. <code>alpine</code>) are pulled from this registry instead of <code>docker.io</code>. Fully-qualified refs (e.g. <code>ghcr.io/org/img</code>) are unaffected. Example: <code>myregistry.example.com</code>.',
+				'设置后，未指定仓库的 <code># sandbox</code> 镜像会从该仓库拉取，而不是 docker.io。完整镜像地址不受影响。',
 			fieldType: 'text',
 			placeholder: 'docker.io',
 			storage: 'setting'
 		},
 		{
-			label: 'Sandbox registry auth',
+			label: '沙箱镜像仓库认证',
 			key: 'sandbox_registry_auth',
 			description:
-				'Credentials for private registries used by <code># sandbox</code> images, in docker <code>config.json</code> / <code>auth.json</code> format. Written to a per-job <code>DOCKER_CONFIG</code> dir (removed with the job) and used by crane for the pull.',
+				'<code># sandbox</code> 镜像使用私有仓库时的认证配置，格式为 Docker <code>config.json</code> / <code>auth.json</code>。运行时会写入任务专属 <code>DOCKER_CONFIG</code> 目录，并随任务清理。',
 			fieldType: 'codearea',
 			codeAreaLang: 'json',
 			placeholder:
@@ -323,17 +323,17 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting'
 		},
 		{
-			label: 'SSH execution (#ssh)',
+			label: 'SSH 执行（#ssh）',
 			key: 'ssh_execution_enabled',
 			fieldType: 'boolean',
 			description:
-				'Allow bash scripts starting with a <code>#ssh &lt;resource_path&gt;</code> directive to run on the remote host described by the referenced <code>ssh_target</code> resource instead of the worker. Off by default.',
+				'允许以 <code>#ssh &lt;resource_path&gt;</code> 开头的 Bash 脚本在对应 <code>ssh_target</code> 资源描述的远程主机上执行，而不是在 Worker 上执行。默认关闭。',
 			storage: 'setting',
 			ee_only: '',
 			hideInQuickSetup: true
 		},
 		{
-			label: 'Default timeout',
+			label: '默认超时',
 			key: 'job_default_timeout',
 			description:
 				'单个任务的默认超时时间。',
@@ -342,7 +342,7 @@ export const settings: Record<string, Setting[]> = {
 			cloudonly: false
 		},
 		{
-			label: 'Max timeout for sync endpoints',
+			label: '同步接口最长等待时间',
 			description:
 				'同步接口允许运行的最长时间，单位为秒。超过后会被停止或判定超时。',
 			key: 'timeout_wait_result',
@@ -351,14 +351,14 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting'
 		},
 		{
-			label: 'Keep job directories for debug',
+			label: '保留任务目录用于调试',
 			key: 'keep_job_dir',
 			fieldType: 'boolean',
-			description: 'Keep Job directories after execution at /tmp/windmill/WORKER/JOB_ID',
+			description: '任务执行结束后，在 /tmp/windmill/WORKER/JOB_ID 保留任务目录。',
 			storage: 'setting'
 		},
 		{
-			label: 'Retention period in secs',
+			label: '任务数据保留时间（秒）',
 			key: 'retention_period_secs',
 			description:
 				'任务数据在数据库中的保留时间。当前部署最多保留 30 天。',
@@ -369,9 +369,9 @@ export const settings: Record<string, Setting[]> = {
 			cloudonly: false
 		},
 		{
-			label: 'Workspace fairness — enabled',
+			label: '工作空间公平调度 - 启用',
 			description:
-				'Multi-tenant safeguard against a single workspace dominating the shared worker pool. <strong>Only relevant on instances where multiple workspaces share one worker group</strong> — single-tenant deployments do not need this. When a workspace accounts for at least <em>Workspace fairness — max percent</em> of cluster activity over the last <em>Workspace fairness — duration</em> seconds, each worker pull stochastically excludes that workspace so its share converges to the cap without on/off oscillation. Idle workers always fall back to running its jobs, so capping never starves the queue.',
+				'用于防止单个工作空间占满共享 Worker 池。仅适用于多个工作空间共享同一 Worker 组的部署；单部门单租户部署通常不需要。',
 			key: 'workspace_fairness_enabled',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -381,9 +381,9 @@ export const settings: Record<string, Setting[]> = {
 			hideInQuickSetup: true
 		},
 		{
-			label: 'Workspace fairness — max percent',
+			label: '工作空间公平调度 - 最大占比',
 			description:
-				'Maximum share of cluster activity any single workspace may sustain before being stochastically throttled by the pull query. The admitted probability for capped workspaces is set just above this value so the cap is statistically stable rather than oscillating. Default 50.',
+				'单个工作空间在集群活动中允许占用的最大比例。默认 50。',
 			key: 'workspace_fairness_max_percent',
 			fieldType: 'number',
 			placeholder: '50',
@@ -393,9 +393,9 @@ export const settings: Record<string, Setting[]> = {
 			hideInQuickSetup: true
 		},
 		{
-			label: 'Workspace fairness — duration (seconds)',
+			label: '工作空间公平调度 - 统计窗口（秒）',
 			description:
-				'Rolling window used to measure workspace share. Activity = currently running jobs ∪ jobs completed in the last N seconds. Default 10.',
+				'用于统计工作空间占比的滚动时间窗口。默认 10 秒。',
 			key: 'workspace_fairness_duration_secs',
 			fieldType: 'seconds',
 			placeholder: '10',
@@ -405,9 +405,9 @@ export const settings: Record<string, Setting[]> = {
 			hideInQuickSetup: true
 		},
 		{
-			label: 'Workspace fairness — minimum total jobs',
+			label: '工作空间公平调度 - 最小任务数',
 			description:
-				'Cap is only applied when cluster-wide activity exceeds this floor. Prevents over-eager capping on small clusters or quiet periods. Default 4.',
+				'仅当集群整体活动超过该任务数时才应用限制，避免在小集群或空闲时段过度限制。默认 4。',
 			key: 'workspace_fairness_min_total_jobs',
 			fieldType: 'number',
 			placeholder: '4',
@@ -419,9 +419,9 @@ export const settings: Record<string, Setting[]> = {
 	],
 	'Object Storage': [
 		{
-			label: 'Instance object storage',
+			label: '实例对象存储',
 			description:
-				' S3/Azure bucket to store large logs and global cache for Python and Go. <a href="https://www.windmill.dev/docs/core_concepts/object_storage_in_windmill#instance-object-storage">Learn more</a>',
+				'用于存储大型日志以及 Python、Go 全局缓存的 S3/Azure 存储桶。',
 			key: 'object_store_cache_config',
 			fieldType: 'object_store_config',
 			storage: 'setting',
@@ -432,18 +432,18 @@ export const settings: Record<string, Setting[]> = {
 			}
 		},
 		{
-			label: 'Delete logs from s3 periodically',
+			label: '定期删除对象存储中的日志',
 			description:
-				'Job and service logs are periodically deleted from disk when they expire. When this setting is on, they are also deleted from object storage. Defaults to on when object storage is configured; turn off to keep logs in object storage indefinitely.',
+				'任务和服务日志过期后会定期从磁盘删除。开启后，也会同步从对象存储中删除。配置对象存储时默认开启；关闭后对象存储中的日志会长期保留。',
 			key: 'monitor_logs_on_s3',
 			fieldType: 'boolean',
 			storage: 'setting',
 			ee_only: ''
 		},
 		{
-			label: 'Store audit logs in object storage',
+			label: '将审计日志存储到对象存储',
 			description:
-				'When enabled and instance object storage is configured, audit logs are also exported as newline-delimited JSON to the dedicated logs/audit/ folder (partitioned by day). Export is incremental and runs off the hot path. Pre-existing history is not backfilled: export starts from when the setting is enabled (transactions in flight at that moment may include a bounded set of just-prior rows). No audit log committed after enabling is ever skipped.',
+				'开启并配置实例对象存储后，审计日志会以 JSON Lines 格式增量导出到 logs/audit/ 目录，并按天分区。开启前的历史数据不会回填。',
 			key: 'store_audit_logs_s3',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -518,16 +518,16 @@ export const settings: Record<string, Setting[]> = {
 	],
 	SMTP: [
 		{
-			label: 'SMTP configuration',
+			label: 'SMTP 配置',
 			key: 'smtp_settings',
 			fieldType: 'smtp_connect',
 			storage: 'setting',
 			ee_only: ''
 		},
 		{
-			label: 'Disable workspace invite emails',
+			label: '禁用工作空间邀请邮件',
 			description:
-				'Do not send email notifications when a user is invited or added to a workspace. Useful for automated workflows that add users programmatically.',
+				'邀请或添加用户到工作空间时不发送邮件通知。适用于通过自动化流程批量添加用户的场景。',
 			key: 'disable_workspace_invite_emails',
 			fieldType: 'boolean',
 			storage: 'setting'
@@ -535,17 +535,17 @@ export const settings: Record<string, Setting[]> = {
 	],
 	'Auth/OAuth/SAML': [
 		{
-			label: 'Disable password login',
+			label: '禁用密码登录',
 			description:
-				'Hide the email/password form on the login page and reject password login requests. Use when you only want OAuth/SAML logins.',
+				'隐藏登录页中的邮箱/密码表单，并拒绝密码登录请求。仅使用 OAuth/SAML 登录时可开启。',
 			key: 'disable_password_login',
 			fieldType: 'boolean',
 			storage: 'setting'
 		},
 		{
-			label: 'Auto-login SSO provider',
+			label: '自动登录 SSO 提供方',
 			description:
-				'If set, the login page redirects automatically to this provider. Use the OAuth provider key (e.g. "okta", "google") or "saml". The provider must be configured; otherwise the setting is ignored. Visit /user/login?no_sso=1 to bypass the redirect and fall back to the normal login form.',
+				'设置后，登录页会自动跳转到该登录提供方。可填写 OAuth 提供方 key（如 "okta"、"google"）或 "saml"。提供方必须已配置，否则此设置会被忽略。访问 /user/login?no_sso=1 可跳过自动跳转。',
 			key: 'auto_login_provider',
 			fieldType: 'text',
 			placeholder: 'okta',
@@ -555,8 +555,8 @@ export const settings: Record<string, Setting[]> = {
 	'DB Health': [],
 	Registries: [
 		{
-			label: 'Instance Python Version',
-			description: 'Default python version for newly deployed scripts',
+			label: '实例 Python 版本',
+			description: '新部署脚本默认使用的 Python 版本。',
 			key: 'instance_python_version',
 			fieldType: 'select_python',
 			// To change latest stable version:
@@ -566,7 +566,7 @@ export const settings: Record<string, Setting[]> = {
 			placeholder: '3.10,3.11,3.12,3.13',
 			select_items: [
 				{
-					label: 'Latest Stable',
+					label: '最新稳定版',
 					value: 'default',
 					tooltip: 'python-3.12'
 				},
@@ -586,8 +586,8 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting'
 		},
 		{
-			label: 'UV index url',
-			description: 'Add private Pip registry',
+			label: 'UV 索引地址',
+			description: '添加私有 Pip 仓库。',
 			key: 'pip_index_url',
 			fieldType: 'password',
 			placeholder: 'https://username:password@pypi.company.com/simple',
@@ -595,8 +595,8 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'UV extra index url',
-			description: 'Add private extra Pip registry',
+			label: 'UV 额外索引地址',
+			description: '添加额外的私有 Pip 仓库。',
 			key: 'pip_extra_index_url',
 			fieldType: 'password',
 			placeholder: 'https://username:password@pypi.company.com/simple',
@@ -604,18 +604,18 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'UV Python install mirror',
+			label: 'UV Python 安装镜像',
 			description:
-				'Mirror URL for downloading managed Python interpreters. Wires to <code>UV_PYTHON_INSTALL_MIRROR</code>. See <a href="https://docs.astral.sh/uv/configuration/environment/#uv_python_install_mirror">uv docs</a>.',
+				'用于下载托管 Python 解释器的镜像地址，对应 <code>UV_PYTHON_INSTALL_MIRROR</code>。',
 			key: 'uv_python_install_mirror',
 			fieldType: 'text',
 			placeholder: 'https://mirror.example.com/python-build-standalone',
 			storage: 'setting'
 		},
 		{
-			label: 'UV index strategy',
+			label: 'UV 索引策略',
 			description:
-				'Strategy for resolving packages from multiple indexes. See <a href="https://docs.astral.sh/uv/pip/compatibility/#packages-that-exist-on-multiple-indexes">uv docs</a>',
+				'从多个索引解析包时使用的策略。',
 			key: 'uv_index_strategy',
 			fieldType: 'select',
 			placeholder: 'unsafe-best-match',
@@ -623,25 +623,25 @@ export const settings: Record<string, Setting[]> = {
 			select_items: [
 				{
 					label: 'first-index',
-					tooltip: 'Only use the first index that contains the package'
+					tooltip: '只使用第一个包含该包的索引'
 				},
 				{
 					label: 'unsafe-first-match',
-					tooltip: 'Search for packages across all indexes, preferring the first match'
+					tooltip: '在所有索引中搜索包，优先使用第一个匹配项'
 				},
 				{
-					label: 'unsafe-best-match (default)',
+					label: 'unsafe-best-match（默认）',
 					value: 'unsafe-best-match',
-					tooltip: 'Search for packages across all indexes, preferring the best match'
+					tooltip: '在所有索引中搜索包，优先使用最佳匹配项'
 				}
 			],
 			storage: 'setting',
 			ee_only: ''
 		},
 		{
-			label: 'NPM Registry Configuration (.npmrc)',
+			label: 'NPM 仓库配置（.npmrc）',
 			description:
-				'Full .npmrc file content for private npm registries. Used by Bun, Deno, and the npm proxy. Takes precedence over the legacy fields below.',
+				'私有 npm 仓库使用的完整 .npmrc 文件内容。Bun、Deno 和 npm 代理都会使用该配置，优先级高于下方旧配置项。',
 			key: 'npmrc',
 			fieldType: 'codearea',
 			codeAreaLang: 'ini',
@@ -651,8 +651,8 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'Npm config registry (legacy)',
-			description: 'Add private npm registry. Prefer using the .npmrc field above.',
+			label: 'NPM 配置仓库（旧版）',
+			description: '添加私有 npm 仓库。优先建议使用上方 .npmrc 配置。',
 			key: 'npm_config_registry',
 			fieldType: 'password',
 			placeholder: 'https://registry.npmjs.org/:_authToken=npm_FOOBAR',
@@ -661,9 +661,9 @@ export const settings: Record<string, Setting[]> = {
 			hiddenIfEmpty: true
 		},
 		{
-			label: 'Bunfig install scopes (legacy)',
+			label: 'Bunfig 安装作用域（旧版）',
 			description:
-				'Add private scoped registries for Bun. Prefer using the .npmrc field above. See: https://bun.sh/docs/install/registries',
+				'为 Bun 添加私有作用域仓库。优先建议使用上方 .npmrc 配置。',
 			key: 'bunfig_install_scopes',
 			fieldType: 'password',
 			placeholder: '"@myorg3" = { token = "mytoken", url = "https://registry.myorg.com/" }',
@@ -672,27 +672,27 @@ export const settings: Record<string, Setting[]> = {
 			hiddenIfEmpty: true
 		},
 		{
-			label: 'Minimum release age (uv / Python)',
+			label: '最小发布时间（uv / Python）',
 			description:
-				'Refuse to install Python packages younger than this many seconds. Protects against supply-chain attacks via freshly published versions. Wires to <code>uv pip --exclude-newer</code>.',
+				'拒绝安装发布时间短于该秒数的 Python 包，用于降低新发布恶意包带来的供应链风险。对应 <code>uv pip --exclude-newer</code>。',
 			key: 'uv_exclude_newer',
 			fieldType: 'seconds',
 			placeholder: '604800',
 			storage: 'setting'
 		},
 		{
-			label: 'Minimum release age (bun / npm)',
+			label: '最小发布时间（bun / npm）',
 			description:
-				'Refuse to install npm packages younger than this many seconds. Protects against supply-chain attacks via freshly published versions. Sets <code>BUN_INSTALL_MINIMUM_RELEASE_AGE</code>.',
+				'拒绝安装发布时间短于该秒数的 npm 包，用于降低新发布恶意包带来的供应链风险。对应 <code>BUN_INSTALL_MINIMUM_RELEASE_AGE</code>。',
 			key: 'bun_install_min_release_age',
 			fieldType: 'seconds',
 			placeholder: '604800',
 			storage: 'setting'
 		},
 		{
-			label: 'Nuget Config',
+			label: 'NuGet 配置',
 			description:
-				'Write a nuget.config file to set custom package sources and credentials. Use <clear /> inside <packageSources> to remove default sources and only use your custom ones',
+				'写入 nuget.config，用于配置自定义包源和凭据。可在 <packageSources> 中使用 <clear /> 移除默认源，仅使用自定义源。',
 			key: 'nuget_config',
 			fieldType: 'codearea',
 			codeAreaLang: 'xml',
@@ -700,8 +700,8 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'Maven/Ivy repositories',
-			description: 'Add private Maven/Ivy repositories',
+			label: 'Maven/Ivy 仓库',
+			description: '添加私有 Maven/Ivy 仓库。',
 			key: 'maven_repos',
 			fieldType: 'password',
 			placeholder: 'https://user:password@artifacts.foo.com/maven',
@@ -711,7 +711,7 @@ export const settings: Record<string, Setting[]> = {
 		{
 			label: 'Maven settings.xml',
 			description:
-				'Write a Maven settings.xml file for custom repositories, mirrors, and credentials',
+				'写入 Maven settings.xml，用于配置自定义仓库、镜像和凭据。',
 			key: 'maven_settings_xml',
 			fieldType: 'codearea',
 			codeAreaLang: 'xml',
@@ -719,16 +719,16 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'Disable default Maven repository',
-			description: 'Do not use default Maven repository',
+			label: '禁用默认 Maven 仓库',
+			description: '不使用默认 Maven 仓库。',
 			key: 'no_default_maven',
 			fieldType: 'boolean',
 			storage: 'setting',
 			ee_only: ''
 		},
 		{
-			label: 'Ruby Gems repositories',
-			description: 'Add private Ruby repositories with credentials. Should end with /',
+			label: 'Ruby Gems 仓库',
+			description: '添加带凭据的私有 Ruby 仓库，地址应以 / 结尾。',
 			key: 'ruby_repos',
 			fieldType: 'password',
 			placeholder: 'https://user:password@gems.foo.com/',
@@ -736,8 +736,8 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'Cargo registries',
-			description: 'Write a .cargo/config.toml to set custom Cargo registries and credentials',
+			label: 'Cargo 仓库',
+			description: '写入 .cargo/config.toml，用于配置自定义 Cargo 仓库和凭据。',
 			key: 'cargo_registries',
 			fieldType: 'codearea',
 			codeAreaLang: 'toml',
@@ -745,8 +745,8 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'PowerShell Repository URL',
-			description: 'Add private PowerShell repository URL',
+			label: 'PowerShell 仓库地址',
+			description: '添加私有 PowerShell 仓库地址。',
 			key: 'powershell_repo_url',
 			placeholder:
 				'https://pkgs.dev.azure.com/<org>/<project>/_packaging/<feed>/nuget/v3/index.json',
@@ -755,9 +755,9 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'PowerShell Repository PAT',
+			label: 'PowerShell 仓库 PAT',
 			description:
-				'Add private PowerShell repository Personal Access Token (optional, for authenticated repositories)',
+				'添加私有 PowerShell 仓库个人访问令牌（可选，用于需要认证的仓库）。',
 			key: 'powershell_repo_pat',
 			fieldType: 'password',
 			storage: 'setting',
@@ -774,7 +774,7 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting',
 			ee_only: 'Tracing 以外的告警渠道当前未开放',
 			actionButton: {
-				label: 'Test all channels',
+				label: '测试所有渠道',
 				onclick: async (values) => {
 					const { SettingService } = await import('$lib/gen')
 					const { sendUserToast } = await import('$lib/toast')
@@ -782,17 +782,17 @@ export const settings: Record<string, Setting[]> = {
 						await SettingService.testCriticalChannels({
 							requestBody: values.critical_error_channels
 						})
-						sendUserToast('Test message sent successfully to critical channels', false)
+						sendUserToast('测试消息已发送到重要告警渠道', false)
 					} catch (error: any) {
-						sendUserToast('Failed to send test message: ' + error.message, true)
+						sendUserToast('发送测试消息失败：' + error.message, true)
 					}
 				},
 				variant: 'accent'
 			}
 		},
 		{
-			label: 'Mute critical alerts in UI',
-			description: 'Enable to mute critical alerts in the UI',
+			label: '在界面中静音重要告警',
+			description: '开启后，界面内不再展示重要告警提示。',
 			key: 'critical_alert_mute_ui',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -800,9 +800,9 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: '界面内重要告警当前未开放'
 		},
 		{
-			label: 'Alert on token expiry',
+			label: '令牌过期告警',
 			description:
-				'Send critical alerts when API tokens are about to expire (within 7 days) or have expired',
+				'当 API 令牌将在 7 天内过期或已经过期时发送重要告警。',
 			key: 'critical_alerts_on_token_expiry',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -816,9 +816,9 @@ export const settings: Record<string, Setting[]> = {
 			ee_only: ''
 		},
 		{
-			label: 'Alert on DB oversize',
+			label: '数据库过大告警',
 			key: 'critical_alerts_on_db_oversize',
-			description: 'Alert if DB grows more than specified size',
+			description: '当数据库大小超过指定值时发送告警。',
 			fieldType: 'critical_alerts_on_db_oversize',
 			placeholder: '100',
 			storage: 'setting',
@@ -827,9 +827,9 @@ export const settings: Record<string, Setting[]> = {
 	],
 	Webhooks: [
 		{
-			label: 'Instance Events Webhook',
+			label: '实例事件 Webhook',
 			description:
-				'URL to receive POST requests for instance events (user added, OAuth signup, user invited/added/joined workspace).',
+				'用于接收实例事件 POST 请求的地址，例如用户添加、OAuth 注册、用户被邀请/添加/加入工作空间。',
 			key: 'instance_events_webhook',
 			fieldType: 'text',
 			placeholder: 'https://example.com/webhook',
@@ -846,9 +846,9 @@ export const settings: Record<string, Setting[]> = {
 			triggersRestart: true
 		},
 		{
-			label: 'HTTP Request Tracing',
+			label: 'HTTP 请求追踪',
 			description:
-				'Capture HTTP/HTTPS requests from job scripts as OpenTelemetry spans. Visible in job details and exported to your OTEL collector if configured. Toggling restarts workers.',
+				'将任务脚本发起的 HTTP/HTTPS 请求记录为 OpenTelemetry span，可在任务详情中查看，并在配置后导出到 OTEL 收集器。切换该项会重启 Worker。',
 			key: 'otel_tracing_proxy',
 			fieldType: 'otel_tracing_proxy',
 			storage: 'setting',
@@ -879,7 +879,7 @@ export const settings: Record<string, Setting[]> = {
 
 	Telemetry: [
 		{
-			label: 'Minimal telemetry',
+			label: '最小遥测',
 			key: 'disable_stats',
 			fieldType: 'boolean',
 			storage: 'setting'
@@ -887,7 +887,7 @@ export const settings: Record<string, Setting[]> = {
 	],
 	'Secret Storage': [
 		{
-			label: 'Backend type',
+			label: '后端类型',
 			description:
 				'默认情况下，密钥会加密存储在数据库中。外部密钥后端属于当前部署未开放的高级能力。',
 			key: 'secret_backend',
@@ -907,7 +907,7 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting',
 			ee_only: '',
 			error:
-				'When self-managed mode is enabled, Base URL, App ID, App Slug, Client ID, and Private Key are required.',
+				'启用自管理模式时，必须填写基础地址、App ID、App Slug、Client ID 和私钥。',
 			isValid: (v: any) => {
 				if (!v?.self_managed) return true
 				return !!(v?.base_url && v?.app_id && v?.app_slug && v?.client_id && v?.private_key)
@@ -916,9 +916,9 @@ export const settings: Record<string, Setting[]> = {
 	],
 	WebSocket: [
 		{
-			label: 'WebSocket connectivity',
+			label: 'WebSocket 连接测试',
 			description:
-				'Test connectivity to multiplayer, LSP, and debugger WebSocket services. Enable custom URL override for deployments where WebSocket traffic routes to a different host.',
+				'测试多人协作、LSP 和调试器 WebSocket 服务的连接情况。如果 WebSocket 流量走不同主机，可启用自定义地址覆盖。',
 			key: 'ws_base_url',
 			fieldType: 'ws_connectivity',
 			storage: 'setting',
@@ -933,9 +933,9 @@ export const settings: Record<string, Setting[]> = {
 	],
 	LSP: [
 		{
-			label: 'Ruff config (ruff.toml)',
+			label: 'Ruff 配置（ruff.toml）',
 			description:
-				'Shared ruff.toml applied to the Python editor linter across the whole instance. The LSP container fetches this every minute and writes it next to edited files. See <a href="https://docs.astral.sh/ruff/configuration/">ruff docs</a>',
+				'应用到整个实例 Python 编辑器检查器的共享 ruff.toml。LSP 容器每分钟获取一次，并写入编辑文件旁边。',
 			key: 'ruff_config',
 			fieldType: 'codearea',
 			codeAreaLang: 'toml',
@@ -950,76 +950,76 @@ export const settingsKeys = Object.keys(settings)
 // --- Sidebar navigation for instance settings ---
 export const instanceSettingsNavigationGroups = [
 	{
-		title: 'Core',
+		title: '核心',
 		items: [
 			{
 				id: 'users',
-				label: 'Users',
+				label: '用户',
 				aiId: 'instance-settings-users',
-				aiDescription: 'Instance users settings'
+				aiDescription: '实例用户设置'
 			},
 			{
 				id: 'general',
-				label: 'General',
+				label: '通用',
 				aiId: 'instance-settings-general',
-				aiDescription: 'Instance general settings'
+				aiDescription: '实例通用设置'
 			},
 			{
 				id: 'jobs',
-				label: 'Jobs',
+				label: '任务',
 				aiId: 'instance-settings-jobs',
-				aiDescription: 'Instance jobs settings'
+				aiDescription: '实例任务设置'
 			}
 		]
 	},
 	{
-		title: 'Authentication',
+		title: '认证',
 		items: [
 			{
 				id: 'sso',
 				label: 'SSO',
 				aiId: 'instance-settings-sso',
-				aiDescription: 'Instance SSO settings'
+				aiDescription: '实例 SSO 设置'
 			},
 			{
 				id: 'oauth',
 				label: 'OAuth',
 				aiId: 'instance-settings-oauth',
-				aiDescription: 'Instance OAuth settings'
+				aiDescription: '实例 OAuth 设置'
 			}
 		]
 	},
 	{
-		title: 'Infrastructure',
+		title: '基础设施',
 		items: [
 			{
 				id: 'smtp',
 				label: 'SMTP',
 				aiId: 'instance-settings-smtp',
-				aiDescription: 'Instance SMTP settings'
+				aiDescription: '实例 SMTP 设置'
 			},
 			{
 				id: 'registries',
-				label: 'Registries',
+				label: '依赖源',
 				aiId: 'instance-settings-registries',
-				aiDescription: 'Instance registries settings'
+				aiDescription: '实例依赖源设置'
 			}
 		]
 	},
 	{
-		title: 'Monitoring',
+		title: '监控',
 		items: [
 			{
 				id: 'webhooks',
 				label: 'Webhooks',
 				aiId: 'instance-settings-webhooks',
-				aiDescription: 'Instance events webhook settings'
+				aiDescription: '实例事件 Webhook 设置'
 			},
 			{
 				id: 'db_health',
-				label: 'DB Health',
+				label: '数据库健康',
 				aiId: 'instance-settings-db-health',
-				aiDescription: 'Database health diagnostics and performance insights'
+				aiDescription: '数据库健康诊断和性能分析'
 			}
 		]
 	},
@@ -1030,36 +1030,36 @@ export const instanceSettingsNavigationGroups = [
 				id: 'ai',
 				label: 'AI',
 				aiId: 'instance-settings-ai',
-				aiDescription: 'Instance AI settings (providers, models, prompts)'
+				aiDescription: '实例 AI 设置（供应商、模型、提示词）'
 			}
 		]
 	},
 	{
-		title: 'Advanced',
+		title: '高级',
 		items: [
 			{
 				id: 'telemetry',
-				label: 'Telemetry',
+				label: '遥测',
 				aiId: 'instance-settings-telemetry',
-				aiDescription: 'Instance telemetry settings'
+				aiDescription: '实例遥测设置'
 			},
 			{
 				id: 'secret_storage',
-				label: 'Secret Storage',
+				label: '密钥存储',
 				aiId: 'instance-settings-secret-storage',
-				aiDescription: 'Instance secret storage settings'
+				aiDescription: '实例密钥存储设置'
 			},
 			{
 				id: 'websocket',
 				label: 'WebSocket',
 				aiId: 'instance-settings-websocket',
-				aiDescription: 'WebSocket connectivity test and URL override'
+				aiDescription: 'WebSocket 连接测试和地址覆盖'
 			},
 			{
 				id: 'lsp',
 				label: 'LSP',
 				aiId: 'instance-settings-lsp',
-				aiDescription: 'Language server protocol settings (ruff config, editor linting)'
+				aiDescription: '语言服务协议设置（Ruff 配置、编辑器检查）'
 			}
 		]
 	}

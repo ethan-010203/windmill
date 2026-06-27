@@ -255,7 +255,7 @@
 
 	function resetPrompts() {
 		customPrompts = { ...initialPrompts }
-		sendUserToast('Reset to last saved state')
+			sendUserToast('已恢复到上次保存的状态')
 	}
 
 	function buildConfig(): AIConfig {
@@ -302,7 +302,7 @@
 		}
 
 		if (isSaveDisabled()) {
-			sendUserToast('Complete AI settings before leaving this page', true)
+			sendUserToast('离开此页面前请先完成 AI 设置', true)
 			return false
 		}
 
@@ -327,7 +327,7 @@
 				uses_instance_ai_config: response.uses_instance_ai_config,
 				instance_ai_summary: response.instance_ai_summary
 			}
-			sendUserToast('AI settings updated')
+			sendUserToast('AI 设置已更新')
 		}
 		storeInitialState()
 		await onSave?.(settingsState)
@@ -367,8 +367,7 @@
 		<div
 			class="p-3 border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 rounded-md text-xs text-secondary"
 		>
-			Instance-level AI settings are currently active. Configure workspace-specific settings below
-			to override them.
+			当前正在使用实例级 AI 设置。可在下方配置工作区专用设置进行覆盖。
 		</div>
 		<InstanceFallbackSettings
 			{instanceAiSummary}
@@ -379,12 +378,11 @@
 		<div
 			class="p-3 border border-surface-hover bg-surface-secondary rounded-md text-xs text-secondary"
 		>
-			Workspace AI settings override instance defaults. Remove workspace settings to use instance
-			defaults.
+			工作区 AI 设置会覆盖实例默认值。移除工作区设置后将使用实例默认值。
 		</div>
 	{/if}
 	{#if showWorkspaceOverrideEditor}
-		<SettingCard label="AI Providers">
+		<SettingCard label="AI 提供商">
 			<div class="flex flex-col gap-4 p-4 rounded-md border bg-surface-tertiary">
 				{#each Object.entries(AI_PROVIDERS) as [provider, details] (provider)}
 					<div class="flex flex-col">
@@ -419,10 +417,9 @@
 							/>
 							{#if provider === 'anthropic'}
 								<Badge color="blue">
-									Recommended
+									推荐
 									<Tooltip>
-										Anthropic models handle tool calls better than other providers, which makes them
-										a better choice for AI chat.
+										Anthropic 模型对工具调用的处理通常更稳定，适合作为 AI 对话模型。
 									</Tooltip>
 								</Badge>
 							{/if}
@@ -433,7 +430,7 @@
 								class="mb-4 flex flex-col gap-6 border p-4 rounded-md mt-2"
 								transition:slide|local={{ duration: 150 }}
 							>
-								<Label label="Resource">
+							<Label label="资源">
 									<div class="flex flex-row gap-1">
 										<ResourcePicker
 											selectFirst
@@ -460,29 +457,29 @@
 									</div>
 								</Label>
 
-								<Label label="Enabled models">
+							<Label label="启用的模型">
 									<MultiSelect
 										items={safeSelectItems([
 											...availableAiModels[provider],
 											...aiProviders[provider].models
 										])}
 										bind:value={aiProviders[provider].models}
-										placeholder="Select models"
+										placeholder="选择模型"
 										onCreateItem={(item) =>
 											(aiProviders[provider].models = [...aiProviders[provider].models, item])}
 									/>
 									<p class="text-2xs text-hint">
-										If you don't see the model you want, you can type it manually in the selector.
+									如果没有看到需要的模型，可以在选择器中手动输入。
 									</p>
 								</Label>
 
 								{#if providerSupportsWebSearch(provider as AIProvider)}
-									<Label label="Web search">
+								<Label label="联网搜索">
 										<Toggle
 											options={{
-												right: 'Enable native web search',
-												rightTooltip:
-													'Uses the provider-native web search tool automatically in chat.'
+										right: '启用原生联网搜索',
+										rightTooltip:
+											'在对话中自动使用提供商原生的联网搜索工具。'
 											}}
 											checked={aiProviders[provider].web_search_enabled !== false}
 											on:change={(e) => {
@@ -498,13 +495,13 @@
 			</div>
 		</SettingCard>
 
-		<SettingCard label="Default chat model">
+		<SettingCard label="默认对话模型">
 			{#key Object.keys(aiProviders).length}
 				<Select
 					items={safeSelectItems(selectedAiModels)}
 					bind:value={defaultModel}
 					disabled={false}
-					placeholder="Select a default model"
+					placeholder="选择默认模型"
 					size="sm"
 					class="max-w-lg"
 					clearable
@@ -513,15 +510,15 @@
 		</SettingCard>
 
 		<SettingCard
-			label="Metadata generation model"
-			description="Used for automatic summaries, descriptions, and tool names. If unset, the default chat model is used."
+			label="元数据生成模型"
+			description="用于自动生成摘要、描述和工具名称。未设置时使用默认对话模型。"
 		>
 			{#key Object.keys(aiProviders).length}
 				<Select
 					items={safeSelectItems(selectedAiModels)}
 					bind:value={metadataModel}
 					disabled={false}
-					placeholder="Use default chat model"
+					placeholder="使用默认对话模型"
 					size="sm"
 					class="max-w-lg"
 					clearable
@@ -531,7 +528,7 @@
 
 		<!-- Code completion group for animation purposes -->
 		<div>
-			<SettingCard label="Code completion">
+			<SettingCard label="代码补全">
 				<Toggle
 					on:change={(e) => {
 						if (e.detail) {
@@ -543,21 +540,21 @@
 					checked={codeCompletionModel != undefined}
 					disabled={autocompleteModels.length == 0}
 					options={{
-						right: 'Enable code completion',
+						right: '启用代码补全',
 						rightTooltip:
-							'We currently support Mistral Codestral and DeepSeek FIM models for code completion.'
+							'当前支持使用 Mistral Codestral 和 DeepSeek FIM 模型进行代码补全。'
 					}}
 				/>
 			</SettingCard>
 
 			{#if codeCompletionModel != undefined}
 				<div transition:slide|local={{ duration: 150 }} class="mt-6">
-					<SettingCard label="Code completion model">
+				<SettingCard label="代码补全模型">
 						<Select
 							items={safeSelectItems(autocompleteModels)}
 							bind:value={codeCompletionModel}
 							disabled={false}
-							placeholder="Select a code completion model"
+						placeholder="选择代码补全模型"
 							size="sm"
 						/>
 					</SettingCard>
@@ -567,7 +564,7 @@
 
 		<ModelTokenLimits {aiProviders} bind:maxTokensPerModel />
 
-		<SettingCard label="Custom system prompts" description={promptDescription}>
+		<SettingCard label="自定义系统提示词" description={promptDescription}>
 			<div class="flex items-center gap-2 pt-1">
 				<Button
 					onclick={() => (modalOpen = true)}
@@ -576,13 +573,13 @@
 					startIcon={{ icon: Settings }}
 					disabled={Object.keys(aiProviders ?? {}).length === 0}
 				>
-					Configure AI prompts
+					配置 AI 提示词
 				</Button>
 				{#if promptCount > 0}
-					<span class="text-xs text-secondary">({promptCount} configured)</span>
+				<span class="text-xs text-secondary">（已配置 {promptCount} 项）</span>
 				{/if}
 				{#if hasPromptsChanges}
-					<Badge color="yellow">Unsaved changes</Badge>
+				<Badge color="yellow">未保存的更改</Badge>
 				{/if}
 			</div>
 		</SettingCard>
@@ -602,7 +599,7 @@
 		hasUnsavedChanges={dirty}
 		onSave={editCopilotConfig}
 		onDiscard={discard}
-		saveLabel="Save AI settings"
+		saveLabel="保存 AI 设置"
 		disabled={isSaveDisabled()}
 	/>
 {/if}

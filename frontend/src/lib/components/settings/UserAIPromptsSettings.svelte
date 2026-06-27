@@ -19,12 +19,12 @@
 	function save() {
 		storeLocalSetting(USER_CUSTOM_PROMPTS_KEY, JSON.stringify(customPrompts))
 		initialPrompts = { ...customPrompts }
-		sendUserToast('User AI prompts saved')
+		sendUserToast('用户 AI 提示词已保存')
 	}
 
 	function reset() {
 		customPrompts = { ...initialPrompts }
-		sendUserToast('Reset to last saved state')
+		sendUserToast('已恢复到上次保存的状态')
 	}
 
 	let hasPrompts = $derived(Object.values(customPrompts).some((p) => p?.trim().length > 0))
@@ -45,7 +45,7 @@
 </script>
 
 <div class="mt-4">
-	<Label label="Custom system prompts">
+	<Label label="自定义系统提示词">
 		<div class="flex flex-col gap-4">
 			{#if $userStore?.is_admin || $userStore?.is_super_admin}
 				<p class="text-xs text-secondary">

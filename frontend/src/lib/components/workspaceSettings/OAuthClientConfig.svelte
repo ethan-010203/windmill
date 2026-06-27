@@ -60,7 +60,7 @@
 
 	async function saveConfig() {
 		if (!canSave) {
-			sendUserToast('Please fill in all required fields', true)
+			sendUserToast('请填写所有必填字段', true)
 			return
 		}
 
@@ -76,7 +76,7 @@
 			await onConfigSaved(oauthData)
 			resetForm()
 		} catch (err: any) {
-			sendUserToast(`Failed to configure OAuth client: ${err.message}`, true)
+			sendUserToast(`配置 OAuth 客户端失败：${err.message}`, true)
 		} finally {
 			saving = false
 		}
@@ -92,15 +92,15 @@
 
 <div class="space-y-4">
 	<div class="flex justify-between items-center">
-		<h4 class="text-md font-medium text-primary">{serviceDisplayName} OAuth Client Configuration</h4
+			<h4 class="text-md font-medium text-primary">{serviceDisplayName} OAuth 客户端配置</h4
 		>
 	</div>
 
 	{#if !existingConfig}
-		<Alert type="warning" title="OAuth client required">
-			<p class="text-sm mb-2">
-				Before you can connect to {serviceDisplayName}, you need to configure an OAuth client.
-			</p>
+			<Alert type="warning" title="需要 OAuth 客户端">
+				<p class="text-sm mb-2">
+					连接 {serviceDisplayName} 前，需要先配置 OAuth 客户端。
+				</p>
 			{#if setupInstructions}
 				<ol class="list-decimal list-inside space-y-1 text-sm">
 					{#each setupInstructions as instruction}
@@ -117,7 +117,7 @@
 				<div class="flex flex-col gap-1">
 					<Label label={baseUrlLabel} />
 					<p class="text-xs font-normal text-secondary"
-						>The base URL of your {serviceDisplayName} instance (without trailing slash)</p
+						>{serviceDisplayName} 实例的基础 URL（末尾不带斜杠）</p
 					>
 					<input
 						type="url"
@@ -133,22 +133,22 @@
 							target="_blank"
 							startIcon={{ icon: ExternalLink }}
 						>
-							{serviceDisplayName} OAuth Settings
+								{serviceDisplayName} OAuth 设置
 						</Button>
 					{/if}
 				</div>
 			{/if}
 
 			<div class="flex flex-col gap-1">
-				<Label label="Redirect URI" />
+				<Label label="重定向 URI" />
 				<p class="text-xs font-normal text-secondary"
-					>Use this URL when creating the OAuth app in {serviceDisplayName}</p
+					>在 {serviceDisplayName} 中创建 OAuth 应用时使用此 URL</p
 				>
 				<ClipboardPanel content={redirectUri} size="sm" />
 			</div>
 
 			<div class="flex flex-col gap-1">
-				<Label label="Client ID" />
+				<Label label="客户端 ID" />
 				<input
 					type="text"
 					bind:value={clientId}
@@ -159,7 +159,7 @@
 			</div>
 
 			<div class="flex flex-col gap-1">
-				<Label label="Client secret" />
+				<Label label="客户端密钥" />
 				<input
 					type="password"
 					bind:value={clientSecret}
@@ -176,18 +176,17 @@
 					disabled={!canSave}
 					startIcon={{ icon: Save }}
 				>
-					{saving ? 'Saving...' : 'Save configuration'}
+					{saving ? '保存中...' : '保存配置'}
 				</Button>
 			</div>
 		</div>
 	</div>
 
 	{#if existingConfig}
-		<Alert type="success" title="OAuth client configured">
-			<p class="text-sm">
-				OAuth client is configured for {serviceDisplayName}. You can now connect this workspace to
-				{serviceDisplayName}.
-			</p>
-		</Alert>
+			<Alert type="success" title="OAuth 客户端已配置">
+				<p class="text-sm">
+					已为 {serviceDisplayName} 配置 OAuth 客户端。现在可以将此工作区连接到 {serviceDisplayName}。
+				</p>
+			</Alert>
 	{/if}
 </div>

@@ -157,8 +157,8 @@
 			) {
 				let confirm = await confirmationModal.ask({
 					title: 'Some instance databases are not setup',
-					children: 'Are you sure you want to save without setting them up ?',
-					confirmationText: 'Save anyway'
+					children: '确定要在未完成设置的情况下保存吗？',
+					confirmationText: '仍然保存'
 				})
 				if (!confirm) return
 			}
@@ -168,7 +168,7 @@
 				requestBody: { settings }
 			})
 			ducklakeSavedSettings = clone(ducklakeSettings)
-			sendUserToast('Ducklake settings saved successfully')
+			sendUserToast('Ducklake 设置已保存')
 			onSaveProp?.()
 		} catch (e) {
 			sendUserToast(e, true)
@@ -186,13 +186,12 @@
 		secondaryStorageNames.refresh()
 	})
 
-	let tableHeadNames = ['Name', 'Catalog', 'Workspace storage', '', ''] as const
+	let tableHeadNames = ['名称', '目录', '工作区存储', '', ''] as const
 
 	let tableHeadTooltips: Partial<Record<(typeof tableHeadNames)[number], string | undefined>> = {
-		Name: "Ducklakes are referenced in DuckDB scripts with the <code class='px-1 py-0.5 border rounded-md'>ATTACH 'ducklake://name' AS dl;</code> syntax",
-		Catalog: 'Ducklake needs an SQL database to store metadata about the data',
-		'Workspace storage':
-			'Where the data is actually stored, in parquet format. You need to configure a workspace storage first'
+		名称: "在 DuckDB 脚本中可通过 <code class='px-1 py-0.5 border rounded-md'>ATTACH 'ducklake://name' AS dl;</code> 语法引用 Ducklake",
+		目录: 'Ducklake 需要一个 SQL 数据库用于存储数据元信息',
+		工作区存储: '实际存放 parquet 数据的位置。需要先配置工作区存储'
 	}
 
 	let confirmationModal = createAsyncConfirmationModal()
@@ -201,18 +200,16 @@
 <div class="flex flex-col gap-4 mb-8">
 	<div class="flex flex-col gap-1">
 		<div class="text-primary text-lg font-semibold">Ducklake</div>
-		<Description link="https://www.windmill.dev/docs/core_concepts/persistent_storage/ducklake">
-			Windmill has first class support for Ducklake. You can use and explore ducklakes like a normal
-			SQL database, even though the data is actually stored in parquet files in S3 !
+		<Description>
+			平台内置支持 Ducklake。可以像使用普通 SQL 数据库一样使用和浏览 Ducklake，即使数据实际以 parquet 文件形式存储在 S3 中。
 		</Description>
 	</div>
 </div>
 
 {#if ducklakeSettings.ducklakes.some((d) => d.catalog.resource_type === 'instance')}
 	<div transition:slide={{ duration: 200 }} class="mb-4">
-		<Alert title="Instance databases use the Windmill database" type="info">
-			Using an instance database is the fastest way to get started with Ducklake. They are public to
-			the instance and can be re-used in other workspaces' Ducklake settings.
+		<Alert title="实例数据库使用平台数据库" type="info">
+			使用实例数据库是开始使用 Ducklake 的最快方式。实例数据库在实例范围内公开，可在其他工作区的 Ducklake 设置中复用。
 		</Alert>
 	</div>
 {/if}
@@ -236,7 +233,7 @@
 		{#if ducklakeSettings.ducklakes.length == 0}
 			<Row>
 				<Cell colspan={tableHeadNames.length} class="text-center py-6">
-					No ducklake in this workspace yet
+					此工作区尚未配置 Ducklake
 				</Cell>
 			</Row>
 		{/if}
@@ -245,7 +242,7 @@
 				<Cell first class="w-44 relative">
 					{#if ducklake.name === 'main'}
 						<Tooltip wrapperClass="absolute mt-[0.6rem] right-4" placement="bottom-start">
-							The <i>main</i> ducklake can be accessed with the
+								<i>main</i> Ducklake 可以通过以下简写访问：
 							<br />
 							<code class="px-1 py-0.5 border rounded-md">ATTACH 'ducklake' AS dl;</code> shorthand
 						</Tooltip>
@@ -261,18 +258,18 @@
 						<div class="relative">
 							{#if ducklake.catalog.resource_type === 'instance'}
 								<Tooltip wrapperClass="absolute mt-[0.6rem] right-2 z-20" placement="bottom-start">
-									Use Windmill's PostgreSQL instance as a catalog
+										使用平台 PostgreSQL 实例作为目录
 								</Tooltip>
 							{/if}
 							<Select
 								items={[
 									{ value: 'postgresql', label: 'PostgreSQL' },
 									{ value: 'mysql', label: 'MySQL' },
-									{
-										value: 'instance',
-										label: 'Instance',
-										subtitle: $isCustomInstanceDbEnabled ? undefined : 'Superadmin only'
-									}
+										{
+											value: 'instance',
+											label: '实例',
+											subtitle: $isCustomInstanceDbEnabled ? undefined : '仅超级管理员'
+										}
 								]}
 								bind:value={
 									() => ducklake.catalog.resource_type,
@@ -303,9 +300,7 @@
 									tag="ducklake"
 								>
 									{#snippet wizardBottomHint()}
-										Note: this is different from the Manage Ducklake button. This will show you the
-										content of the PostgreSQL database used as a catalog, while the other button
-										shows you the content of the ducklake (the parquet files).
+											注意：这里不同于“管理 Ducklake”按钮。这里显示作为目录使用的 PostgreSQL 数据库内容，另一个按钮显示 Ducklake 内容（parquet 文件）。
 									{/snippet}
 								</CustomInstanceDbSelect>
 							{/if}
@@ -315,9 +310,9 @@
 				<Cell>
 					<div class="flex gap-1">
 						<Select
-							placeholder="Default storage"
+							placeholder="默认存储"
 							items={[
-								{ value: undefined, label: 'Default storage' },
+								{ value: undefined, label: '默认存储' },
 								...(secondaryStorageNames.value?.map((value) => ({ value })) ?? [])
 							]}
 							bind:value={
@@ -331,7 +326,7 @@
 							inputClass="!placeholder-secondary"
 						/>
 						<TextInput
-							inputProps={{ placeholder: 'Data path (defaults to /)' }}
+							inputProps={{ placeholder: '数据路径（默认为 /）' }}
 							class="ducklake-storage-data-path"
 							bind:value={ducklake.storage.path}
 						/>
@@ -352,8 +347,8 @@
 							{/snippet}
 							{#snippet content()}
 								<Label
-									label="Extra args"
-									tooltip="Additional arguments to pass in the ATTACH command. The argument list is substituted as-is. Separate them with commas."
+									label="附加参数"
+									tooltip="传递给 ATTACH 命令的附加参数。参数列表会原样替换，请用英文逗号分隔。"
 								>
 									<TextInput
 										bind:value={ducklake.extra_args}

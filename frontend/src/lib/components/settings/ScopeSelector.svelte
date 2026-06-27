@@ -109,8 +109,8 @@
 			initializeDomainStates()
 		} catch (err) {
 			console.error('Error fetching scope domains:', err)
-			sendUserToast('Failed to load scope options', true)
-			error = 'Failed to load scope options'
+			sendUserToast('加载权限范围选项失败', true)
+			error = '加载权限范围选项失败'
 		} finally {
 			loading = false
 		}
@@ -498,22 +498,22 @@
 	{:else if error}
 		<div class="p-4 bg-surface-tertiary border border-red-200 rounded-lg">
 			<p class="text-xs text-red-600 mb-3">{error}</p>
-			<Button onclick={fetchScopeDomains} variant="accent" size="sm">Try again</Button>
+			<Button onclick={fetchScopeDomains} variant="accent" size="sm">重试</Button>
 		</div>
 	{:else if scopeDomains}
 		<div class="mb-6 p-4 bg-surface-tertiary border rounded-md">
 			<div class="flex items-center justify-between mb-3">
-				<h4 class="text-xs font-semibold text-emphasis">
-					Selected Scopes ({selectedScopes.length})
-				</h4>
-				<Button onclick={clearAllScopes} {disabled} size="xs" variant="subtle">Clear All</Button>
+					<h4 class="text-xs font-semibold text-emphasis">
+						已选权限范围（{selectedScopes.length}）
+					</h4>
+					<Button onclick={clearAllScopes} {disabled} size="xs" variant="subtle">全部清除</Button>
 			</div>
 
 			{#if selectedScopes.length === 0}
-				<p class="text-xs text-secondary">No scopes selected. Token will have full access.</p>
+					<p class="text-xs text-secondary">未选择权限范围。令牌将拥有完整访问权限。</p>
 			{:else if hasAdministratorScope}
 				<p class="text-xs text-secondary"
-					>Administrator scope grants full access to all resources.</p
+						>管理员权限范围会授予对所有资源的完整访问权限。</p
 				>
 			{:else}
 				<div class="flex flex-wrap gap-2">
@@ -526,7 +526,7 @@
 								type="button"
 								onclick={() => removeSelectedScope(scope)}
 								class="text-blue-600 hover:text-blue-800 flex-shrink-0"
-								title="Remove scope"
+								title="移除权限范围"
 								{disabled}
 							>
 								<X size={10} />
@@ -537,7 +537,7 @@
 						<span
 							class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-surface text-secondary rounded"
 						>
-							+{selectedScopes.length - 10} more
+								另有 {selectedScopes.length - 10} 项
 						</span>
 					{/if}
 				</div>
@@ -608,7 +608,7 @@
 													removeSelectedScope(scope)
 												}}
 												class="text-blue-600 hover:text-blue-800 flex-shrink-0"
-												title="Remove scope"
+													title="移除权限范围"
 												{disabled}
 											>
 												<X size={10} />
@@ -673,11 +673,10 @@
 													>
 														{#snippet trigger()}
 															<Button size="xs" disabled={isDisabled} variant="default">
-																Restrict paths
-																<Tooltip light>
-																	Restrict this scope to specific resource paths. If no paths are
-																	specified, the scope gives full access.
-																</Tooltip>
+																	限制路径
+																	<Tooltip light>
+																		将此权限范围限制到指定资源路径。未指定路径时，此权限范围会授予完整访问权限。
+																	</Tooltip>
 															</Button>
 														{/snippet}
 														{#snippet content()}
@@ -693,7 +692,7 @@
 																				scopeState.pathError = undefined
 																			}
 																		}}
-																		placeholder="e.g. f/folder/*, u/user/path"
+																			placeholder="例如 f/folder/*, u/user/path"
 																		onkeydown={(e) => {
 																			if (e.key === 'Enter' && currentInput.trim()) {
 																				e.preventDefault()
@@ -708,7 +707,7 @@
 																		size="xs"
 																		disabled={!currentInput.trim()}
 																	>
-																		Add
+																			添加
 																	</Button>
 																</div>
 																{#if pathError}
@@ -732,7 +731,7 @@
 															type="button"
 															onclick={() => removeResourcePath(scope.value, path)}
 															class="text-blue-600 hover:text-blue-800 flex-shrink-0"
-															title="Remove path"
+															title="移除路径"
 														>
 															<X size={10} />
 														</button>

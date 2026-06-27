@@ -67,7 +67,7 @@
 			})
 		} catch (error) {
 			console.error('Failed to load workspace dependencies:', error)
-			sendUserToast('Failed to load enforced dependencies', true)
+			sendUserToast('加载依赖约束失败', true)
 		}
 	}
 
@@ -115,7 +115,7 @@
 			deps.language
 		)
 		if (!importedPath) {
-			sendUserToast('Unable to determine enforced dependencies path', true)
+			sendUserToast('无法确定依赖约束路径', true)
 			return
 		}
 
@@ -150,7 +150,7 @@
 			deps.language
 		)
 		if (!importedPath) {
-			sendUserToast('Unable to determine enforced dependencies path', true)
+			sendUserToast('无法确定依赖约束路径', true)
 			return
 		}
 
@@ -185,7 +185,7 @@
 				deps.language
 			)
 			if (!path) {
-				sendUserToast('Unable to determine enforced dependencies path', true)
+				sendUserToast('无法确定依赖约束路径', true)
 				return
 			}
 
@@ -195,7 +195,7 @@
 			})
 
 			if (dependents.length === 0) {
-				sendUserToast('No dependent runnables found for these enforced dependencies')
+				sendUserToast('没有找到依赖此配置的运行项')
 			} else {
 				// Show dependents in a modal or navigate to a detailed view
 				console.log('Dependents:', dependents)
@@ -205,7 +205,7 @@
 			}
 		} catch (error) {
 			console.error('Error fetching dependent runnables:', error)
-			sendUserToast('Failed to fetch dependent runnables', true)
+			sendUserToast('获取依赖运行项失败', true)
 		}
 	}
 
@@ -252,9 +252,8 @@
 />
 
 <SettingsPageHeader
-	title="Enforced Dependencies"
-	description="Enforced Dependencies define dependency specifications for scripts by language. Unnamed dependencies serve as workspace defaults, while named dependencies can be referenced by scripts using #raw_reqs annotations."
-	link="https://www.windmill.dev/docs/core_concepts/workspace_dependencies"
+	title="依赖约束"
+	description="依赖约束用于按语言定义脚本依赖。未命名配置会作为工作空间默认值，命名配置可通过 #raw_reqs 注释在脚本中引用。"
 >
 	{#snippet actions()}
 		<Button
@@ -263,7 +262,7 @@
 			startIcon={{ icon: Plus }}
 			onClick={createNewWorkspaceDependencies}
 		>
-			New&nbsp;enforced&nbsp;dependencies
+			新增依赖约束
 		</Button>
 	{/snippet}
 </SettingsPageHeader>
@@ -271,7 +270,7 @@
 <div class="pt-2">
 	<div class="relative text-tertiary">
 		<input
-			placeholder="Search enforced dependencies by name, language, or content..."
+			placeholder="按名称、语言或内容搜索依赖约束..."
 			bind:value={filter}
 			class="bg-surface !h-10 !px-4 !pr-10 !rounded-lg text-sm focus:outline-none w-full"
 		/>
@@ -294,24 +293,24 @@
 	{:else if filteredItems.length == 0}
 		<div class="flex flex-col items-center justify-center h-full py-12">
 			<FileText size={48} class="text-secondary mb-4" />
-			<div class="text-md font-medium">No enforced dependencies found</div>
+			<div class="text-md font-medium">未找到依赖约束</div>
 			<div class="text-sm text-secondary mb-4">
-				Try changing the filters or creating new enforced dependencies
+				可以调整筛选条件，或新建依赖约束。
 			</div>
 			<Button startIcon={{ icon: Plus }} on:click={createNewWorkspaceDependencies}>
-				Create your first enforced dependencies
+				创建第一个依赖约束
 			</Button>
 		</div>
 	{:else}
 		<DataTable size="xs">
 			<Head>
 				<tr>
-					<Cell head first>Name</Cell>
-					<Cell head>Language</Cell>
-					<Cell head>Description</Cell>
-					<Cell head>Type</Cell>
-					<Cell head>Edited</Cell>
-					<Cell head last>Actions</Cell>
+					<Cell head first>名称</Cell>
+					<Cell head>语言</Cell>
+					<Cell head>说明</Cell>
+					<Cell head>类型</Cell>
+					<Cell head>编辑时间</Cell>
+					<Cell head last>操作</Cell>
 				</tr>
 			</Head>
 			<tbody class="divide-y">
@@ -378,7 +377,7 @@
 									startIcon={{ icon: Eye }}
 									on:click={() => viewWorkspaceDependencies(deps)}
 								>
-									View
+									查看
 								</Button>
 								<Button
 									size="xs"
@@ -387,7 +386,7 @@
 									startIcon={{ icon: Edit }}
 									on:click={() => editWorkspaceDependencies(deps)}
 								>
-									Edit
+									编辑
 								</Button>
 								<!-- Placeholder buttons -->
 								<Button
@@ -395,27 +394,27 @@
 									variant="border"
 									color="gray"
 									on:click={() => archiveWorkspaceDependencies(deps)}
-									title="Archive"
+									title="归档"
 								>
-									Archive
+									归档
 								</Button>
 								<Button
 									size="xs"
 									variant="border"
 									color="red"
 									on:click={() => deleteWorkspaceDependencies(deps)}
-									title="Delete"
+									title="删除"
 								>
-									Delete
+									删除
 								</Button>
 								<Button
 									size="xs"
 									variant="border"
 									color="gray"
 									on:click={() => viewReferencedFrom(deps)}
-									title="Referenced From"
+									title="引用来源"
 								>
-									Refs
+									引用
 								</Button>
 							</div>
 						</Cell>
@@ -429,11 +428,9 @@
 {#if $userStore?.is_admin || $userStore?.is_super_admin}
 	<div class="border-t pt-8 mt-16 pb-12 pr-4 flex items-start justify-between gap-4">
 		<div class="flex flex-col gap-0.5 min-w-0">
-			<span class="text-xs font-medium text-secondary">Rebuild dependency map</span>
+			<span class="text-xs font-medium text-secondary">重建依赖关系图</span>
 			<span class="text-xs text-tertiary max-w-2xl">
-				Rebuilds the workspace dependency map from scratch. This should almost never be needed —
-				only if dependency tracking has gotten out of sync, e.g. after orphaned references are
-				reported in the logs.
+				从头重建工作空间依赖关系图。通常不需要执行；仅当依赖追踪不同步，例如日志中出现孤立引用时使用。
 			</span>
 		</div>
 		<Button
@@ -444,13 +441,13 @@
 			disabled={rebuildingDependencyMap}
 			onClick={rebuildDependencyMap}
 		>
-			Rebuild
+			重建
 		</Button>
 	</div>
 {/if}
 
 <Drawer bind:this={viewDrawer} size="900px">
-	<DrawerContent title="View Requirement - {viewPath}" on:close={viewDrawer?.closeDrawer}>
+	<DrawerContent title="查看依赖 - {viewPath}" on:close={viewDrawer?.closeDrawer}>
 		{#snippet actions()}
 			<div class="flex items-center gap-2">
 				<Code2 size={16} class="text-secondary" />
@@ -464,7 +461,7 @@
 			{:else}
 				<div class="text-center text-secondary py-8">
 					<FileText size={48} class="mx-auto mb-4 opacity-50" />
-					<p>No content available for this requirement</p>
+					<p>该依赖暂无内容</p>
 				</div>
 			{/if}
 		</div>

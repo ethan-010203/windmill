@@ -88,7 +88,7 @@
 			sendUserToast(`Replaced shared UI folder with ${Object.keys(files).length} file(s)`)
 			await loadListing()
 		} catch (e) {
-			sendUserToast(`Failed to replace shared UI: ${e}`, true)
+			sendUserToast(`替换共享 UI 失败：${e}`, true)
 		} finally {
 			uploading = false
 			if (fileInput) {
@@ -103,17 +103,15 @@
 </script>
 
 <div class="mb-6">
-	<h2 class="text-lg font-semibold mb-1">Shared UI folder</h2>
-	<p class="text-sm text-secondary">
-		Workspace-shared frontend files (components, styles, helpers) that the raw app bundler merges
-		under the <code>/ui/</code> path. Raw apps can import shared components with
-		<code>{`import { Button } from '/ui/Button'`}</code>.
-	</p>
-	<p class="text-sm text-secondary mt-2">
-		Editing happens through the Windmill CLI (<code>wmill sync</code> writes/reads the
-		<code>ui/</code> folder at the root of your sync directory). This page lets you inspect or
-		replace the entire folder. Changes do <strong>not</strong> retroactively rebuild deployed raw apps
-		— re-push affected raw apps to pick up updates.
+		<h2 class="text-lg font-semibold mb-1">共享 UI 文件夹</h2>
+		<p class="text-sm text-secondary">
+			工作区共享的前端文件（组件、样式、辅助函数）会由原始应用打包器合并到 <code>/ui/</code>
+			路径下。原始应用可以通过如下方式导入共享组件：
+			<code>{`import { Button } from '/ui/Button'`}</code>.
+		</p>
+		<p class="text-sm text-secondary mt-2">
+			编辑需要通过 CLI 完成（<code>wmill sync</code> 会读写同步目录根目录下的 <code>ui/</code>
+			文件夹）。此页面用于查看或整体替换该文件夹。变更<strong>不会</strong>自动重新构建已部署的原始应用，需要重新推送受影响的原始应用后才会生效。
 	</p>
 </div>
 
@@ -125,7 +123,7 @@
 		on:click={loadListing}
 		disabled={loading}
 	>
-		Refresh
+			刷新
 	</Button>
 	<Button
 		size="xs"
@@ -134,7 +132,7 @@
 		on:click={downloadZip}
 		disabled={!listing || listing.paths.length === 0}
 	>
-		Download as zip
+			下载为 zip
 	</Button>
 	{#if isAdmin}
 		<Button
@@ -144,7 +142,7 @@
 			on:click={() => fileInput?.click()}
 			disabled={uploading}
 		>
-			{uploading ? 'Replacing…' : 'Replace from zip'}
+				{uploading ? '替换中...' : '从 zip 替换'}
 		</Button>
 		<input
 			bind:this={fileInput}
@@ -158,14 +156,14 @@
 
 {#if listing}
 	<div class="text-xs text-secondary mb-2">
-		Version {listing.version}{#if listing.edited_by}
-			· Last edited by <code>{listing.edited_by}</code>
+			版本 {listing.version}{#if listing.edited_by}
+				· 最后编辑人 <code>{listing.edited_by}</code>
 		{/if}
 	</div>
 	{#if listing.paths.length === 0}
 		<div class="rounded border border-dashed p-6 text-center text-sm text-secondary">
-			The shared UI folder is empty. Create a <code>ui/</code> directory next to your
-			<code>f/</code> and <code>u/</code> folders, add files, then run <code>wmill sync push</code>.
+				共享 UI 文件夹为空。请在 <code>f/</code> 和 <code>u/</code> 文件夹旁创建 <code>ui/</code>
+				目录，添加文件后运行 <code>wmill sync push</code>。
 		</div>
 	{:else}
 		<div class="rounded border divide-y">

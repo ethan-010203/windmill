@@ -175,7 +175,6 @@
 							right: '生成 MCP URL',
 							rightTooltip:
 								'生成新的 MCP URL，让你的脚本、流程和 API 端点可以作为工具供 LLM 客户端使用。',
-						rightDocumentationLink: 'https://www.windmill.dev/docs/core_concepts/mcp'
 					}}
 					size="xs"
 				/>

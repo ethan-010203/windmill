@@ -38,24 +38,24 @@
 			})
 			originalSettings = { ...operatorWorkspaceSettings }
 			isChanged = false
-			sendUserToast('Operator settings saved successfully!', false)
+			sendUserToast('操作员设置已保存', false)
 		} catch (error) {
 			console.error('Error updating operator settings:', error)
-			sendUserToast('Failed to save operator settings.', true)
+			sendUserToast('保存操作员设置失败', true)
 		}
 	}
 
 	const descriptions = {
-		runs: { title: 'Runs', description: 'View runs' },
-		schedules: { title: 'Schedules', description: 'View schedules' },
-		resources: { title: 'Resources', description: 'View resources' },
-		variables: { title: 'Variables', description: 'View variables' },
-		assets: { title: 'Assets', description: 'View assets' },
-		triggers: { title: 'Triggers', description: 'View all triggers (HTTP, Websocket, Kafka)' },
-		audit_logs: { title: 'Audit Logs', description: 'View audit logs' },
-		groups: { title: 'Groups', description: 'View groups and group members' },
-		folders: { title: 'Folders', description: 'View folders' },
-		workers: { title: 'Workers', description: 'View workers and worker groups' }
+		runs: { title: '运行记录', description: '查看运行记录' },
+		schedules: { title: '定时任务', description: '查看定时任务' },
+		resources: { title: '资源', description: '查看资源' },
+		variables: { title: '变量', description: '查看变量' },
+		assets: { title: '资产', description: '查看资产' },
+		triggers: { title: '触发器', description: '查看所有触发器（HTTP、WebSocket、Kafka）' },
+		audit_logs: { title: '审计日志', description: '查看审计日志' },
+		groups: { title: '用户组', description: '查看用户组和组成员' },
+		folders: { title: '文件夹', description: '查看文件夹' },
+		workers: { title: 'Worker', description: '查看 Worker 和 Worker 组' }
 	}
 
 	$effect(() => {
@@ -89,10 +89,10 @@
 </script>
 
 <Section
-	label="Operator settings"
+	label="操作员设置"
 	collapsable={true}
-	tooltip="Configure the operator visibility settings for your workspace. Toggle the settings you want to enable."
-	description="Configure the operator visibility settings for your workspace. Toggle the settings you want to enable."
+	tooltip="配置操作员在当前工作空间中可以看到的栏目。"
+	description="配置操作员在当前工作空间中可以看到的栏目。"
 >
 	{#snippet action()}
 		<Button
@@ -101,15 +101,15 @@
 			disabled={!isChanged}
 			variant="accent"
 		>
-			Save operator settings
+			保存操作员设置
 		</Button>
 	{/snippet}
 
 	<DataTable tableFixed={true} size="xs">
 		<Head>
 			<tr>
-				<Cell head first>Section</Cell>
-				<Cell head>Description</Cell>
+				<Cell head first>栏目</Cell>
+				<Cell head>说明</Cell>
 				<Cell head last>
 					<ToggleButtonGroup
 						bind:selected={
@@ -123,12 +123,12 @@
 						}
 					>
 						{#snippet children({ item })}
-							<ToggleButton icon={EyeIcon} small={true} value={'true'} label="Enable All" {item} />
+							<ToggleButton icon={EyeIcon} small={true} value={'true'} label="全部启用" {item} />
 							<ToggleButton
 								icon={EyeOffIcon}
 								small={true}
 								value={'false'}
-								label="Disable All"
+								label="全部禁用"
 								{item}
 							/>
 						{/snippet}
@@ -147,8 +147,8 @@
 							on:selected={({ detail }) => (operatorWorkspaceSettings[key] = detail === 'on')}
 						>
 							{#snippet children({ item })}
-								<ToggleButton icon={EyeIcon} small={true} value={'on'} label="On" {item} />
-								<ToggleButton icon={EyeOffIcon} small={true} value={'off'} label="Off" {item} />
+								<ToggleButton icon={EyeIcon} small={true} value={'on'} label="开" {item} />
+								<ToggleButton icon={EyeOffIcon} small={true} value={'off'} label="关" {item} />
 							{/snippet}
 						</ToggleButtonGroup>
 					</Cell>

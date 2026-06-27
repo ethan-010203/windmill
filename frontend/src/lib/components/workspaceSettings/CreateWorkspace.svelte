@@ -14,11 +14,11 @@
 	const rd = page.url.searchParams.get('rd')
 </script>
 
-<CenteredModal title="{isFork ? 'Forking' : 'New'} Workspace" centerVertically={false}>
+<CenteredModal title={isFork ? '复制工作区' : '新建工作区'} centerVertically={false}>
 	{#if isFork}
 		<div class="flex flex-block gap-2">
 			<GitForkIcon size={16} />
-			<span class="text-xs text-normal">Forking </span>
+			<span class="text-xs text-normal">正在复制 </span>
 			<span class="text-xs text-emphasis font-semibold">
 				{$workspaceStore}
 			</span>

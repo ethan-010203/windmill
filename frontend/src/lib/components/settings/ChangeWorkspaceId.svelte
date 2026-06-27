@@ -67,8 +67,8 @@
 </script>
 
 <div class="flex flex-col gap-1">
-	<p class="font-semibold text-xs text-emphasis">Workspace ID</p>
-	<p class="text-xs text-secondary font-normal">Slug to uniquely identify your workspace</p>
+	<p class="font-semibold text-xs text-emphasis">工作区 ID</p>
+	<p class="text-xs text-secondary font-normal">用于唯一标识工作区的路径标识</p>
 	<div class="flex flex-row gap-0.5 items-center">
 		<p class="text-xs font-normal text-primary">{$workspaceStore ?? ''}</p>
 		{#if !isCloudHosted() || $superadmin}
@@ -87,25 +87,25 @@
 	</div>
 </div>
 
-<Modal bind:open title="Change workspace ID">
+<Modal bind:open title="修改工作空间 ID">
 	<div class="flex flex-col gap-4">
-		<Alert type="warning" title="What happens">
+		<Alert type="warning" title="会发生什么">
 			<ul class="list-disc list-inside text-xs mt-1 space-y-1">
-				<li>All content (scripts, flows, apps, resources, etc.) moves to the new ID</li>
-				<li>Old workspace is archived with completed jobs, logs, and audit history</li>
-				<li>Running jobs will be canceled</li>
+				<li>所有内容（脚本、流程、应用、资源等）都会迁移到新的 ID</li>
+				<li>旧工作空间会连同已完成任务、日志和审计历史一起归档</li>
+				<li>正在运行的任务会被取消</li>
 			</ul>
-			<p class="text-xs mt-2">Remember to update webhook URLs and CLI sync config afterward.</p>
+			<p class="text-xs mt-2">完成后请记得更新 Webhook 地址和 CLI 同步配置。</p>
 		</Alert>
 		<p class="text-secondary text-xs"
-			>Current ID <br /> <span class="text-emphasis">{$workspaceStore ?? ''}</span></p
+			>当前 ID <br /> <span class="text-emphasis">{$workspaceStore ?? ''}</span></p
 		>
 		<label class="flex flex-col gap-1">
-			<span class="text-emphasis text-xs">New name</span>
+			<span class="text-emphasis text-xs">新名称</span>
 			<input type="text" bind:value={newName} />
 		</label>
 		<label class="block">
-			<span class="text-emphasis text-xs">New ID</span>
+			<span class="text-emphasis text-xs">新 ID</span>
 			<input type="text" bind:value={newId} />
 			{#if errorId}
 				<div class="text-red-500 text-xs mt-1">{errorId}</div>

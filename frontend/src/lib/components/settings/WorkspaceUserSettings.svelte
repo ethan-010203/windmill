@@ -177,12 +177,12 @@
 					roles: autoAddInstanceGroupsRoles
 				}
 			})
-			sendUserToast('Instance group settings saved')
+			sendUserToast('实例用户组设置已保存')
 			// Refresh user list to show newly auto-added users
 			listUsers()
 		} catch (e) {
 			console.error('Failed to save instance group settings:', e)
-			sendUserToast('Failed to save settings', true)
+			sendUserToast('保存设置失败', true)
 		}
 	}
 
@@ -205,7 +205,7 @@
 			// Rollback on error
 			autoAddInstanceGroups = autoAddInstanceGroups.filter((g) => g !== groupToAdd)
 			delete autoAddInstanceGroupsRoles[groupToAdd]
-			sendUserToast('Failed to add instance group', true)
+			sendUserToast('添加实例用户组失败', true)
 		}
 	}
 
@@ -223,7 +223,7 @@
 			if (previousRole) {
 				autoAddInstanceGroupsRoles[groupName] = previousRole
 			}
-			sendUserToast('Failed to remove instance group', true)
+			sendUserToast('移除实例用户组失败', true)
 		}
 	}
 
@@ -236,7 +236,7 @@
 		} catch (e) {
 			// Rollback on error
 			autoAddInstanceGroupsRoles[groupName] = previousRole
-			sendUserToast('Failed to update role', true)
+			sendUserToast('更新角色失败', true)
 		}
 	}
 
@@ -246,11 +246,11 @@
 				workspace: $workspaceStore ?? '',
 				username
 			})
-			sendUserToast('User converted to group user')
+			sendUserToast('用户已转换为用户组用户')
 			listUsers()
 		} catch (e) {
 			console.error('Failed to convert user:', e)
-			sendUserToast('Failed to convert user', true)
+			sendUserToast('转换用户失败', true)
 		}
 	}
 
@@ -316,26 +316,26 @@
 					operator: selected == 'operator'
 				}
 			})
-			sendUserToast(`Invited ${email}`)
+			sendUserToast(`已邀请 ${email}`)
 		} catch (e) {
 			console.error('Failed to invite user:', e)
-			sendUserToast('Failed to invite user', true)
+			sendUserToast('邀请用户失败', true)
 		}
 
 		if (!(await UserService.existsEmail({ email }))) {
 			let isSuperadmin = $superadmin
 			if (!isCloudHosted()) {
 				sendUserToast(
-					`User ${email} is not registered yet on the instance. ${
+					`用户 ${email} 尚未在实例中注册。${
 						!isSuperadmin
-							? `If not using SSO, ask an administrator to add ${email} to the instance`
+							? `如果未使用 SSO，请联系管理员将 ${email} 添加到实例`
 							: ''
 					}`,
 					true,
 					isSuperadmin
 						? [
 								{
-									label: 'Add user to the instance',
+									label: '添加用户到实例',
 									callback: () => {
 										$globalEmailInvite = email
 										goto('#superadmin-settings')
@@ -373,14 +373,14 @@
 			})
 			const message =
 				updateType === 'update'
-					? `Auto-${autoAdd ? 'add' : 'invite'} updated`
+					? `自动${autoAdd ? '加入' : '邀请'}已更新`
 					: updateType === 'enable'
-						? `Auto-${autoAdd ? 'add' : 'invite'} enabled`
-						: `Auto-${autoAdd ? 'add' : 'invite'} disabled`
+						? `自动${autoAdd ? '加入' : '邀请'}已启用`
+						: `自动${autoAdd ? '加入' : '邀请'}已禁用`
 			sendUserToast(message)
 		} catch (e) {
 			console.error('Failed to update auto invite:', e)
-			sendUserToast('Failed to update auto invite', true)
+			sendUserToast('更新自动邀请设置失败', true)
 		}
 		loadSettings()
 		listInvites()
@@ -418,24 +418,22 @@
 />
 
 <SettingsPageHeader
-	title="Members {(filteredUsers?.length ?? users?.length) != undefined
+	title="成员 {(filteredUsers?.length ?? users?.length) != undefined
 		? `(${filteredUsers?.length ?? users?.length})`
 		: ''}"
-	description="Add members to your workspace and manage their roles. You can also auto-add users to join your workspace."
-	link="https://www.windmill.dev/docs/core_concepts/roles_and_permissions"
+	description="添加工作空间成员并管理成员角色，也可以配置自动加入规则。"
 />
 
 {#if isAdminsWorkspaceWithoutEE}
-	<Alert type="info" title="Admins workspace">
-		The admins workspace is reserved for superadmins. Only users with superadmin privileges can
-		access it. Members cannot be manually added or invited to this workspace.
+	<Alert type="info" title="管理员工作空间">
+		管理员工作空间仅供超级管理员使用。只有拥有超级管理员权限的用户才能访问，不能手动添加或邀请成员。
 	</Alert>
 {/if}
 
 <Section>
 	{#snippet action()}
 		<div class="flex flex-row items-center gap-2 relative whitespace-nowrap w-full">
-			<input placeholder="Filter members" bind:value={userFilter} class="input !pl-8 !w-56" />
+			<input placeholder="筛选成员" bind:value={userFilter} class="input !pl-8 !w-56" />
 			<Search class="absolute left-2" size={14} />
 
 			{#if !isAdminsWorkspaceWithoutEE}
@@ -449,14 +447,14 @@
 							unifiedSize="md"
 							nonCaptureEvent={true}
 							startIcon={{ icon: Mails }}
-							>Auto-{displayMode}: {autoInviteOrAddEnabled ? 'ON' : 'OFF'}
+							>自动{displayMode === 'invite' ? '邀请' : '加入'}：{autoInviteOrAddEnabled ? '开' : '关'}
 						</Button>
 					{/snippet}
 					{#snippet content()}
 						<div class="flex flex-col items-start p-4 min-w-[320px] max-w-sm">
 							{#if showAutoInviteToggle}
 								<div class="text-xs mb-1 text-primary"
-									>Mode <Tooltip>Whether to invite or add users directly to the workspace.</Tooltip>
+									>模式 <Tooltip>选择邀请用户，还是直接将用户添加到工作空间。</Tooltip>
 								</div>
 								<ToggleButtonGroup
 									selected={displayMode}
@@ -480,16 +478,15 @@
 									}}
 								>
 									{#snippet children({ item })}
-										<ToggleButton value="invite" small label="Auto-invite" {item} />
-										<ToggleButton value="add" small label="Auto-add" {item} />
+										<ToggleButton value="invite" small label="自动邀请" {item} />
+										<ToggleButton value="add" small label="自动加入" {item} />
 									{/snippet}
 								</ToggleButtonGroup>
 
 								{#if isLegacyAutoInvite && !autoAdd}
 									<div class="mt-3 w-full">
-										<Alert type="warning" size="xs" title="Legacy mode">
-											Auto-invite is deprecated. Switching to auto-add will permanently disable
-											auto-invite for this workspace.
+										<Alert type="warning" size="xs" title="旧模式">
+											自动邀请已不推荐使用。切换到自动加入后，将永久禁用此工作空间的自动邀请。
 										</Alert>
 									</div>
 								{/if}
@@ -497,7 +494,7 @@
 								<div class="mt-6"></div>
 							{/if}
 
-							<span class="text-xs mb-1">Role <Tooltip>Role of the auto-added users</Tooltip></span>
+							<span class="text-xs mb-1">角色 <Tooltip>自动加入用户的角色</Tooltip></span>
 							<ToggleButtonGroup
 								selected={operatorOnly ? 'operator' : 'developer'}
 								on:selected={async (e) => {
@@ -511,15 +508,15 @@
 									<ToggleButton
 										value="operator"
 										small
-										label="Operator"
-										tooltip="An operator can only execute and view scripts/flows/apps from your workspace, and only those that he has visibility on."
+										label="操作员"
+										tooltip="操作员只能执行和查看当前工作空间中对其可见的脚本、流程和应用。"
 										{item}
 									/>
 									<ToggleButton
 										value="developer"
 										small
-										label="Developer"
-										tooltip="A Developer can execute and view scripts/flows/apps, but they can also create new ones and edit those they are allowed to by their path (either u/ or Writer or Admin of their folder found at /f)."
+										label="开发者"
+										tooltip="开发者可以执行和查看脚本、流程和应用，也可以创建新内容，并编辑其路径权限允许的内容。"
 										{item}
 									/>
 								{/snippet}
@@ -591,17 +588,17 @@
 						{#snippet content()}
 							<div class="flex flex-col p-4 min-w-[500px]">
 								<div class="flex flex-col gap-4">
-									<span class="text-sm leading-6 font-semibold"> Auto-add instance groups </span>
+									<span class="text-sm leading-6 font-semibold">自动加入实例用户组</span>
 
 									<!-- Add new instance group form -->
 									{#if availableGroupItems.length > 0}
 										<div class="flex w-full mt-1 gap-2 items-end justify-between">
 											<div class="flex gap-2 items-end">
 												<div class="flex flex-col gap-1">
-													<span class="text-xs text-primary">Instance group</span>
+													<span class="text-xs text-primary">实例用户组</span>
 													<Select
 														items={availableGroupItems}
-														placeholder="Select group"
+														placeholder="选择用户组"
 														bind:value={selectedNewInstanceGroup}
 														class="max-w-[160px]"
 														disablePortal={true}
@@ -609,7 +606,7 @@
 												</div>
 
 												<div class="flex flex-col gap-1">
-													<span class="text-xs text-primary">Role</span>
+													<span class="text-xs text-primary">角色</span>
 													<ToggleButtonGroup
 														selected={selectedNewRole}
 														on:selected={(e) => {
@@ -620,22 +617,22 @@
 															<ToggleButton
 																value="operator"
 																small
-																label="Operator"
-																tooltip="An operator can only execute and view scripts/flows/apps from your workspace, and only those that he has visibility on."
+																label="操作员"
+																tooltip="操作员只能执行和查看当前工作空间中对其可见的脚本、流程和应用。"
 																{item}
 															/>
 															<ToggleButton
 																value="developer"
 																small
-																label="Developer"
-																tooltip="A Developer can execute and view scripts/flows/apps, but they can also create new ones and edit those they are allowed to by their path (either u/ or Writer or Admin of their folder found at /f)."
+																label="开发者"
+																tooltip="开发者可以执行和查看脚本、流程和应用，也可以创建新内容，并编辑其路径权限允许的内容。"
 																{item}
 															/>
 															<ToggleButton
 																value="admin"
 																small
-																label="Admin"
-																tooltip="An admin has full control over a specific Windmill workspace, including the ability to manage users, edit entities, and control permissions within the workspace."
+																label="管理员"
+																tooltip="管理员拥有当前工作空间的完整控制权，包括管理用户、编辑实体和控制权限。"
 																{item}
 															/>
 														{/snippet}
@@ -650,7 +647,7 @@
 												disabled={!selectedNewInstanceGroup || !selectedNewRole}
 												onclick={addInstanceGroup}
 											>
-												Add
+												添加
 											</Button>
 										</div>
 									{/if}
@@ -658,13 +655,13 @@
 									<!-- Configured groups table -->
 									{#if autoAddInstanceGroups.length > 0}
 										<div class="flex flex-col gap-2">
-											<p class="text-sm font-medium text-secondary">Configured groups:</p>
+											<p class="text-sm font-medium text-secondary">已配置用户组：</p>
 											<div class="flex flex-col gap-1">
 												<table class="w-full text-sm">
 													<thead>
 														<tr class="text-left text-xs text-primary">
-															<th class="pb-2 w-1/2">Group</th>
-															<th class="pb-2 w-1/4">Role</th>
+															<th class="pb-2 w-1/2">用户组</th>
+															<th class="pb-2 w-1/4">角色</th>
 															<th class="pb-2 w-1/4"></th>
 														</tr>
 													</thead>
@@ -692,22 +689,22 @@
 																				<ToggleButton
 																					value="operator"
 																					small
-																					label="Operator"
-																					tooltip="An operator can only execute and view scripts/flows/apps from your workspace, and only those that he has visibility on."
+																					label="操作员"
+																					tooltip="操作员只能执行和查看当前工作空间中对其可见的脚本、流程和应用。"
 																					{item}
 																				/>
 																				<ToggleButton
 																					value="developer"
 																					small
-																					label="Developer"
-																					tooltip="A Developer can execute and view scripts/flows/apps, but they can also create new ones and edit those they are allowed to by their path (either u/ or Writer or Admin of their folder found at /f)."
+																					label="开发者"
+																					tooltip="开发者可以执行和查看脚本、流程和应用，也可以创建新内容，并编辑其路径权限允许的内容。"
 																					{item}
 																				/>
 																				<ToggleButton
 																					value="admin"
 																					small
-																					label="Admin"
-																					tooltip="An admin has full control over a specific Windmill workspace, including the ability to manage users, edit entities, and control permissions within the workspace."
+																					label="管理员"
+																					tooltip="管理员拥有当前工作空间的完整控制权，包括管理用户、编辑实体和控制权限。"
 																					{item}
 																				/>
 																			{/snippet}
@@ -772,29 +769,27 @@
 	>
 		<Head>
 			<tr>
-				<Cell head first>Email</Cell>
-				<Cell head>Username</Cell>
+				<Cell head first>邮箱</Cell>
+				<Cell head>用户名</Cell>
 				{#if hasNonManualUsers}
 					<Cell head>
-						Added via
+						加入来源
 						<Tooltip>
-							Shows how the user was added to the workspace: manually, via domain auto-invite, or
-							through an instance group.
+							显示用户加入工作空间的方式：手动添加、通过域名自动加入，或通过实例用户组加入。
 						</Tooltip>
 					</Cell>
 				{/if}
 
 				<Cell head>
-					Executions (<abbr title="past 1w">1w</abbr>)
+					执行次数（<abbr title="过去 1 周">1 周</abbr>）
 					<Tooltip>
-						An execution is calculated as 1 for any runs of scripts + 1 for each seconds above the
-						first one
+						脚本每运行一次记为 1 次，超过第一秒后每秒额外计 1 次。
 					</Tooltip>
 				</Cell>
-				<Cell head>Role</Cell>
-				<Cell head>Enabled</Cell>
+				<Cell head>角色</Cell>
+				<Cell head>启用</Cell>
 				<Cell head last>
-					<span class="sr-only">Actions</span>
+					<span class="sr-only">操作</span>
 				</Cell>
 			</tr>
 		</Head>
@@ -806,7 +801,7 @@
 					{#if hasNonManualUsers && index > 0 && sortedUsers()[index - 1]?.added_via?.source !== 'instance_group' && added_via?.source === 'instance_group'}
 						<tr class="bg-surface-secondary">
 							<td colspan={hasNonManualUsers ? 8 : 7} class="px-4 py-2">
-								<div class="text-xs text-emphasis font-semibold"> Instance group users </div>
+								<div class="text-xs text-emphasis font-semibold">实例用户组用户</div>
 							</td>
 						</tr>
 					{/if}
@@ -830,12 +825,12 @@
 							<Cell>
 								<div class="flex items-center gap-2">
 									{#if added_via?.source === 'instance_group'}
-										<Badge color="blue">Group</Badge>
-										<span>{truncate(added_via.group || 'Unknown', 20)}</span>
+										<Badge color="blue">用户组</Badge>
+										<span>{truncate(added_via.group || '未知', 20)}</span>
 									{:else if added_via?.source === 'domain'}
-										<Badge color="blue">Auto-add</Badge>
+										<Badge color="blue">自动加入</Badge>
 									{:else}
-										<Badge color="blue">Manual</Badge>
+										<Badge color="blue">手动</Badge>
 									{/if}
 								</div>
 							</Cell>
@@ -851,9 +846,9 @@
 								{#if added_via?.source === 'instance_group'}
 									<div class="flex items-center gap-1">
 										<span class="rounded-md text-xs px-2 py-1 bg-surface shadow-md font-bold">
-											{is_admin ? 'Admin' : operator ? 'Operator' : 'Developer'}
+											{is_admin ? '管理员' : operator ? '操作员' : '开发者'}
 										</span>
-										<Tooltip>Role is managed through instance group configuration above.</Tooltip>
+										<Tooltip>角色由上方实例用户组配置管理。</Tooltip>
 									</div>
 								{:else}
 									<ToggleButtonGroup
@@ -861,7 +856,7 @@
 										on:selected={async (e) => {
 											if (is_admin && email == $userStore?.email && e.detail != 'admin') {
 												sendUserToast(
-													'Admins cannot be demoted by themselves, ask another admin to demote you',
+													'管理员不能降级自己，请让其他管理员操作',
 													true
 												)
 												e.preventDefault()
@@ -886,24 +881,24 @@
 											<ToggleButton
 												value="operator"
 												small
-												label="Operator"
-												tooltip="An operator can only execute and view scripts/flows/apps from your workspace, and only those that he has visibility on."
+												label="操作员"
+												tooltip="操作员只能执行和查看当前工作空间中对其可见的脚本、流程和应用。"
 												{item}
 											/>
 
 											<ToggleButton
 												value="developer"
 												small
-												label="Developer"
-												tooltip="A Developer can execute and view scripts/flows/apps, but they can also create new ones and edit those they are allowed to by their path (either u/ or Writer or Admin of their folder found at /f)."
+												label="开发者"
+												tooltip="开发者可以执行和查看脚本、流程和应用，也可以创建新内容，并编辑其路径权限允许的内容。"
 												{item}
 											/>
 
 											<ToggleButton
 												value="admin"
 												small
-												label="Admin"
-												tooltip="An admin has full control over a specific Windmill workspace, including the ability to manage users, edit entities, and control permissions within the workspace."
+												label="管理员"
+												tooltip="管理员拥有当前工作空间的完整控制权，包括管理用户、编辑实体和控制权限。"
 												{item}
 											/>
 										{/snippet}
@@ -923,11 +918,11 @@
 												disabled: !disabled
 											}
 										})
-										sendUserToast(`User ${username} ${disabled ? 'enabled' : 'disabled'}`)
+										sendUserToast(`用户 ${username} 已${disabled ? '启用' : '禁用'}`)
 										listUsers()
 									} catch (e) {
 										console.error('Failed to update user status:', e)
-										sendUserToast('Failed to update user status', true)
+										sendUserToast('更新用户状态失败', true)
 									}
 								}}
 								size="xs"
@@ -955,11 +950,11 @@
 												}
 												window.location.href = '/'
 											} catch (e) {
-												sendUserToast('Failed to impersonate service account', true)
+												sendUserToast('模拟登录服务账号失败', true)
 											}
 										}}
 									>
-										Impersonate
+										模拟登录
 									</Button>
 								{/if}
 								{#snippet removeUserButton(disabled: boolean)}
@@ -1039,9 +1034,8 @@
 
 {#if invites?.length > 0}
 	<Section
-		label="Invites ({invites.length ?? ''})"
-		tooltip="Manage invites on your workspace."
-		documentationLink="https://www.windmill.dev/docs/core_concepts/authentification#adding-users-to-a-workspace"
+		label="邀请 ({invites.length ?? ''})"
+		tooltip="管理当前工作空间的邀请。"
 	>
 		{#snippet action()}
 			{#if showAutoInviteToggle && !isAdminsWorkspaceWithoutEE}
@@ -1053,9 +1047,9 @@
 		<DataTable>
 			<Head>
 				<tr>
-					<Cell head first>Email</Cell>
-					<Cell head>Role</Cell>
-					<Cell head last><span class="sr-only">Actions</span></Cell>
+					<Cell head first>邮箱</Cell>
+					<Cell head>角色</Cell>
+					<Cell head last><span class="sr-only">操作</span></Cell>
 				</tr>
 			</Head>
 			<tbody class="divide-y bg-surface">
@@ -1088,24 +1082,24 @@
 											<ToggleButton
 												value="operator"
 												small
-												label="Operator"
-												tooltip="An operator can only execute and view scripts/flows/apps from your workspace, and only those that he has visibility on."
+												label="操作员"
+												tooltip="操作员只能执行和查看当前工作空间中对其可见的脚本、流程和应用。"
 												{item}
 											/>
 
 											<ToggleButton
 												value="developer"
 												small
-												label="Developer"
-												tooltip="A Developer can execute and view scripts/flows/apps, but they can also create new ones and edit those they are allowed to by their path (either u/ or Writer or Admin of their folder found at /f)."
+												label="开发者"
+												tooltip="开发者可以执行和查看脚本、流程和应用，也可以创建新内容，并编辑其路径权限允许的内容。"
 												{item}
 											/>
 
 											<ToggleButton
 												value="admin"
 												small
-												label="Admin"
-												tooltip="An admin has full control over a specific Windmill workspace, including the ability to manage users, edit entities, and control permissions within the workspace."
+												label="管理员"
+												tooltip="管理员拥有当前工作空间的完整控制权，包括管理用户、编辑实体和控制权限。"
 												{item}
 											/>
 										{/snippet}
@@ -1171,8 +1165,8 @@
 <div class="[&>div]:!z-[5002]">
 	<ConfirmationModal
 		open={Boolean(removeInstanceGroupConfirmedCallback)}
-		title="Remove instance group"
-		confirmationText="Remove"
+		title="移除实例用户组"
+		confirmationText="移除"
 		on:canceled={() => {
 			removeInstanceGroupConfirmedCallback = undefined
 		}}
@@ -1185,8 +1179,7 @@
 	>
 		<div class="flex flex-col w-full space-y-4">
 			<span
-				>Are you sure you want to remove this instance group from auto-add? This will not remove
-				users already added from this group.</span
+				>确定要从自动加入配置中移除此实例用户组吗？这不会移除已经通过该用户组加入的用户。</span
 			>
 		</div>
 	</ConfirmationModal>
@@ -1194,8 +1187,8 @@
 
 <ConfirmationModal
 	open={Boolean(convertConfirmedCallback)}
-	title="Convert to Group User"
-	confirmationText="Convert"
+	title="转换为用户组用户"
+	confirmationText="转换"
 	on:canceled={() => {
 		convertConfirmedCallback = undefined
 	}}
@@ -1207,12 +1200,12 @@
 	}}
 >
 	<div class="flex flex-col w-full space-y-4">
-		<span>Are you sure you want to convert this user to a group user?</span>
-		<span class="text-sm text-secondary">This will:</span>
+		<span>确定要将此用户转换为用户组用户吗？</span>
+		<span class="text-sm text-secondary">此操作会：</span>
 		<ul class="text-sm text-secondary list-disc ml-4 space-y-1">
-			<li>Change the user's role based on their instance group configuration</li>
-			<li>Make their role managed through the instance group settings</li>
-			<li>Prevent manual role changes for this user</li>
+			<li>根据实例用户组配置调整该用户角色</li>
+			<li>让该用户角色由实例用户组设置管理</li>
+			<li>阻止手动修改该用户角色</li>
 		</ul>
 	</div>
 </ConfirmationModal>
@@ -1221,8 +1214,8 @@
 <div class="[&>div]:!z-[5002]">
 	<ConfirmationModal
 		open={Boolean(autoAddConfirmCallback)}
-		title="Enable Auto-add"
-		confirmationText="Enable"
+		title="启用自动加入"
+		confirmationText="启用"
 		on:canceled={() => {
 			autoAddConfirmCallback = undefined
 		}}
@@ -1233,16 +1226,16 @@
 			autoAddConfirmCallback = undefined
 		}}
 	>
-		Are you sure you want to enable auto-add?<br />
-		Anyone added to the instance will automatically join this workspace.
+		确定要启用自动加入吗？<br />
+		任何加入实例的用户都会自动加入当前工作空间。
 	</ConfirmationModal>
 </div>
 
 <div class="[&>div]:!z-[5002]">
 	<ConfirmationModal
 		open={Boolean(autoInviteDisableConfirmCallback)}
-		title="Disable Auto-invite"
-		confirmationText="Disable"
+		title="禁用自动邀请"
+		confirmationText="禁用"
 		on:canceled={() => {
 			autoInviteDisableConfirmCallback = undefined
 		}}
@@ -1253,17 +1246,16 @@
 			autoInviteDisableConfirmCallback = undefined
 		}}
 	>
-		Are you sure you want to disable auto-invite? Auto-invite is a legacy feature. After disabling,
-		it will no longer be available for this workspace. You will only be able to use auto-add. <br />
-		Anyone added to the instance will automatically join this workspace.
+		确定要禁用自动邀请吗？自动邀请是旧功能，禁用后当前工作空间将无法再使用，只能使用自动加入。<br />
+		任何加入实例的用户都会自动加入当前工作空间。
 	</ConfirmationModal>
 </div>
 
 <div class="[&>div]:!z-[5002]">
 	<ConfirmationModal
 		open={Boolean(switchToAutoAddConfirmCallback)}
-		title="Switch to Auto-add"
-		confirmationText="Switch"
+		title="切换到自动加入"
+		confirmationText="切换"
 		on:canceled={() => {
 			switchToAutoAddConfirmCallback = undefined
 		}}

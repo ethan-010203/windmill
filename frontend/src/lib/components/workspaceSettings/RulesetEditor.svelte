@@ -174,11 +174,11 @@
 				}
 			})
 
-			sendUserToast('Protection rule created successfully')
+			sendUserToast('保护规则已创建')
 			onUpdate?.()
 		} catch (error) {
 			console.error('Failed to create protection rule:', error)
-			sendUserToast('Failed to create protection rule', true)
+			sendUserToast('创建保护规则失败', true)
 		}
 	}
 
@@ -205,7 +205,7 @@
 				}
 			})
 
-			sendUserToast('Protection rule saved successfully')
+			sendUserToast('保护规则已保存')
 
 			// Update initial state
 			initialName = name
@@ -219,7 +219,7 @@
 			onUpdate?.()
 		} catch (error) {
 			console.error('Failed to save protection rule:', error)
-			sendUserToast('Failed to save protection rule', true)
+			sendUserToast('保存保护规则失败', true)
 		}
 	}
 </script>
@@ -227,15 +227,15 @@
 <div class="flex flex-col gap-6 p-4">
 	<!-- Name Section -->
 	<span class="text-secondary text-sm">
-		Keep in mind that rulesets can take up to one minute to take effect
+		保护规则最多可能需要 1 分钟生效。
 	</span>
-	<Section label="Rule Name" class="space-y-2">
+	<Section label="规则名称" class="space-y-2">
 		<TextInput
 			size="md"
 			bind:value={name}
 			error={nameError}
 			inputProps={{
-				placeholder: 'Enter rule name'
+				placeholder: '输入规则名称'
 			}}
 		/>
 		{#if nameError}
@@ -245,17 +245,17 @@
 
 	<!-- Bypass Permissions Section -->
 	<Section
-		label="Bypass Permissions"
-		description="Select the groups and/or users who can bypass the restrictions defined in this rule. These users will be exempt from the rules configured below."
+		label="绕过权限"
+		description="选择可以绕过此规则限制的用户组或用户。被选中的对象不会受到下方规则约束。"
 		class="space-y-4"
 	>
 		<!-- Groups -->
 		<div class="flex flex-col gap-2">
-			<Label class="text-xs">Groups</Label>
+			<Label class="text-xs">用户组</Label>
 			<Select
 				bind:value={selectedGroupToAdd}
 				items={safeSelectItems(availableGroups.filter((g) => !selectedGroups.includes(g)))}
-				placeholder="Select groups..."
+				placeholder="选择用户组..."
 			/>
 			{#if selectedGroups.length > 0}
 				<div class="flex flex-wrap gap-2 mt-2">
@@ -277,11 +277,11 @@
 
 		<!-- Users -->
 		<div class="flex flex-col gap-2">
-			<Label class="text-xs">Users</Label>
+			<Label class="text-xs">用户</Label>
 			<Select
 				bind:value={selectedUserToAdd}
 				items={safeSelectItems(availableUsers.filter((u) => !selectedUsers.includes(u)))}
-				placeholder="Select users..."
+				placeholder="选择用户..."
 			/>
 			{#if selectedUsers.length > 0}
 				<div class="flex flex-wrap gap-2 mt-2">
@@ -304,8 +304,8 @@
 
 	<!-- Protection Rules Section -->
 	<Section
-		label="Protection Rules"
-		description="Configure the rules that will be enforced"
+		label="保护规则"
+		description="配置需要强制执行的规则"
 		class="space-y-4"
 	>
 		<div class="flex flex-col gap-4">
@@ -314,11 +314,11 @@
 				<Toggle
 					bind:checked={disableDirectDeployment}
 					options={{
-						right: 'Disable direct deployment'
+						right: '禁用直接部署'
 					}}
 				/>
 				<div class="text-xs text-secondary ml-6">
-					Users must use a fork or git branch to make changes. Direct edits are not allowed.
+					用户必须通过副本或 Git 分支进行变更，不允许直接编辑。
 				</div>
 			</div>
 
@@ -327,10 +327,10 @@
 				<Toggle
 					bind:checked={disableFork}
 					options={{
-						right: 'Disable workspace forking'
+						right: '禁用工作区复制'
 					}}
 				/>
-				<div class="text-xs text-secondary ml-6">Users cannot create forks of this workspace.</div>
+				<div class="text-xs text-secondary ml-6">用户无法创建此工作区的副本。</div>
 			</div>
 
 			<!-- Restrict deploy to deployers -->
@@ -338,12 +338,11 @@
 				<Toggle
 					bind:checked={restrictDeployToDeployers}
 					options={{
-						right: 'Restrict deployment to wm_deployers'
+						right: '仅允许 wm_deployers 部署'
 					}}
 				/>
 				<div class="text-xs text-secondary ml-6">
-					Only workspace admins and members of <code>wm_deployers</code> can deploy to this workspace.
-					Non-deployers can still fork, browse, and request a review.
+					只有工作区管理员和 <code>wm_deployers</code> 成员可以部署到此工作区。其他用户仍可复制、浏览并提交审核请求。
 				</div>
 			</div>
 
@@ -352,12 +351,11 @@
 				<Toggle
 					bind:checked={restrictAnonymousAppDeployment}
 					options={{
-						right: 'Restrict public app access'
+						right: '限制公开应用访问'
 					}}
 				/>
 				<div class="text-xs text-secondary ml-6">
-					Only workspace admins and bypass users can make an app publicly accessible without login
-					(anonymous execution mode). Apps that are already public can still be redeployed.
+					只有工作区管理员和绕过用户可以将应用设置为无需登录即可访问（匿名执行模式）。已经公开的应用仍可重新部署。
 				</div>
 			</div>
 		</div>
@@ -372,11 +370,11 @@
 			on:click={isCreateMode ? create : save}
 			startIcon={{ icon: isCreateMode ? Plus : Save }}
 		>
-			{isCreateMode ? 'Create Rule' : 'Save Rule'}
+			{isCreateMode ? '创建规则' : '保存规则'}
 		</Button>
 
 		{#if hasUnsavedChanges && !isCreateMode}
-			<span class="text-xs text-secondary">You have unsaved changes</span>
+			<span class="text-xs text-secondary">存在未保存的更改</span>
 		{/if}
 	</div>
 </div>

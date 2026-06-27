@@ -167,15 +167,15 @@
 </script>
 
 {#if allDatatables.current && allDatatables.current.length > 0}
-	<Label label="Data table behavior">
-		<span class="text-xs text-secondary"> Choose how to handle each datatable when forking </span>
+	<Label label="数据表处理方式">
+		<span class="text-xs text-secondary"> 选择复制工作区时如何处理每个数据表 </span>
 		<div class="border rounded-md divide-y">
 			{#each allDatatables.current as dt}
 				<div class="flex items-center gap-2 justify-between px-4 py-1.5">
 					<div class="flex flex-col">
 						<span class="text-xs font-medium">{dt.name}</span>
-						<span class="text-2xs text-tertiary"
-							>{dt.resource_type === 'instance' ? 'Instance DB' : 'Resource DB'}</span
+							<span class="text-2xs text-tertiary"
+								>{dt.resource_type === 'instance' ? '实例数据库' : '资源数据库'}</span
 						>
 					</div>
 					<Select
@@ -185,10 +185,10 @@
 							(v) => (datatableBehaviors[dt.name] = v)
 						}
 						items={[
-							{ value: 'keep_original', label: 'Keep original' },
-							{ value: 'schema_only', label: 'Clone schema only' },
+							{ value: 'keep_original', label: '保留原数据表' },
+							{ value: 'schema_only', label: '仅复制结构' },
 							...(!isCloudHosted() && $userStore?.is_admin
-								? [{ value: 'schema_and_data', label: 'Clone schema and data' }]
+								? [{ value: 'schema_and_data', label: '复制结构和数据' }]
 								: [])
 						]}
 					/>
@@ -200,8 +200,8 @@
 
 {#if cloneModalOpen && currentCloneJob}
 	<ConfirmationModal
-		title="Clone datatable: {currentCloneJob.name}"
-		confirmationText={cloneRunning ? 'Running...' : 'Start'}
+		title="复制数据表：{currentCloneJob.name}"
+		confirmationText={cloneRunning ? '运行中...' : '开始'}
 		open={cloneModalOpen}
 		loading={cloneRunning}
 		onConfirmed={async () => {
@@ -216,26 +216,24 @@
 		}}
 	>
 		{#if currentCloneJob.behavior === 'schema_and_data'}
-			<Alert type="error" title="Heavy operation">
-				This will copy the <b>entire database</b> including all data. The pg_dump output is temporarily
-				stored on disk and may consume significant server disk space during the operation.
+			<Alert type="error" title="高负载操作">
+				这将复制<b>整个数据库</b>，包括全部数据。pg_dump 输出会临时存储在磁盘上，执行期间可能占用大量服务器磁盘空间。
 			</Alert>
 		{:else}
-			<Alert type="info" title="Schema only">
-				This will copy the database schema only. All tables will be empty. This is a lightweight
-				operation.
+			<Alert type="info" title="仅复制结构">
+				这只会复制数据库结构。所有表都会为空，这是一个轻量操作。
 			</Alert>
 		{/if}
 
 		{#if currentCloneJob.resourceType === 'instance'}
 			<p class="text-xs text-secondary mt-2">
-				This will run <code
+				这将在平台 PostgreSQL 实例上运行 <code
 					>CREATE DATABASE {currentCloneJob.steps[0]?.label.match(/"([^"]+)"/)?.[1] ?? ''}</code
-				> on the Windmill PostgreSQL instance.
+				>。
 			</p>
 		{:else}
 			<p class="text-xs text-secondary mt-2">
-				This will run <code>CREATE DATABASE</code> on the resource's PostgreSQL server.
+				这将在资源对应的 PostgreSQL 服务器上运行 <code>CREATE DATABASE</code>。
 			</p>
 		{/if}
 

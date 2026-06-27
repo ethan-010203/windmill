@@ -38,8 +38,8 @@
 </script>
 
 <div class="flex flex-col gap-1">
-	<p class="font-semibold text-xs text-emphasis">Workspace name</p>
-	<p class="text-xs text-secondary font-normal">Displayable name</p>
+	<p class="font-semibold text-xs text-emphasis">工作区名称</p>
+	<p class="text-xs text-secondary font-normal">显示名称</p>
 	<div class="flex flex-row gap-2 items-center">
 		<p class="text-primary text-xs">{currentName}</p>
 		<Button
@@ -56,15 +56,15 @@
 	</div>
 </div>
 
-<Modal bind:open title="Change workspace name">
+<Modal bind:open title="修改工作空间名称">
 	<div class="flex flex-col gap-4 mt-4">
 		{#if currentName}
 			<p class="text-secondary text-xs"
-				>Current name <br /> <span class="text-emphasis">{currentName}</span></p
+				>当前名称 <br /> <span class="text-emphasis">{currentName}</span></p
 			>
 		{/if}
 		<label class="flex flex-col gap-1">
-			<span class="text-emphasis text-xs">New name</span>
+			<span class="text-emphasis text-xs">新名称</span>
 			<input type="text" bind:value={newName} />
 		</label>
 	</div>

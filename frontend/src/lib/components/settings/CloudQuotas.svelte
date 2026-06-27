@@ -37,7 +37,7 @@
 		try {
 			quotas = await WorkspaceService.getCloudQuotas({ workspace: $workspaceStore! })
 		} catch (e) {
-			sendUserToast(`Failed to load cloud quotas: ${e}`, true)
+			sendUserToast(`加载配额失败：${e}`, true)
 		} finally {
 			loading = false
 		}
@@ -56,11 +56,11 @@
 				workspace: $workspaceStore!,
 				requestBody: { resource_type: pruneTarget }
 			})
-			sendUserToast(`Pruned ${result.pruned} old ${pruneTarget} versions`)
+			sendUserToast(`已清理 ${result.pruned} 个旧版本`)
 			drawer?.closeDrawer()
 			await loadQuotas()
 		} catch (e) {
-			sendUserToast(`Failed to prune: ${e}`, true)
+			sendUserToast(`清理失败：${e}`, true)
 		} finally {
 			pruning = false
 		}
@@ -74,39 +74,39 @@
 	function getPruneDescription(type: ResourceType): string {
 		switch (type) {
 			case 'scripts':
-				return 'This will permanently delete all non-HEAD script versions (old edits). The latest deployed version of each script will be preserved. This directly frees up quota space since each script edit creates a new row counted against the limit.'
+				return '这将永久删除所有非 HEAD 脚本版本（旧编辑记录）。每个脚本的最新部署版本会保留。由于每次脚本编辑都会创建计入限制的新记录，此操作会直接释放配额空间。'
 			case 'flows':
-				return 'This will permanently delete all non-HEAD flow versions. Only the latest version of each flow will be kept. This frees up storage but does not reduce the flow count (quota counts unique flows, not versions).'
+				return '这将永久删除所有非 HEAD 流程版本。每个流程只保留最新版本。此操作会释放存储空间，但不会减少流程数量（配额按唯一流程计数，而不是按版本计数）。'
 			case 'apps':
-				return 'This will permanently delete all non-HEAD app versions. Only the latest version of each app will be kept. This frees up storage but does not reduce the app count (quota counts unique apps, not versions).'
+				return '这将永久删除所有非 HEAD 应用版本。每个应用只保留最新版本。此操作会释放存储空间，但不会减少应用数量（配额按唯一应用计数，而不是按版本计数）。'
 		}
 	}
 
 	const rows: { label: string; key: keyof NonNullable<typeof quotas>; prunable: boolean }[] = [
-		{ label: 'Scripts', key: 'scripts', prunable: true },
-		{ label: 'Flows', key: 'flows', prunable: true },
-		{ label: 'Apps', key: 'apps', prunable: true },
-		{ label: 'Variables', key: 'variables', prunable: false },
-		{ label: 'Resources', key: 'resources', prunable: false }
+		{ label: '脚本', key: 'scripts', prunable: true },
+		{ label: '流程', key: 'flows', prunable: true },
+		{ label: '应用', key: 'apps', prunable: true },
+		{ label: '变量', key: 'variables', prunable: false },
+		{ label: '资源', key: 'resources', prunable: false }
 	]
 </script>
 
 <div class="flex flex-col gap-2">
-	<p class="font-semibold text-xs text-emphasis">Cloud Quotas</p>
+	<p class="font-semibold text-xs text-emphasis">配额</p>
 	<p class="text-xs text-secondary font-normal">
-		Current usage and limits for this workspace. Prune old versions to free up space.
+		当前工作区的使用量和限制。可清理旧版本释放空间。
 	</p>
 
 	{#if loading && !quotas}
-		<p class="text-xs text-tertiary">Loading...</p>
+		<p class="text-xs text-tertiary">加载中...</p>
 	{:else if quotas}
 		<div class="border rounded-md overflow-hidden">
 			<table class="w-full text-xs">
 				<thead>
 					<tr class="bg-surface-secondary border-b">
-						<th class="text-left px-3 py-2 text-secondary font-medium">Resource</th>
-						<th class="text-left px-3 py-2 text-secondary font-medium">Usage</th>
-						<th class="text-right px-3 py-2 text-secondary font-medium">Actions</th>
+						<th class="text-left px-3 py-2 text-secondary font-medium">资源</th>
+						<th class="text-left px-3 py-2 text-secondary font-medium">用量</th>
+						<th class="text-right px-3 py-2 text-secondary font-medium">操作</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -130,10 +130,10 @@
 										startIcon={{ icon: Trash2 }}
 										on:click={() => openPruneDrawer(row.key as ResourceType)}
 									>
-										Prune {info.prunable} old versions
+										清理 {info.prunable} 个旧版本
 									</Button>
 								{:else if row.prunable}
-									<span class="text-tertiary">No old versions</span>
+									<span class="text-tertiary">没有旧版本</span>
 								{/if}
 							</td>
 						</tr>
@@ -145,22 +145,22 @@
 </div>
 
 <Drawer bind:this={drawer}>
-	<DrawerContent title="Prune old versions" on:close={drawer?.closeDrawer}>
+	<DrawerContent title="清理旧版本" on:close={drawer?.closeDrawer}>
 		{#if pruneTarget}
 			<div class="flex flex-col gap-4">
 				<p class="text-sm text-primary">
-					You are about to prune <span class="font-semibold">{getPrunableCount(pruneTarget)}</span>
-					old {pruneTarget} versions.
+					即将清理 <span class="font-semibold">{getPrunableCount(pruneTarget)}</span>
+					个旧版本。
 				</p>
 				<p class="text-xs text-secondary">
 					{getPruneDescription(pruneTarget)}
 				</p>
-				<p class="text-xs text-red-500 font-medium">This action cannot be undone.</p>
+				<p class="text-xs text-red-500 font-medium">此操作无法撤销。</p>
 			</div>
 		{/if}
 		{#snippet actions()}
 			<Button variant="accent" on:click={confirmPrune} disabled={pruning}>
-				{pruning ? 'Pruning...' : 'Confirm Prune'}
+				{pruning ? '清理中...' : '确认清理'}
 			</Button>
 		{/snippet}
 	</DrawerContent>

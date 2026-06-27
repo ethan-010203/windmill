@@ -111,7 +111,7 @@
 									}
 								}}
 							>
-								Drop database
+									删除数据库
 							</Button>
 						{/if}
 					</div>
@@ -121,7 +121,7 @@
 				<div class="flex-1 overflow-y-scroll">
 					{#if status?.error}
 						<div transition:slide={{ duration: 200 }} class="mb-4">
-							<Alert title="Error setting up custom instance database" type="error">
+								<Alert title="设置自定义实例数据库时出错" type="error">
 								{status.error}
 							</Alert>
 						</div>
@@ -131,41 +131,41 @@
 						steps={firstEmptyStepIsError(
 							[
 								{
-									title: 'Super admin required',
+									title: '需要超级管理员权限',
 									status: status?.logs.super_admin,
 									description:
-										'You need to be a super admin to create a new database in the Windmill PostgreSQL instance'
+										'需要超级管理员权限，才能在平台 PostgreSQL 实例中创建新数据库'
 								},
 								{
-									title: 'Retrieve and parse database credentials',
+									title: '读取并解析数据库凭据',
 									status: status?.logs.database_credentials,
 									description:
-										'Windmill uses the DATABASE_URL or DATABASE_URL_FILE environment variable to connect to the PostgreSQL instance. Make sure it is correctly set'
+										'平台使用 DATABASE_URL 或 DATABASE_URL_FILE 环境变量连接 PostgreSQL 实例。请确保配置正确'
 								},
 								{
-									title: 'Database name is valid',
+									title: '数据库名称有效',
 									status: status?.logs.valid_dbname,
 									description:
-										'The database name must be alphanumeric (underscores allowed) and cannot be named the same as the Windmill database (usually "windmill")'
+										'数据库名称只能包含字母、数字和下划线，且不能与平台主数据库同名（通常为 "windmill"）'
 								},
 								{
 									title:
-										'Create database' +
-										(status?.logs.created_database === 'SKIP' ? ' (already exists, skipped)' : ''),
+										'创建数据库' +
+										(status?.logs.created_database === 'SKIP' ? '（已存在，已跳过）' : ''),
 									status: status?.logs.created_database,
-									description: `In the Windmill PostgreSQL instance, run: CREATE DATABASE "${dbname}".`
+									description: `在平台 PostgreSQL 实例中运行：CREATE DATABASE "${dbname}"。`
 								},
 								{
-									title: `Connect to the ${dbname} database`,
+									title: `连接到 ${dbname} 数据库`,
 									status: status?.logs.db_connect,
 									description:
-										"Connect to the newly created database with the default admin user (the one in DATABASE_URL, usually 'postgres') to run the next commands"
+										"使用默认管理员用户（DATABASE_URL 中的用户，通常为 'postgres'）连接到新建数据库，以便执行后续命令"
 								},
 								{
-									title: 'Grant permissions to custom_instance_user',
+									title: '授予 custom_instance_user 权限',
 									status: status?.logs.grant_permissions,
 									description:
-										'Gives custom_instance_user the required permissions to use the database. custom_instance_user is already created during a migration and has an auto-generated password stored in global_settings.custom_instance_pg_databases.user_pwd. These are the commands : \n\n' +
+										'授予 custom_instance_user 使用该数据库所需的权限。custom_instance_user 已在迁移过程中创建，自动生成的密码存储在 global_settings.custom_instance_pg_databases.user_pwd。需要执行的命令：\n\n' +
 										`GRANT CONNECT ON DATABASE "${dbname}" TO custom_instance_user;\n` +
 										'GRANT USAGE ON SCHEMA public TO custom_instance_user;\n' +
 										'GRANT CREATE ON SCHEMA public TO custom_instance_user;\n' +
@@ -185,11 +185,11 @@
 							endIcon={{ icon: InfoIcon }}
 							onClick={async () => {
 								await SettingService.refreshCustomInstanceUserPwd()
-								sendUserToast('custom_instance_user password refreshed')
-							}}>Refresh custom_instance_user password</Button
+								sendUserToast('custom_instance_user 密码已刷新')
+							}}>刷新 custom_instance_user 密码</Button
 						>
 						{#snippet text()}
-							Try this if there is an issue with your custom instance database password.
+							如果自定义实例数据库密码存在问题，可以尝试此操作。
 						{/snippet}
 					</Tooltip>
 				{/if}
@@ -206,9 +206,9 @@
 						if (status?.logs.created_database != 'OK' && status?.logs.created_database != 'SKIP') {
 							preventClose = true
 							let confirm = await confirmationModal.ask({
-								title: 'Confirm setup',
-								children: `This will create a new database ${dbname} in the Windmill PostgreSQL instance`,
-								confirmationText: 'Setup database'
+								title: '确认设置',
+								children: `这将在平台 PostgreSQL 实例中创建新数据库 ${dbname}`,
+								confirmationText: '设置数据库'
 							})
 							preventClose = false
 							if (!confirm) return
@@ -222,13 +222,13 @@
 							})
 							await customInstanceDbs.refetch()
 							if (result.success) {
-								if (!wasAlreadySuccessful) sendUserToast('Setup successful')
-								else sendUserToast('Check successful')
+								if (!wasAlreadySuccessful) sendUserToast('设置成功')
+								else sendUserToast('检查成功')
 							} else {
-								sendUserToast(result.error ?? 'An error occurred', true)
+								sendUserToast(result.error ?? '发生错误', true)
 							}
 						} catch (e) {
-							sendUserToast('Unexpected error, check console for details', true)
+							sendUserToast('发生意外错误，请查看控制台详情', true)
 							console.error('Error setting up custom instance database', e)
 						} finally {
 							customInstanceDbSetupIsRunning = false
@@ -237,13 +237,13 @@
 					loading={customInstanceDbSetupIsRunning}
 				>
 					{#if !$isCustomInstanceDbEnabled}
-						Only superadmins can setup custom instance databases
+						只有超级管理员可以设置自定义实例数据库
 					{:else if status?.success}
-						Check again
+						再次检查
 					{:else if status?.error}
-						Try again
+						重试
 					{:else}
-						Setup {truncate(dbname, 24)}
+						设置 {truncate(dbname, 24)}
 					{/if}
 				</Button>
 			</div>

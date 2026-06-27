@@ -143,7 +143,7 @@
 				requestBody: { settings }
 			})
 			dataTableSettings = clone(tempSettings)
-			sendUserToast('Data table settings saved successfully')
+			sendUserToast('数据表设置已保存')
 		} catch (e) {
 			sendUserToast(e, true)
 			console.error('Error saving data table settings', e)
@@ -180,9 +180,8 @@
 </script>
 
 <SettingsPageHeader
-	title="Data tables"
-	description="Store relational data out of the box. Interact with a fully managed PostgreSQL database directly from the Windmill SDK."
-	link="https://www.windmill.dev/docs/core_concepts/persistent_storage/data_tables"
+	title="数据表"
+	description="用于存储结构化关系数据，可通过 SDK 直接读写托管数据库。"
 />
 
 <DataTable>
@@ -204,7 +203,7 @@
 		{#if tempSettings.dataTables.length == 0}
 			<Row>
 				<Cell colspan={tableHeadNames.length} class="text-center py-6">
-					No data table in this workspace yet
+					当前工作空间还没有数据表
 				</Cell>
 			</Row>
 		{/if}
@@ -218,7 +217,7 @@
 						<div class="relative">
 							{#if dataTable.database.resource_type === 'instance'}
 								<Tooltip wrapperClass="absolute mt-[0.6rem] right-2 z-20" placement="bottom-start">
-									Use Windmill's PostgreSQL instance
+									使用实例内置 PostgreSQL
 								</Tooltip>
 							{/if}
 							<Select
@@ -226,8 +225,8 @@
 									{ value: 'postgresql', label: 'PostgreSQL' },
 									{
 										value: 'instance',
-										label: 'Instance',
-										subtitle: $isCustomInstanceDbEnabled ? undefined : 'Superadmin only'
+										label: '实例',
+										subtitle: $isCustomInstanceDbEnabled ? undefined : '仅超级管理员'
 									}
 								]}
 								bind:value={

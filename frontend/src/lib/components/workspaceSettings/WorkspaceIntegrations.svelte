@@ -4,7 +4,7 @@
 	import { Button, Alert } from '$lib/components/common'
 	import Skeleton from '$lib/components/common/skeleton/Skeleton.svelte'
 	import SettingsPageHeader from '$lib/components/settings/SettingsPageHeader.svelte'
-	import { Check, X, ExternalLink, Cog, Plug } from 'lucide-svelte'
+	import { Check, X, Cog, Plug } from 'lucide-svelte'
 	import { NextcloudIcon, GithubIcon } from '$lib/components/icons'
 	import GoogleIcon from '$lib/components/icons/GoogleIcon.svelte'
 	import { WorkspaceIntegrationService, type NativeServiceName } from '$lib/gen'
@@ -32,7 +32,6 @@
 		displayName: string
 		description: string
 		icon: any
-		docsUrl?: string
 		requiresBaseUrl?: boolean
 		clientIdPlaceholder?: string
 		clientSecretPlaceholder?: string
@@ -43,48 +42,45 @@
 		nextcloud: {
 			name: 'nextcloud',
 			displayName: 'Nextcloud',
-			description: 'Connect to Nextcloud for file operations and webhook triggers',
+			description: '连接 Nextcloud，用于文件操作和 Webhook 触发器',
 			icon: NextcloudIcon,
-			docsUrl: 'https://www.windmill.dev/docs/integrations/nextcloud',
 			setupInstructions: [
-				'Create an OAuth2 application in your Nextcloud instance (Administration settings → Security → OAuth 2.0 clients)',
-				'Configure the redirect URI shown below',
-				'Enter the client credentials below'
+				'在 Nextcloud 实例中创建 OAuth2 应用（管理设置 → 安全 → OAuth 2.0 客户端）',
+				'配置下方显示的重定向 URI',
+				'填写客户端凭据'
 			]
 		},
-		google: {
+			google: {
 			name: 'google',
 			displayName: 'Google',
-			description: 'Connect to Google for Drive and Calendar triggers',
+			description: '连接 Google，用于 Drive 和 Calendar 触发器',
 			icon: GoogleIcon,
-			docsUrl: 'https://www.windmill.dev/docs/core_concepts/native_triggers#google-triggers',
 			requiresBaseUrl: false,
 			clientIdPlaceholder: 'xxxx.apps.googleusercontent.com',
-			clientSecretPlaceholder: 'Google Cloud Console client secret',
-			setupInstructions: [
-				'Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" class="underline">Google Cloud Console - Credentials</a>',
-				'Create an OAuth 2.0 Client ID (Web application type)',
-				'Add the redirect URI shown below to "Authorized redirect URIs"',
-				'Enable the <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com" target="_blank" rel="noopener" class="underline">Google Drive API</a> and <a href="https://console.cloud.google.com/apis/library/calendar-json.googleapis.com" target="_blank" rel="noopener" class="underline">Google Calendar API</a> in your project',
-				'Enter the client credentials below'
-			]
-		},
+			clientSecretPlaceholder: 'Google Cloud Console 客户端密钥',
+				setupInstructions: [
+					'打开 <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" class="underline">Google Cloud Console - Credentials</a>',
+					'创建 OAuth 2.0 客户端 ID（Web 应用类型）',
+					'将下方显示的重定向 URI 添加到“Authorized redirect URIs”',
+					'在项目中启用 <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com" target="_blank" rel="noopener" class="underline">Google Drive API</a> 和 <a href="https://console.cloud.google.com/apis/library/calendar-json.googleapis.com" target="_blank" rel="noopener" class="underline">Google Calendar API</a>',
+					'在下方填写客户端凭据'
+				]
+			},
 		github: {
 			name: 'github',
 			displayName: 'GitHub',
-			description: 'Connect to GitHub for repository webhook triggers',
+			description: '连接 GitHub，用于仓库 Webhook 触发器',
 			icon: GithubIcon,
-			docsUrl: 'https://www.windmill.dev/docs/core_concepts/native_triggers#github-triggers',
 			requiresBaseUrl: false,
-			clientIdPlaceholder: 'GitHub OAuth App Client ID',
-			clientSecretPlaceholder: 'GitHub OAuth App Client Secret',
-			setupInstructions: [
-				'Go to <a href="https://github.com/settings/developers" target="_blank" rel="noopener" class="underline">GitHub Developer Settings</a>',
-				'Create a new OAuth App (not a GitHub App)',
-				'Set the "Authorization callback URL" to the redirect URI shown below',
-				'Enter the Client ID and Client Secret below'
-			]
-		}
+				clientIdPlaceholder: 'GitHub OAuth App 客户端 ID',
+				clientSecretPlaceholder: 'GitHub OAuth App 客户端密钥',
+				setupInstructions: [
+					'打开 <a href="https://github.com/settings/developers" target="_blank" rel="noopener" class="underline">GitHub Developer Settings</a>',
+					'创建新的 OAuth App（不是 GitHub App）',
+					'将“Authorization callback URL”设置为下方显示的重定向 URI',
+					'在下方填写客户端 ID 和客户端密钥'
+				]
+			}
 	}
 
 	let integrations = $state<WorkspaceIntegration[]>([])
@@ -117,7 +113,7 @@
 			}))
 		} catch (err: any) {
 			console.error('Failed to load workspace integrations:', err)
-			sendUserToast(`Failed to load integrations: ${err.message}`, true)
+			sendUserToast(`加载集成失败：${err.message}`, true)
 		} finally {
 			loading = false
 		}
@@ -128,9 +124,9 @@
 
 		const displayName = supportedServices[serviceName]?.displayName ?? serviceName
 		const confirmed = await confirmationModal.ask({
-			title: `Disconnect ${displayName}?`,
-			confirmationText: 'Disconnect',
-			children: `This will delete all ${displayName} triggers associated with this integration. This action cannot be undone.`
+			title: `断开 ${displayName}？`,
+			confirmationText: '断开',
+			children: `这会删除与该集成关联的所有 ${displayName} 触发器。此操作无法撤销。`
 		})
 		if (!confirmed) return
 
@@ -139,10 +135,10 @@
 				workspace: $workspaceStore,
 				serviceName: serviceName as any
 			})
-			sendUserToast(`${displayName} disconnected successfully`)
+			sendUserToast(`${displayName} 已断开`)
 			loadIntegrations()
 		} catch (err: any) {
-			sendUserToast(`Failed to disconnect ${displayName}: ${err.message}`, true)
+			sendUserToast(`断开 ${displayName} 失败：${err.message}`, true)
 		}
 	}
 
@@ -162,7 +158,7 @@
 			}
 		} catch (err: any) {
 			sendUserToast(
-				`Failed to connect ${supportedServices[serviceName]?.displayName}: ${err.message}`,
+				`连接 ${supportedServices[serviceName]?.displayName} 失败：${err.message}`,
 				true
 			)
 			connecting = null
@@ -179,12 +175,12 @@
 				requestBody: oauthData
 			})
 			sendUserToast(
-				`${supportedServices[serviceName]?.displayName} configuration saved successfully`
+				`${supportedServices[serviceName]?.displayName} 配置已保存`
 			)
 			loadIntegrations()
 		} catch (err: any) {
 			sendUserToast(
-				`Failed to configure ${supportedServices[serviceName]?.displayName}: ${err.message}`,
+				`配置 ${supportedServices[serviceName]?.displayName} 失败：${err.message}`,
 				true
 			)
 		}
@@ -328,9 +324,8 @@
 
 <div class="flex flex-col">
 	<SettingsPageHeader
-		title="Native Triggers"
-		description="Connect your workspace to external services for native triggers and enhanced functionality. These connections are shared across all workspace members and are required for native triggers to work."
-		link="https://www.windmill.dev/docs/core_concepts/native_triggers"
+		title="原生触发器集成"
+		description="将当前工作空间连接到外部服务，用于启用原生触发器和相关能力。这些连接会在工作空间成员之间共享。"
 	/>
 
 	{#if pendingCallback}
@@ -338,11 +333,10 @@
 		{@const config = supportedServices[serviceName]}
 		<div class="border border-gray-200 dark:border-gray-700 rounded-md p-4 bg-surface-tertiary">
 			<div class="text-sm font-semibold text-emphasis mb-2">
-				Save {config?.displayName ?? serviceName} credentials as resource
+				将 {config?.displayName ?? serviceName} 凭据保存为资源
 			</div>
 			<div class="text-xs text-secondary mb-3">
-				Choose where to save the OAuth resource. This resource will store the access token for the
-				integration.
+				请选择 OAuth 资源保存位置。该资源会保存此集成的访问令牌。
 			</div>
 			<Path
 				kind="resource"
@@ -357,7 +351,7 @@
 					disabled={!resourcePath || !!pathError}
 					onclick={finalizePendingCallback}
 				>
-					Save
+					保存
 				</Button>
 				<Button
 					onclick={() => {
@@ -366,7 +360,7 @@
 						pathError = undefined
 					}}
 				>
-					Cancel
+					取消
 				</Button>
 			</div>
 		</div>
@@ -401,7 +395,7 @@
 							{#if isServiceConnected}
 								<div class="flex items-center gap-1 text-green-600 text-xs">
 									<Check size={16} />
-									<span class="font-semibold">Connected</span>
+									<span class="font-semibold">已连接</span>
 								</div>
 								<Button
 									onclick={() =>
@@ -411,14 +405,14 @@
 									disabled={isConnecting}
 									startIcon={{ icon: Plug }}
 								>
-									{isConnecting ? 'Reconnecting...' : 'Reconnect'}
+									{isConnecting ? '重新连接中...' : '重新连接'}
 								</Button>
 								<Button
 									destructive
 									onclick={() => deleteIntegration(serviceName)}
 									startIcon={{ icon: X }}
 								>
-									Delete
+									删除
 								</Button>
 							{:else if isOAuthConfigured}
 								<Button
@@ -427,14 +421,14 @@
 									disabled={isConnecting}
 									startIcon={{ icon: Plug }}
 								>
-									{isConnecting ? 'Connecting...' : 'Connect'}
+									{isConnecting ? '连接中...' : '连接'}
 								</Button>
 								<Button
 									destructive
 									onclick={() => deleteIntegration(serviceName)}
 									startIcon={{ icon: X }}
 								>
-									Delete
+									删除
 								</Button>
 							{:else if instanceSharingAvailable[serviceName]}
 								<Button
@@ -443,7 +437,7 @@
 									disabled={isConnecting}
 									startIcon={{ icon: Plug }}
 								>
-									{isConnecting ? 'Connecting...' : 'Connect'}
+									{isConnecting ? '连接中...' : '连接'}
 								</Button>
 							{:else}
 								<Button
@@ -452,30 +446,24 @@
 										(showingConfig = showingConfig === serviceName ? null : serviceName)}
 									startIcon={{ icon: Cog }}
 								>
-									Configure OAuth
+									配置 OAuth
 								</Button>
 							{/if}
 
-							{#if config.docsUrl}
-								<Button href={config.docsUrl} target="_blank" startIcon={{ icon: ExternalLink }}>
-									Docs
-								</Button>
-							{/if}
 						</div>
 					</div>
 
 					{#if instanceSharingAvailable[serviceName] && !isOAuthConfigured}
 						<div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-							<Alert type="info" title="Redirect URI required">
+							<Alert type="info" title="需要配置重定向 URI">
 								<p class="text-sm mb-2">
-									Your instance admin has configured Google OAuth for native triggers. Before
-									connecting, ensure the following redirect URI has been added to the
+									实例管理员已为原生触发器配置 Google OAuth。连接前，请确认以下重定向 URI 已由实例管理员添加到
 									<a
 										href="https://console.cloud.google.com/apis/credentials"
 										target="_blank"
 										rel="noopener noreferrer"
 										class="underline">Google Cloud Console</a
-									> by the instance admin:
+									>：
 								</p>
 								<ClipboardPanel content={getRedirectUri(serviceName)} size="sm" />
 							</Alert>
@@ -485,19 +473,19 @@
 					{#if isShowingConfig}
 						<div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
 							{#if serviceName === 'nextcloud'}
-								<Alert type="info" title="Requirements" class="mb-4">
-									<p>Nextcloud integration requires:</p>
+								<Alert type="info" title="要求" class="mb-4">
+									<p>Nextcloud 集成需要：</p>
 									<ul class="list-disc pl-4 mt-2 space-y-1">
-										<li>Nextcloud 33 or later.</li>
+										<li>Nextcloud 33 或更高版本。</li>
 										<li>
-											The <a
+											<a
 												href="https://apps.nextcloud.com/apps/integration_windmill"
 												target="_blank"
 												rel="noopener noreferrer"
 												class="underline hover:text-blue-600"
 											>
-												Windmill integration app
-											</a> to be installed on your Nextcloud instance.
+												集成应用
+											</a>已安装到你的 Nextcloud 实例。
 										</li>
 										<li>
 											<a
@@ -506,9 +494,9 @@
 												rel="noopener noreferrer"
 												class="underline hover:text-blue-600"
 											>
-												Pretty URLs
+												美化 URL
 											</a>
-											to be enabled on your Nextcloud instance.
+											已在你的 Nextcloud 实例中启用。
 										</li>
 									</ul>
 								</Alert>
@@ -534,8 +522,8 @@
 		</div>
 
 		{#if integrations.length === 0}
-			<Alert type="warning" title="No Integrations Connected">
-				Connect to external services above to enable native triggers for your workspace.
+			<Alert type="warning" title="尚未连接集成">
+				连接上方外部服务后，当前工作空间才能使用对应原生触发器。
 			</Alert>
 		{/if}
 	{/if}

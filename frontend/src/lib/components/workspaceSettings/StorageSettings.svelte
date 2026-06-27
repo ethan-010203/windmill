@@ -440,14 +440,9 @@
 					/>
 					{#if storage.publicResource === true}
 						<div class="pt-2"></div>
-						<Alert
-							type="warning"
-							title="(Legacy) Object storage content and resource details are shared"
-						>
-							object public access is ON, which means that the entire content of the object store
-							will be accessible to all the users of this workspace regardless of whether they have
-							access the resource or not.
-						</Alert>
+							<Alert type="warning" title="（旧版）对象存储内容和资源详情已共享">
+								对象公开访问已开启，这意味着该对象存储中的全部内容都会对当前工作区所有用户可见，即使这些用户原本没有此资源的访问权限。
+							</Alert>
 					{/if}
 				</div>
 			{/if}
@@ -456,27 +451,27 @@
 </Modal2>
 
 {#snippet advancedPermissionsEditor(rules: S3ResourceSettingsItem['advancedPermissions'])}
-	<Alert title="Standard Unix-style glob syntax is supported">
-		The following will be interpolated :
+	<Alert title="支持标准 Unix 风格 glob 语法">
+		以下占位符会被替换：
 		<ul class="list-disc pl-6">
-			<li><code>{'{username}'}</code> : Nickname of the user doing the request</li>
-			<li><code>{'{group}'}</code> : Any group that the user belongs to</li>
-			<li><code>{'{folder_read}'}</code> : Any folder that the user has read access to</li>
-			<li><code>{'{folder_write}'}</code> : Any folder that the user has write access to</li>
+			<li><code>{'{username}'}</code>：发起请求用户的昵称</li>
+			<li><code>{'{group}'}</code>：该用户所属的任意用户组</li>
+			<li><code>{'{folder_read}'}</code>：该用户拥有读取权限的任意文件夹</li>
+			<li><code>{'{folder_write}'}</code>：该用户拥有写入权限的任意文件夹</li>
 		</ul>
 		<br />
-		Note that changes may take up to 1 minute to propagate due to cache invalidation
+		由于缓存失效需要时间，变更最多可能需要 1 分钟生效。
 	</Alert>
 
 	<div class="flex-1 overflow-y-auto gap-3 flex flex-col">
 		{#each rules ?? [] as item, idx}
 			<div class="flex gap-2">
-				<ClearableInput bind:value={item.pattern} placeholder="Pattern" />
+			<ClearableInput bind:value={item.pattern} placeholder="匹配规则" />
 				<MultiSelect
 					items={[{ value: 'read' }, { value: 'write' }, { value: 'delete' }, { value: 'list' }]}
 					bind:value={item.allow}
 					class="w-[20rem]"
-					placeholder="Deny all access"
+					placeholder="拒绝所有访问"
 					hideMainClearBtn
 				/>
 				<CloseButton onClick={() => rules?.splice(idx, 1)} />
@@ -485,6 +480,6 @@
 	</div>
 	<Button size="xs" variant="default" on:click={() => rules?.push({ pattern: '', allow: [] })}>
 		<Plus size={14} />
-		Add permission rule
+		添加权限规则
 	</Button>
 {/snippet}

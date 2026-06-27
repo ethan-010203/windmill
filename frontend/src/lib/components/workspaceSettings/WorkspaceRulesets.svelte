@@ -23,7 +23,7 @@
 			rules = await WorkspaceService.listProtectionRules({ workspace: $workspaceStore })
 		} catch (error) {
 			console.error('Failed to load protection rules:', error)
-			sendUserToast('Failed to load protection rules', true)
+			sendUserToast('加载保护规则失败', true)
 			rules = []
 		}
 	}
@@ -42,10 +42,10 @@
 				ruleName: name
 			})
 			await loadRules()
-			sendUserToast('Protection rule deleted')
+			sendUserToast('保护规则已删除')
 		} catch (error) {
 			console.error('Failed to delete protection rule:', error)
-			sendUserToast('Failed to delete protection rule', true)
+			sendUserToast('删除保护规则失败', true)
 		}
 	}
 
@@ -53,9 +53,9 @@
 		const groupCount = bypassGroups.length
 		const userCount = bypassUsers.length
 		const parts: string[] = []
-		if (groupCount > 0) parts.push(`${groupCount} group${groupCount !== 1 ? 's' : ''}`)
-		if (userCount > 0) parts.push(`${userCount} user${userCount !== 1 ? 's' : ''}`)
-		return parts.length > 0 ? `${parts.join(', ')} can bypass` : 'No bypassers'
+	if (groupCount > 0) parts.push(`${groupCount} 个用户组`)
+	if (userCount > 0) parts.push(`${userCount} 个用户`)
+	return parts.length > 0 ? `${parts.join('，')} 可绕过` : '无绕过对象'
 	}
 
 	function getEnabledRulesCount(ruleConfig: ProtectionRuleset['rules']): number {
@@ -109,9 +109,9 @@
 	<DataTable containerClass="bg-surface-tertiary">
 		<Head>
 			<tr>
-				<Cell head first>Name</Cell>
-				<Cell head>Bypassers</Cell>
-				<Cell head>Rules</Cell>
+				<Cell head first>名称</Cell>
+				<Cell head>绕过对象</Cell>
+				<Cell head>规则</Cell>
 				<Cell head last />
 			</tr>
 		</Head>
@@ -128,7 +128,7 @@
 				<tr>
 					<Cell first last colspan={4}>
 						<div class="text-center py-8 text-secondary text-sm">
-							No protection rules created yet. Click "New rule" to create your first rule.
+							尚未创建保护规则。点击“新建规则”创建第一条规则。
 						</div>
 					</Cell>
 				</tr>
@@ -153,14 +153,14 @@
 						</Cell>
 						<Cell>
 							<span class="text-xs text-secondary">
-								{getEnabledRulesCount(rule.rules)} enabled
+								已启用 {getEnabledRulesCount(rule.rules)} 条
 							</span>
 						</Cell>
 						<Cell last>
 							<Dropdown
 								items={[
 									{
-										displayName: 'Edit rule',
+						displayName: '编辑规则',
 										icon: Pen,
 										action: (e) => {
 											e?.stopPropagation()
@@ -169,7 +169,7 @@
 										}
 									},
 									{
-										displayName: 'Delete',
+						displayName: '删除',
 										icon: Trash,
 										type: 'delete',
 										action: async () => {
