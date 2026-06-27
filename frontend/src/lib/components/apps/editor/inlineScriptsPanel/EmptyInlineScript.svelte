@@ -2,14 +2,13 @@
 	import type { Schema } from '$lib/common'
 	import { Button, Drawer, DrawerContent, Tab, Tabs } from '$lib/components/common'
 	import FlowScriptPicker from '$lib/components/flows/pickers/FlowScriptPicker.svelte'
-	import PickHubScript from '$lib/components/flows/pickers/PickHubScript.svelte'
 	import Tooltip from '$lib/components/Tooltip.svelte'
 	import { inferArgs } from '$lib/infer'
 	import { initialCode } from '$lib/script_helpers'
 	import { emptySchema } from '$lib/utils'
 	import { defaultScriptLanguages, getScriptByPath, processLangs } from '$lib/scripts'
 
-	import { Building, GitFork, Globe2 } from 'lucide-svelte'
+	import { Building, GitFork } from 'lucide-svelte'
 	import { createEventDispatcher } from 'svelte'
 	import { defaultCode } from '../component'
 	import WorkspaceScriptList from '../settingsPanel/mainInput/WorkspaceScriptList.svelte'
@@ -35,7 +34,6 @@
 	}: Props = $props()
 
 	let tab = $state('workspacescripts')
-	let filter: string = $state('')
 	let picker: Drawer | undefined = $state(undefined)
 
 	const dispatch = createEventDispatcher()
@@ -82,11 +80,6 @@
 		newInlineScript(script.content, script.language)
 	}
 
-	async function pickHubScript(path: string) {
-		const script = await getScriptByPath(path)
-		newInlineScript(script.content, script.language)
-	}
-
 	let langs = $derived(
 		processLangs(undefined, $defaultScripts?.order ?? Object.keys(defaultScriptLanguages))
 			.map((l) => [defaultScriptLanguages[l], l])
@@ -104,16 +97,12 @@
 			<div class="max-w-6xl">
 				<Tabs bind:selected={tab}>
 					<Tab value="workspacescripts" label="Workspace Scripts" icon={Building} />
-
-					<Tab value="hubscripts" label="Hub Scripts" icon={Globe2} />
 				</Tabs>
 				<div class="my-2"></div>
 				<div class="flex flex-col gap-y-16">
 					<div class="flex flex-col">
 						{#if tab == 'workspacescripts'}
 							<WorkspaceScriptList on:pick={(e) => pickScript(e.detail)} />
-						{:else if tab == 'hubscripts'}
-							<PickHubScript bind:filter on:pick={(e) => pickHubScript(e.detail.path)} />
 						{/if}
 					</div>
 				</div>
