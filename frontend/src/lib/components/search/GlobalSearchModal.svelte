@@ -20,7 +20,6 @@
 		DollarSignIcon,
 		HomeIcon,
 		LayoutDashboardIcon,
-		MailIcon,
 		PlayIcon,
 		Route,
 		Search,
@@ -34,13 +33,11 @@
 	import ContentSearchInner from '../ContentSearchInner.svelte'
 	import { goto } from '$app/navigation'
 	import QuickMenuItem from '../search/QuickMenuItem.svelte'
-	import { devopsRole, enterpriseLicense, userStore, workspaceStore } from '$lib/stores'
+	import { userStore, workspaceStore } from '$lib/stores'
 	import uFuzzy from '@leeoniya/ufuzzy'
 	import BarsStaggered from '../icons/BarsStaggered.svelte'
-	import { Alert } from '../common'
 	import Popover from '../Popover.svelte'
-	import Logs from 'lucide-svelte/icons/logs'
-	import { AwsIcon, AzureIcon, GoogleCloudIcon, KafkaIcon, MqttIcon, NatsIcon } from '../icons'
+	import { MqttIcon } from '../icons'
 	import RunsSearch from './RunsSearch.svelte'
 	import AskAiButton from '../copilot/AskAiButton.svelte'
 
@@ -52,11 +49,10 @@
 	let contentSearch: ContentSearchInner | undefined = $state(undefined)
 
 	const RUNS_PREFIX = '>'
-	const LOGS_PREFIX = '!'
 	const CONTENT_SEARCH_PREFIX = '#'
 	const SWITCH_MODE_PREFIX = '?'
 
-	type SearchMode = 'default' | 'switch-mode' | 'runs' | 'content' | 'logs'
+	type SearchMode = 'default' | 'switch-mode' | 'runs' | 'content'
 
 	let tab: SearchMode = $state('default')
 
@@ -71,7 +67,7 @@
 	let switchModeItems: quickMenuItem[] = [
 		{
 			search_id: 'switchto:run-search',
-			label: '搜索已完成运行记录' + (!$enterpriseLicense ? '' : ' (EE)'),
+			label: '搜索已完成运行记录',
 			action: () => switchMode('runs'),
 			shortcutKey: RUNS_PREFIX,
 			icon: Search,
@@ -111,52 +107,10 @@
 			disabled: $userStore?.operator
 		},
 		{
-			search_id: 'nav:kafka_triggers',
-			label: '前往 Kafka 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
-			action: (newtab: boolean = false) => gotoPage('/kafka_triggers', newtab),
-			icon: KafkaIcon,
-			disabled: $userStore?.operator
-		},
-		{
-			search_id: 'nav:nats_triggers',
-			label: '前往 NATS 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
-			action: (newtab: boolean = false) => gotoPage('/nats_triggers', newtab),
-			icon: NatsIcon,
-			disabled: $userStore?.operator
-		},
-		{
-			search_id: 'nav:sqs_triggers',
-			label: '前往 SQS 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
-			action: (newtab: boolean = false) => gotoPage('/sqs_triggers', newtab),
-			icon: AwsIcon,
-			disabled: $userStore?.operator
-		},
-		{
-			search_id: 'nav:gcp_pub_sub',
-			label: '前往 GCP Pub/Sub 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
-			action: (newtab: boolean = false) => gotoPage('/gcp_triggers', newtab),
-			icon: GoogleCloudIcon,
-			disabled: $userStore?.operator
-		},
-		{
-			search_id: 'nav:azure_event_grid',
-			label: '前往 Azure Event Grid 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
-			action: (newtab: boolean = false) => gotoPage('/azure_triggers', newtab),
-			icon: AzureIcon,
-			disabled: $userStore?.operator
-		},
-		{
 			search_id: 'nav:mqtt_triggers',
 			label: '前往 MQTT 触发器',
 			action: (newtab: boolean = false) => gotoPage('/mqtt_triggers', newtab),
 			icon: MqttIcon,
-			disabled: $userStore?.operator
-		},
-		{
-			search_id: 'nav:email_triggers',
-			label: '前往邮件触发器',
-			action: (newtab: boolean = false) => gotoPage('/email_triggers', newtab),
-			icon: MailIcon,
 			disabled: $userStore?.operator
 		}
 	]
@@ -197,15 +151,7 @@
 			icon: CalendarIcon,
 			disabled: false
 		},
-		...switchModeItems,
-		{
-			search_id: 'nav:service_logs',
-			label: '查看服务日志',
-			action: (newtab: boolean = false) => gotoPage('/service_logs', newtab),
-			shortcutKey: LOGS_PREFIX,
-			icon: Logs,
-			disabled: !$devopsRole
-		}
+		...switchModeItems
 	]
 
 	let defaultMenuItemsWithHidden = [...defaultMenuItems, ...hiddenMenuItems]
@@ -214,8 +160,7 @@
 		default: defaultMenuItems as any[],
 		'switch-mode': switchModeItems,
 		runs: [] as any[],
-		content: [] as any[],
-		logs: [] as any[]
+		content: [] as any[]
 	})
 
 	$effect(() => {
@@ -234,9 +179,6 @@
 		}
 		if (tab === 'switch-mode') {
 			searchTerm = SWITCH_MODE_PREFIX
-		}
-		if (tab === 'logs') {
-			searchTerm = LOGS_PREFIX
 		}
 		selectedItem = selectItem(0)
 		textInput?.focus()
@@ -288,17 +230,12 @@
 		if (
 			tab !== 'default' &&
 			(searchTerm === '' ||
-				![RUNS_PREFIX, LOGS_PREFIX, CONTENT_SEARCH_PREFIX, SWITCH_MODE_PREFIX].includes(
-					searchTerm[0]
-				))
+				![RUNS_PREFIX, CONTENT_SEARCH_PREFIX, SWITCH_MODE_PREFIX].includes(searchTerm[0]))
 		) {
 			_switchMode('default')
 		}
 		if (tab != 'switch-mode' && searchTerm.length > 0 && searchTerm[0] === SWITCH_MODE_PREFIX) {
 			_switchMode('switch-mode')
-		}
-		if (tab != 'logs' && searchTerm.length > 0 && searchTerm[0] === LOGS_PREFIX) {
-			_switchMode('logs')
 		}
 		if (tab != 'runs' && searchTerm.length > 0 && searchTerm[0] === RUNS_PREFIX) {
 			_switchMode('runs')
@@ -365,25 +302,23 @@
 					open = false
 				}
 			}
-			if (tab != 'logs') {
-				if (event.key === 'ArrowDown') {
-					event.preventDefault()
-					let idx = itemMap[tab].indexOf(selectedItem)
-					if (idx != -1) {
-						idx = (idx + 1) % itemMap[tab].length
-						selectedItem = selectItem(idx)
-						let el = document.getElementById(selectedItem.search_id)
-						if (el) scroll_into_view_if_needed_polyfill(el, false)
-					}
-				} else if (event.key === 'ArrowUp') {
-					event.preventDefault()
-					let idx = itemMap[tab].indexOf(selectedItem)
-					if (idx != -1) {
-						idx = (idx - 1 + itemMap[tab].length) % itemMap[tab].length
-						selectedItem = selectItem(idx)
-						let el = document.getElementById(selectedItem.search_id)
-						if (el) scroll_into_view_if_needed_polyfill(el, false)
-					}
+			if (event.key === 'ArrowDown') {
+				event.preventDefault()
+				let idx = itemMap[tab].indexOf(selectedItem)
+				if (idx != -1) {
+					idx = (idx + 1) % itemMap[tab].length
+					selectedItem = selectItem(idx)
+					let el = document.getElementById(selectedItem.search_id)
+					if (el) scroll_into_view_if_needed_polyfill(el, false)
+				}
+			} else if (event.key === 'ArrowUp') {
+				event.preventDefault()
+				let idx = itemMap[tab].indexOf(selectedItem)
+				if (idx != -1) {
+					idx = (idx - 1 + itemMap[tab].length) % itemMap[tab].length
+					selectedItem = selectItem(idx)
+					let el = document.getElementById(selectedItem.search_id)
+					if (el) scroll_into_view_if_needed_polyfill(el, false)
 				}
 			}
 		}
@@ -456,8 +391,6 @@
 			case '':
 				return '   搜索，或输入 `?` 查看搜索选项'
 			case RUNS_PREFIX:
-				return '   搜索已完成运行记录'
-			case LOGS_PREFIX:
 				return '   搜索已完成运行记录'
 			case CONTENT_SEARCH_PREFIX:
 				return '   按内容搜索流程、脚本和应用'
@@ -634,7 +567,7 @@
 					{#if (itemMap[tab] ?? []).length === 0 && searchTerm.length > 0}
 						<AskAiButton
 							bind:this={askAiButton}
-							label="Ask AI"
+							label="询问 AI"
 							initialInput={searchTerm}
 							onClick={() => {
 								closeModal()
@@ -645,10 +578,9 @@
 						<Popover notClickable placement="bottom-start">
 							<AlertTriangle size={16} class="text-yellow-500" />
 							{#snippet text()}
-								Some of your search terms have been ignored because one or more parse errors:<br
-								/><br />
+								部分搜索条件因为解析错误已被忽略：<br /><br />
 								<ul>
-									{#each queryParseErrors as msg}
+									{#each queryParseErrors as msg (msg)}
 										<li>- {msg}</li>
 									{/each}
 								</ul>
@@ -667,7 +599,7 @@
 									? 'p-2'
 									: 'p-2 border-b'}
 							>
-								{#each items as el}
+								{#each items as el (el.search_id)}
 									<QuickMenuItem
 										onselect={(shift) => el?.action(shift)}
 										onhover={() => (selectedItem = el)}
@@ -687,7 +619,7 @@
 						{#if (itemMap[tab] ?? []).filter((e) => (combinedItems ?? []).includes(e)).length > 0}
 							<div class="p-2">
 								<div class="py-2 px-1 text-xs font-semibold text-primary">流程/脚本/应用</div>
-								{#each (itemMap[tab] ?? []).filter((e) => (combinedItems ?? []).includes(e)) as el}
+								{#each (itemMap[tab] ?? []).filter((e) => (combinedItems ?? []).includes(e)) as el (el.search_id)}
 									<QuickMenuItem
 										onselect={(shift) => {
 											gotoWindmillItemPage(el, shift)
@@ -711,15 +643,15 @@
 									onselect={() => {
 										askAiButton?.onClick()
 									}}
-									id={'ai:no-results-ask-ai'}
+									id="ai:no-results-ask-ai"
 									hovered={true}
-									label={`Try asking \`${searchTerm}\` to AI`}
+									label={`尝试向 AI 询问 \`${searchTerm}\``}
 									icon={WandSparkles}
 									bind:mouseMoved
 								/>
 								<div class="flex w-full justify-center items-center">
 									<div class="text-primary text-center">
-										<div class="pt-1 text-sm">Tip: press `esc` to quickly clear the search bar</div>
+										<div class="pt-1 text-sm">提示：按 `esc` 可快速清空搜索框</div>
 									</div>
 								</div>
 							</div>
@@ -732,27 +664,6 @@
 								closeModal()
 							}}
 						/>
-					{:else if tab === 'logs'}
-						<div class="p-2">
-							{#if !$devopsRole}
-								<Alert title="Service logs are only available to superadmins" type="warning">
-									Service logs are only available to superadmins
-								</Alert>
-							{:else}
-								<QuickMenuItem
-									onselect={() =>
-										gotoPage(
-											`/service_logs?query=${encodeURIComponent(removePrefix(searchTerm, '!'))}`
-										)}
-									id="goto_service_logs_search"
-									hovered={true}
-									label={searchTerm === '!'
-										? 'Explore Windmill service logs'
-										: `Search '${removePrefix(searchTerm, '!')}' in Windmill's service logs`}
-									icon={searchTerm === '!' ? Logs : Search}
-								/>
-							{/if}
-						</div>
 					{:else if tab === 'runs'}
 						<RunsSearch
 							bind:queryParseErrors

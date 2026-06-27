@@ -8,7 +8,7 @@ export const WM_LOGS_SKIPPED = '__WM_LOGS_SKIPPED__'
 
 export const DEFAULT_WEBHOOK_TYPE: 'async' | 'sync' = 'async'
 
-export const HOME_SHOW_HUB = true
+export const HOME_SHOW_HUB = false
 
 export const HOME_SHOW_CREATE_FLOW = true
 export const HOME_SEARCH_SHOW_FLOW = true

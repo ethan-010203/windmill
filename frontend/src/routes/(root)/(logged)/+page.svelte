@@ -50,7 +50,7 @@
 	type Tab = 'hub' | 'workspace'
 
 	let tab: Tab = $state(
-		window.location.hash == '#workspace' || window.location.hash == '#hub'
+		window.location.hash == '#workspace' || (HOME_SHOW_HUB && window.location.hash == '#hub')
 			? (window.location.hash?.replace('#', '') as Tab)
 			: 'workspace'
 	)

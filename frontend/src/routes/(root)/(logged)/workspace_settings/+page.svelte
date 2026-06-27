@@ -15,7 +15,7 @@
 	import Tooltip from '$lib/components/Tooltip.svelte'
 	import WorkspaceUserSettings from '$lib/components/settings/WorkspaceUserSettings.svelte'
 	import SettingsPageHeader from '$lib/components/settings/SettingsPageHeader.svelte'
-	import { WORKSPACE_SHOW_SLACK_CMD, WORKSPACE_SHOW_WEBHOOK_CLI_SYNC } from '$lib/consts'
+	import { WORKSPACE_SHOW_WEBHOOK_CLI_SYNC } from '$lib/consts'
 	import {
 		OauthService,
 		WorkspaceService,
@@ -1067,13 +1067,6 @@
 					label: 'Windmill AI',
 					aiId: 'workspace-settings-ai',
 					aiDescription: 'Windmill AI workspace settings'
-				},
-				{
-					id: 'premium',
-					label: 'Premium plans',
-					aiId: 'workspace-settings-premium',
-					aiDescription: 'Premium plans workspace settings',
-					showIf: isCloudHosted()
 				}
 			]
 		},
@@ -1086,33 +1079,12 @@
 					aiId: 'workspace-settings-git-sync',
 					aiDescription: 'Git sync workspace settings',
 					isEE: true
-				},
-				{
-					id: 'deploy_to',
-					label: 'Deployment UI',
-					aiId: 'workspace-settings-deploy-to',
-					aiDescription: 'Deployment UI workspace settings',
-					isEE: true
-				},
-				{
-					id: 'rulesets',
-					label: 'Rulesets',
-					aiId: 'workspace-settings-rulesets',
-					aiDescription: 'Protection Rulesets workspace settings',
-					isEE: true
 				}
 			]
 		},
 		{
 			title: 'Integrations',
 			items: [
-				{
-					id: 'slack',
-					label: 'Slack / Teams',
-					aiId: 'workspace-settings-slack',
-					aiDescription: 'Slack / Teams workspace settings',
-					showIf: WORKSPACE_SHOW_SLACK_CMD
-				},
 				{
 					id: 'webhook',
 					label: 'Webhook',
@@ -1137,13 +1109,6 @@
 					aiId: 'workspace-settings-error-handler',
 					aiDescription: 'Error and success handler workspace settings',
 					isEE: true
-				},
-				{
-					id: 'critical_alerts',
-					label: 'Critical alerts',
-					aiId: 'workspace-settings-critical-alerts',
-					aiDescription: 'Critical alerts workspace settings',
-					isEE: true
 				}
 			]
 		},
@@ -1167,25 +1132,12 @@
 					label: 'Volumes',
 					aiId: 'workspace-settings-volume-storage',
 					aiDescription: 'Volume storage workspace settings'
-				},
-				{
-					id: 'ducklake',
-					label: 'Ducklake',
-					aiId: 'workspace-settings-ducklake',
-					aiDescription: 'Ducklake workspace settings'
 				}
 			]
 		},
 		{
 			title: 'Advanced',
 			items: [
-				{
-					id: 'default_app',
-					label: 'Apps',
-					aiId: 'workspace-settings-apps',
-					aiDescription: 'Apps workspace settings',
-					isEE: true
-				},
 				{
 					id: 'shared_ui',
 					label: 'Shared UI folder',

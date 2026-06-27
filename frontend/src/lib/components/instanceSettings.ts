@@ -986,13 +986,6 @@ export const instanceSettingsNavigationGroups = [
 				label: 'OAuth',
 				aiId: 'instance-settings-oauth',
 				aiDescription: 'Instance OAuth settings'
-			},
-			{
-				id: 'scim_saml',
-				label: 'SCIM/SAML',
-				aiId: 'instance-settings-scim-saml',
-				aiDescription: 'Instance SCIM/SAML settings',
-				isEE: true
 			}
 		]
 	},
@@ -1010,13 +1003,6 @@ export const instanceSettingsNavigationGroups = [
 				label: 'Registries',
 				aiId: 'instance-settings-registries',
 				aiDescription: 'Instance registries settings'
-			},
-			{
-				id: 'object_storage',
-				label: 'Object Storage',
-				aiId: 'instance-settings-object-storage',
-				aiDescription: 'Instance object storage settings',
-				isEE: true
 			}
 		]
 	},
@@ -1024,31 +1010,10 @@ export const instanceSettingsNavigationGroups = [
 		title: 'Monitoring',
 		items: [
 			{
-				id: 'alerts',
-				label: 'Alerts',
-				aiId: 'instance-settings-alerts',
-				aiDescription: 'Instance alerts settings',
-				isEE: true
-			},
-			{
 				id: 'webhooks',
 				label: 'Webhooks',
 				aiId: 'instance-settings-webhooks',
 				aiDescription: 'Instance events webhook settings'
-			},
-			{
-				id: 'otel_prom',
-				label: 'OTEL/Prometheus',
-				aiId: 'instance-settings-otel-prom',
-				aiDescription: 'Instance OTEL/Prometheus settings',
-				isEE: true
-			},
-			{
-				id: 'indexer',
-				label: 'Indexer',
-				aiId: 'instance-settings-indexer',
-				aiDescription: 'Instance indexer settings',
-				isEE: true
 			},
 			{
 				id: 'db_health',
@@ -1072,20 +1037,6 @@ export const instanceSettingsNavigationGroups = [
 	{
 		title: 'Advanced',
 		items: [
-			{
-				id: 'github_enterprise_app',
-				label: 'GitHub App',
-				aiId: 'instance-settings-github-enterprise-app',
-				aiDescription: 'Self-managed GitHub App for git sync',
-				isEE: true
-			},
-			{
-				id: 'private_hub',
-				label: 'Private Hub',
-				aiId: 'instance-settings-private-hub',
-				aiDescription: 'Instance private hub settings',
-				isEE: true
-			},
 			{
 				id: 'telemetry',
 				label: 'Telemetry',
@@ -1210,6 +1161,7 @@ export function buildSearchableSettingItems(
 	navigationGroups: typeof instanceSettingsNavigationGroups = instanceSettingsNavigationGroups
 ): SearchableSettingItem[] {
 	const items: SearchableSettingItem[] = []
+	const visibleTabIds = new Set(navigationGroups.flatMap((group) => group.items.map((item) => item.id)))
 
 	// Add sidebar navigation items (tab-level)
 	for (const group of navigationGroups) {
@@ -1226,6 +1178,7 @@ export function buildSearchableSettingItems(
 	for (const [category, categorySettings] of Object.entries(settings)) {
 		const tabId = categoryToTabMap[category]
 		if (!tabId) continue
+		if (!visibleTabIds.has(tabId)) continue
 		for (const setting of categorySettings) {
 			if (!setting.label) continue
 			items.push({
@@ -1239,15 +1192,17 @@ export function buildSearchableSettingItems(
 	}
 
 	// Add SCIM/SAML settings
-	for (const setting of scimSamlSetting) {
-		if (!setting.label) continue
-		items.push({
-			label: setting.label,
-			tabId: 'scim_saml',
-			settingKey: setting.key,
-			category: 'SCIM/SAML',
-			description: setting.description?.replace(/<[^>]*>/g, '') ?? ''
-		})
+	if (visibleTabIds.has('scim_saml')) {
+		for (const setting of scimSamlSetting) {
+			if (!setting.label) continue
+			items.push({
+				label: setting.label,
+				tabId: 'scim_saml',
+				settingKey: setting.key,
+				category: 'SCIM/SAML',
+				description: setting.description?.replace(/<[^>]*>/g, '') ?? ''
+			})
+		}
 	}
 
 	return items
