@@ -80,11 +80,11 @@
 		<div class="absolute top-0 left-0 w-full h-full bg-gray-50 opacity-50 z-10 bottom-0"></div>
 		<Alert
 			type="warning"
-			title="Themes are available in the enterprise edition."
+			title="当前部署未开放主题编辑"
 			class="w-full z-50"
 			size="xs"
 		>
-			Upgrade to the enterprise edition to use themes.
+			主题编辑功能当前不可用。
 		</Alert>
 	{/if}
 	<div class="w-full flex flex-row gap-2 items-center">

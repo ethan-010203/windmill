@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ExternalLink, ChevronDown, ChevronRight, Plus } from 'lucide-svelte'
+	import { ChevronDown, ChevronRight, Plus } from 'lucide-svelte'
 	import { Button, Alert } from '$lib/components/common'
 	import SettingsPageHeader from '$lib/components/settings/SettingsPageHeader.svelte'
 	import { setGitSyncContext } from './GitSyncContext.svelte'
@@ -87,43 +87,37 @@
 	</div>
 {:else}
 	<SettingsPageHeader
-		title="Git Sync"
-		description="Connect the Windmill workspace to a Git repository to automatically commit and push scripts, flows, and apps to the repository on each deploy."
-		link="https://www.windmill.dev/docs/advanced/git_sync"
+		title="Git 同步"
+		description="连接 Git 仓库后，可以在部署脚本、流程和应用时自动提交并推送变更。"
 	>
 		{#snippet actions()}
 			{#if (gitSyncAllowed || gitSyncStatus.user_count != null) && gitSyncContext?.repositories != undefined}
 				<Button
 					variant="accent"
 					target="_blank"
-					endIcon={{ icon: ExternalLink }}
 					href={`/runs?job_kinds=deploymentcallbacks&workspace=${$workspaceStore}`}
 				>
-					See sync jobs
+					查看同步任务
 				</Button>
 			{/if}
 		{/snippet}
 	</SettingsPageHeader>
-	<Alert type="info" title="Only new updates trigger git sync">
-		Only new changes matching the filters will trigger a git sync. You still need to initialize the
-		repo to the desired state first.
+	<Alert type="info" title="只有新的变更会触发同步">
+		只有符合筛选条件的新变更会触发 Git 同步。如需同步已有内容，请先完成仓库初始化。
 	</Alert>
 	{#if !gitSyncAllowed}
 		<div class="mb-2"></div>
 
-		<Alert type={hasConfiguredRepos ? 'error' : 'warning'} title="Git sync disabled">
-			Git sync is an EE feature provided in CE for testing and hobbyist use when workspace members
-			&le; {gitSyncStatus.max_users}. Your workspace has {gitSyncStatus.user_count} members. Settings
-			below are preserved but sync is inactive until membership is reduced or you upgrade to EE.
+		<Alert type={hasConfiguredRepos ? 'error' : 'warning'} title="Git 同步未启用">
+			当前部署仅允许成员数不超过 {gitSyncStatus.max_users} 的工作空间使用 Git
+			同步。当前工作空间有 {gitSyncStatus.user_count} 名成员。下方配置会保留，但暂时不会执行同步。
 		</Alert>
 		<div class="mb-2"></div>
 	{:else if isFreeTier}
 		<div class="mb-2"></div>
 
-		<Alert type="warning" title="CE Limited Feature">
-			Git sync is an EE feature provided in CE for testing and hobbyist use when workspace members
-			&le; {gitSyncStatus.max_users}. Limited to a single repository. Upgrade to EE for multiple
-			repositories, promotion mode, and GitHub App authentication.
+		<Alert type="warning" title="Git 同步限制">
+			当前部署仅开放单仓库同步。多仓库、推广模式和 GitHub App 认证暂不开放。
 		</Alert>
 		<div class="mb-2"></div>
 	{/if}
@@ -154,14 +148,14 @@
 								{:else}
 									<ChevronRight size={16} />
 								{/if}
-								Secondary sync repositories ({secondarySync.length})
+								辅助同步仓库（{secondarySync.length}）
 							</button>
 
 							{#if secondarySyncExpanded}
 								<div class="mt-3 space-y-3">
 									{#if secondarySync.length === 0}
 										<div class="text-sm text-secondary italic">
-											No secondary sync repositories configured
+											尚未配置辅助同步仓库
 										</div>
 									{:else}
 										{#each secondarySync as { repo, idx } (repo.git_repo_resource_path)}
@@ -179,7 +173,7 @@
 												startIcon={{ icon: Plus }}
 												onclick={() => gitSyncContext.addSyncRepository()}
 											>
-												Add secondary sync
+												添加辅助同步
 											</Button>
 										</div>
 									{/if}
@@ -197,7 +191,7 @@
 										gitSyncContext.addSyncRepository()
 									}}
 								>
-									+ Add secondary sync repository
+									+ 添加辅助同步仓库
 								</button>
 							</div>
 						{/if}
@@ -229,14 +223,14 @@
 									{:else}
 										<ChevronRight size={16} />
 									{/if}
-									Secondary promotion repositories ({secondaryPromotion.length})
+									辅助推广仓库（{secondaryPromotion.length}）
 								</button>
 
 								{#if secondaryPromotionExpanded}
 									<div class="mt-3 space-y-3">
 										{#if secondaryPromotion.length === 0}
 											<div class="text-sm text-secondary italic">
-												No secondary promotion repositories configured
+											尚未配置辅助推广仓库
 											</div>
 										{:else}
 											{#each secondaryPromotion as { repo, idx } (repo.git_repo_resource_path)}
@@ -254,7 +248,7 @@
 													startIcon={{ icon: Plus }}
 													onclick={() => gitSyncContext.addPromotionRepository()}
 												>
-													Add secondary promotion
+													添加辅助推广
 												</Button>
 											</div>
 										{/if}
@@ -272,7 +266,7 @@
 											gitSyncContext.addPromotionRepository()
 										}}
 									>
-										+ Add secondary promotion repository
+										+ 添加辅助推广仓库
 									</button>
 								</div>
 							{/if}

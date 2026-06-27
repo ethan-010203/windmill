@@ -235,7 +235,7 @@
 
 			if (!valid && expiration) {
 				sendUserToast(
-					`Enterprise license key expired on ${expiration.toLocaleDateString()}. Please renew your license key to continue using Windmill.`,
+					`授权密钥已于 ${expiration.toLocaleDateString()} 过期，请更新授权密钥后继续使用。`,
 					true
 				)
 			} else if (expiration) {
@@ -245,7 +245,7 @@
 
 				if (daysUntilExpiration <= 7 && daysUntilExpiration >= 0) {
 					sendUserToast(
-						`Enterprise license key expires in ${daysUntilExpiration} day${daysUntilExpiration !== 1 ? 's' : ''} on ${expiration.toLocaleDateString()}. Please renew your license key to continue using Windmill.`,
+						`授权密钥将在 ${daysUntilExpiration} 天后于 ${expiration.toLocaleDateString()} 过期，请及时更新授权密钥。`,
 						true
 					)
 				}

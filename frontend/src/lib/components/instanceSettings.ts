@@ -133,7 +133,7 @@ export const settings: Record<string, Setting[]> = {
 		{
 			label: 'Base url',
 			description:
-				'Public base url of the instance. <a href="https://www.windmill.dev/docs/advanced/instance_settings#global-users">Learn more</a>',
+				'实例对用户公开访问的基础地址。',
 			key: 'base_url',
 			fieldType: 'text',
 			placeholder: 'https://windmill.com',
@@ -173,18 +173,18 @@ export const settings: Record<string, Setting[]> = {
 			triggersRestart: true
 		},
 		{
-			label: 'License key',
+			label: '授权配置',
 			description:
-				'License key required to use the EE (switch image for windmill-ee). <a href="https://www.windmill.dev/docs/advanced/instance_settings#license-key">Learn more</a>',
+				'用于启用当前部署未开放的高级能力。普通内部使用无需配置。',
 			key: 'license_key',
 			fieldType: 'license_key',
-			placeholder: 'only for EE',
+			placeholder: '内部部署通常无需填写',
 			storage: 'setting'
 		},
 		{
 			label: 'Non-prod instance',
 			description:
-				'Whether we should consider the reported usage of this instance as non-prod. <a href="https://www.windmill.dev/docs/advanced/instance_settings#non-prod-instance">Learn more</a>',
+				'是否将当前实例标记为非生产环境。',
 			key: 'dev_instance',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -228,7 +228,7 @@ export const settings: Record<string, Setting[]> = {
 			key: 'job_isolation',
 			fieldType: 'select',
 			description:
-				'Isolation mode for job execution. None: no isolation. Unshare: PID namespace isolation via unshare. Nsjail: full nsjail sandboxing. <a href="https://www.windmill.dev/docs/advanced/security_isolation">Learn more</a>',
+				'任务执行隔离模式。None 表示不隔离；Unshare 使用 PID namespace 隔离；Nsjail 使用完整 nsjail 沙箱。',
 			storage: 'setting',
 			select_items: [
 				{
@@ -336,7 +336,7 @@ export const settings: Record<string, Setting[]> = {
 			label: 'Default timeout',
 			key: 'job_default_timeout',
 			description:
-				'Default timeout for individual jobs. <a href="https://www.windmill.dev/docs/core_concepts/jobs#retention-policy">Learn more</a>',
+				'单个任务的默认超时时间。',
 			fieldType: 'seconds',
 			storage: 'setting',
 			cloudonly: false
@@ -344,7 +344,7 @@ export const settings: Record<string, Setting[]> = {
 		{
 			label: 'Max timeout for sync endpoints',
 			description:
-				'Maximum amount of time (measured in seconds) that a <a href="https://www.windmill.dev/docs/core_concepts/webhooks">sync endpoint</a> is allowed to run before it is forcibly stopped or timed out.',
+				'同步接口允许运行的最长时间，单位为秒。超过后会被停止或判定超时。',
 			key: 'timeout_wait_result',
 			fieldType: 'seconds',
 			placeholder: '60',
@@ -361,11 +361,11 @@ export const settings: Record<string, Setting[]> = {
 			label: 'Retention period in secs',
 			key: 'retention_period_secs',
 			description:
-				'How long to keep the jobs data in the database (max 30 days on CE). <a href="https://www.windmill.dev/docs/advanced/instance_settings#retention-period-in-secs">Learn more</a>',
+				'任务数据在数据库中的保留时间。当前部署最多保留 30 天。',
 			fieldType: 'seconds',
 			placeholder: '30',
 			storage: 'setting',
-			ee_only: 'You can only adjust this setting to above 30 days in the EE version',
+			ee_only: '当前部署最多保留 30 天',
 			cloudonly: false
 		},
 		{
@@ -377,7 +377,7 @@ export const settings: Record<string, Setting[]> = {
 			storage: 'setting',
 			cloudonly: false,
 			ee_only:
-				'Workspace fairness is an Enterprise feature — only useful on multi-tenant clusters where one noisy workspace would otherwise degrade QoS for other workspaces sharing the same worker pool.',
+				'当前部署未开放此功能。该功能仅适用于多个工作空间共享同一 worker 组的大型集群。',
 			hideInQuickSetup: true
 		},
 		{
@@ -389,7 +389,7 @@ export const settings: Record<string, Setting[]> = {
 			placeholder: '50',
 			storage: 'setting',
 			cloudonly: false,
-			ee_only: 'Workspace fairness is an Enterprise feature.',
+			ee_only: '当前部署未开放此功能。',
 			hideInQuickSetup: true
 		},
 		{
@@ -401,7 +401,7 @@ export const settings: Record<string, Setting[]> = {
 			placeholder: '10',
 			storage: 'setting',
 			cloudonly: false,
-			ee_only: 'Workspace fairness is an Enterprise feature.',
+			ee_only: '当前部署未开放此功能。',
 			hideInQuickSetup: true
 		},
 		{
@@ -413,7 +413,7 @@ export const settings: Record<string, Setting[]> = {
 			placeholder: '4',
 			storage: 'setting',
 			cloudonly: false,
-			ee_only: 'Workspace fairness is an Enterprise feature.',
+			ee_only: '当前部署未开放此功能。',
 			hideInQuickSetup: true
 		}
 	],
@@ -451,18 +451,18 @@ export const settings: Record<string, Setting[]> = {
 			hideInQuickSetup: true
 		}
 	],
-	'Private Hub': [
+	'内部模板库': [
 		{
-			label: 'Private Hub base url',
+			label: '内部模板库地址',
 			description:
-				'Base URL of your Private Hub instance, without trailing slash. <a href="https://www.windmill.dev/docs/core_concepts/private_hub">Learn more</a>',
+				'内部模板库服务地址，不需要以斜杠结尾。',
 			placeholder: 'https://hub.company.com',
 			key: 'hub_base_url',
 			fieldType: 'text',
 			storage: 'setting',
 			ee_only: '',
 			advancedToggle: {
-				label: 'I have a different URL for Hub access from end-user browsers',
+				label: '终端用户浏览器访问地址不同',
 				onChange(values) {
 					if (values['hub_accessible_url']) {
 						values['hub_accessible_url'] = null
@@ -476,9 +476,9 @@ export const settings: Record<string, Setting[]> = {
 			requiresReloadOnChange: true
 		},
 		{
-			label: 'Private Hub accessible url',
+			label: '内部模板库浏览器访问地址',
 			description:
-				'Base URL accessible from end-user browsers, without trailing slash. <a href="https://www.windmill.dev/docs/core_concepts/private_hub">Learn more</a>',
+				'终端用户浏览器可访问的内部模板库地址，不需要以斜杠结尾。',
 			key: 'hub_accessible_url',
 			fieldType: 'text',
 			hiddenIfNull: true,
@@ -487,9 +487,9 @@ export const settings: Record<string, Setting[]> = {
 			requiresReloadOnChange: true
 		},
 		{
-			label: 'Private Hub API secret',
+			label: '内部模板库 API 密钥',
 			description:
-				'If access to your Private Hub is restricted, you can set the hub API secret here. <a href="https://www.windmill.dev/docs/core_concepts/private_hub">Learn more</a>',
+				'如果内部模板库限制访问，可以在这里配置 API 密钥。',
 			key: 'hub_api_secret',
 			fieldType: 'password',
 			storage: 'setting',
@@ -498,7 +498,7 @@ export const settings: Record<string, Setting[]> = {
 		{
 			label: 'Azure OpenAI base path',
 			description:
-				'All workspaces using an OpenAI resource for Windmill AI will run on the specified deployed model. Format: https://{your-resource-name}.openai.azure.com/openai/deployments/{deployment-id}. <a href="https://www.windmill.dev/docs/core_concepts/ai_generation#azure-openai-advanced-models">Learn more</a>',
+				'所有使用 OpenAI 资源的工作空间会使用指定模型。格式：https://{your-resource-name}.openai.azure.com/openai/deployments/{deployment-id}。',
 			key: 'openai_azure_base_path',
 			fieldType: 'text',
 			storage: 'setting',
@@ -506,9 +506,9 @@ export const settings: Record<string, Setting[]> = {
 			hiddenIfEmpty: true
 		},
 		{
-			label: 'Disable Hub',
+			label: '禁用模板库',
 			description:
-				'Disable the Windmill Hub integration entirely. Enable this if your instance runs in a closed environment without internet access and you do not have a private hub setup.',
+				'禁用外部模板库集成。封闭内网环境建议保持开启。',
 			key: 'disable_hub',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -768,11 +768,11 @@ export const settings: Record<string, Setting[]> = {
 		{
 			label: 'Critical alert channels',
 			description:
-				'Channels to send critical alerts to. <a href="https://www.windmill.dev/docs/core_concepts/critical_alerts">Learn more</a>',
+				'重要告警的发送渠道。',
 			key: 'critical_error_channels',
 			fieldType: 'critical_error_channels',
 			storage: 'setting',
-			ee_only: 'Channels other than tracing are only available in the EE version',
+			ee_only: 'Tracing 以外的告警渠道当前未开放',
 			actionButton: {
 				label: 'Test all channels',
 				onclick: async (values) => {
@@ -797,7 +797,7 @@ export const settings: Record<string, Setting[]> = {
 			fieldType: 'boolean',
 			storage: 'setting',
 			requiresReloadOnChange: true,
-			ee_only: 'Critical alerts in UI are only available in the EE version'
+			ee_only: '界面内重要告警当前未开放'
 		},
 		{
 			label: 'Alert on token expiry',
@@ -852,14 +852,14 @@ export const settings: Record<string, Setting[]> = {
 			key: 'otel_tracing_proxy',
 			fieldType: 'otel_tracing_proxy',
 			storage: 'setting',
-			ee_only: 'HTTP Request Tracing is an EE feature',
+			ee_only: 'HTTP 请求追踪当前未开放',
 			triggersRestart: true,
 			defaultValue: () => ({ enabled: false, enabled_languages: [...OTEL_TRACING_PROXY_LANGUAGES] })
 		},
 		{
 			label: 'Prometheus',
 			description:
-				'Expose Prometheus metrics for workers and servers on port 8001 at /metrics. <a target="_blank" href="https://www.windmill.dev/docs/advanced/instance_settings#expose-metrics">Learn more</a>',
+				'在 8001 端口的 /metrics 暴露 worker 和 server 的 Prometheus 指标。',
 			key: 'expose_metrics',
 			fieldType: 'boolean',
 			storage: 'setting',
@@ -889,19 +889,19 @@ export const settings: Record<string, Setting[]> = {
 		{
 			label: 'Backend type',
 			description:
-				'By default, secrets are encrypted and stored in the database. Enterprise Edition supports HashiCorp Vault, Azure Key Vault, and AWS Secrets Manager as external secret backends.',
+				'默认情况下，密钥会加密存储在数据库中。外部密钥后端属于当前部署未开放的高级能力。',
 			key: 'secret_backend',
 			fieldType: 'secret_backend',
 			storage: 'setting',
 			ee_only:
-				'HashiCorp Vault, Azure Key Vault, and AWS Secrets Manager integrations are Enterprise Edition features'
+				'当前部署未开放外部密钥后端集成'
 		}
 	],
 	'GitHub App': [
 		{
 			label: 'GitHub App',
 			description:
-				'Configure a self-managed GitHub App to enable git sync without stats.windmill.dev.',
+				'配置自管理 GitHub App，用于在内网环境中启用 Git 同步。',
 			key: 'github_enterprise_app',
 			fieldType: 'github_enterprise_app',
 			storage: 'setting',
@@ -1081,7 +1081,7 @@ export const tabToCategoryMap: Record<string, string> = {
 	secret_storage: 'Secret Storage',
 	object_storage: 'Object Storage',
 	jobs: 'Jobs',
-	private_hub: 'Private Hub',
+	private_hub: '内部模板库',
 	github_enterprise_app: 'GitHub App',
 	websocket: 'WebSocket',
 	db_health: 'DB Health',
@@ -1116,7 +1116,7 @@ export const categoryToTabMap: Record<string, string> = {
 	'Secret Storage': 'secret_storage',
 	'Object Storage': 'object_storage',
 	Jobs: 'jobs',
-	'Private Hub': 'private_hub',
+	'内部模板库': 'private_hub',
 	'GitHub App': 'github_enterprise_app',
 	WebSocket: 'websocket',
 	'DB Health': 'db_health',

@@ -112,9 +112,8 @@
 		{/snippet}
 		{#if emptyString($enterpriseLicense)}
 			<div class="mb-4">
-				<Alert type="info" title="Community Edition limits">
-					Volumes are limited to 20 per workspace and 50 MB per file. Upgrade to Enterprise Edition
-					to remove these limits.
+				<Alert type="info" title="当前部署限制">
+					当前部署中，每个工作区最多 20 个存储卷，每个文件最大 50 MB。
 				</Alert>
 			</div>
 		{/if}

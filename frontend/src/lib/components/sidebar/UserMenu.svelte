@@ -125,7 +125,7 @@
 							}}
 							{item}
 						>
-							Upgrade
+							升级方案
 						</MenuItem>
 					{/if}
 				{:else}
@@ -136,7 +136,7 @@
 						}}
 						{item}
 					>
-						Premium plan
+						高级方案
 					</MenuItem>
 				{/if}
 			</div>

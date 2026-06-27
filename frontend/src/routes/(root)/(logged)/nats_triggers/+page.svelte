@@ -292,7 +292,7 @@
 	<CenteredPage>
 		<PageHeader
 			title="NATS triggers"
-			tooltip="Windmill can consume NATS events and trigger scripts or flows based on them."
+			tooltip="平台可以消费 NATS 事件，并基于事件触发脚本或流程。"
 		>
 			<Button
 				unifiedSize="md"

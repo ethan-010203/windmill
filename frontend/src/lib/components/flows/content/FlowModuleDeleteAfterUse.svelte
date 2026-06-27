@@ -19,18 +19,16 @@
 <Section label="Delete after completion">
 	{#snippet header()}
 		<Tooltip>
-			The logs, arguments and results of this flow step will be completely deleted from Windmill
-			after the specified delay once the flow is complete. They might be temporarily visible in UI
-			while the flow is running.
+			流程完成后，此步骤的日志、参数和结果会在指定延迟后被完全删除。流程运行期间，它们可能会暂时在界面中可见。
 			<br />
-			This also applies to a flow step that has failed: the error will not be accessible.
+			这同样适用于执行失败的流程步骤：错误信息也将不可访问。
 			<br />
 			<br />
-			The deletion is irreversible. Set to 0 for immediate deletion.
+			删除不可恢复。设置为 0 表示立即删除。
 			{#if disabled}
 				<br />
 				<br />
-				This option is only available on Windmill Enterprise Edition.
+				当前部署未开放此选项。
 			{/if}
 		</Tooltip>
 	{/snippet}

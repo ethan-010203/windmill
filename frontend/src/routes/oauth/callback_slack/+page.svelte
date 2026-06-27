@@ -15,24 +15,24 @@
 
 	onMount(async () => {
 		if (error) {
-			sendUserToast(`Error trying to add slack connection: ${error}`, true)
+			sendUserToast(`添加 Slack 连接失败：${error}`, true)
 		} else if (code && state) {
 			await OauthService.connectSlackCallback({
 				workspace: $workspaceStore!,
 				requestBody: { code, state }
 			})
 			sendUserToast(
-				'Slack workspace connected to your Windmill workspace and slack token saved in the folder `slack_bot` at `f/slack_bot/bot_token`.'
+				'Slack 工作区已连接，Slack 令牌已保存到 `f/slack_bot/bot_token`。'
 			)
 		} else {
-			sendUserToast('Missing code or state as query params', true)
+			sendUserToast('缺少 code 或 state 查询参数', true)
 		}
 		goto('/workspace_settings?tab=slack')
 	})
 </script>
 
 <CenteredPage>
-	<PageHeader title="Connection to slack in progress" />
+	<PageHeader title="正在连接 Slack" />
 	<div class="mx-auto w-0">
 		<WindmillIcon height="80px" width="80px" spin="fast" />
 	</div>

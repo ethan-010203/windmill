@@ -18,17 +18,17 @@
 
 	async function resetPassword() {
 		if (!token) {
-			sendUserToast('Invalid or missing reset token', true)
+			sendUserToast('重置链接无效或已缺失', true)
 			return
 		}
 
 		if (!newPassword || !confirmPassword) {
-			sendUserToast('Please fill in both password fields', true)
+			sendUserToast('请填写两次密码', true)
 			return
 		}
 
 		if (newPassword !== confirmPassword) {
-			sendUserToast('Passwords do not match', true)
+			sendUserToast('两次输入的密码不一致', true)
 			return
 		}
 
@@ -41,10 +41,10 @@
 				}
 			})
 			success = true
-			sendUserToast('Password has been reset successfully!')
+			sendUserToast('密码已重置')
 		} catch (err: any) {
 			console.error('Could not reset password', err)
-			sendUserToast('Could not reset password: ' + err, true)
+			sendUserToast('密码重置失败：' + err, true)
 		} finally {
 			loading = false
 		}
@@ -69,10 +69,10 @@
 			{/if}
 		</div>
 		<h2 class="mt-6 text-center text-2xl font-semibold tracking-tight text-emphasis">
-			{success ? 'Password Reset' : 'Set New Password'}
+			{success ? '密码已重置' : '设置新密码'}
 		</h2>
 		{#if !success}
-			<p class="mt-2 text-center text-xs text-secondary"> Enter your new password below </p>
+			<p class="mt-2 text-center text-xs text-secondary"> 请输入新密码 </p>
 		{/if}
 	</div>
 
@@ -83,26 +83,26 @@
 		<div class="bg-surface px-4 py-8 border sm:rounded-lg sm:px-10">
 			{#if !token}
 				<div class="text-center space-y-4">
-					<p class="text-red-500">Invalid or missing reset token.</p>
+					<p class="text-red-500">重置链接无效或已缺失。</p>
 					<div class="pt-4">
 						<Button variant="accent" on:click={() => goto('/user/forgot-password')}>
-							Request New Reset Link
+							重新申请重置链接
 						</Button>
 					</div>
 				</div>
 			{:else if success}
 				<div class="text-center space-y-4">
-					<p class="text-secondary"> Your password has been reset successfully. </p>
-					<p class="text-secondary text-sm"> You can now log in with your new password. </p>
+					<p class="text-secondary"> 密码已重置。 </p>
+					<p class="text-secondary text-sm"> 现在可以使用新密码登录。 </p>
 					<div class="pt-4">
-						<Button variant="accent" on:click={() => goto('/user/login')}>Go to login</Button>
+						<Button variant="accent" on:click={() => goto('/user/login')}>去登录</Button>
 					</div>
 				</div>
 			{:else}
 				<div class="space-y-6">
 					<div class="space-y-1">
 						<label for="new-password" class="block text-xs font-semibold text-emphasis">
-							New Password
+							新密码
 						</label>
 						<div>
 							<input
@@ -117,7 +117,7 @@
 
 					<div class="space-y-1">
 						<label for="confirm-password" class="block text-xs font-semibold text-emphasis">
-							Confirm Password
+							确认密码
 						</label>
 						<div>
 							<input
@@ -136,9 +136,9 @@
 							variant="accent"
 							disabled={!newPassword || !confirmPassword || loading}
 						>
-							{loading ? 'Resetting...' : 'Reset password'}
+							{loading ? '重置中...' : '重置密码'}
 						</Button>
-						<Button variant="subtle" on:click={() => goto('/user/login')}>Back to login</Button>
+						<Button variant="subtle" on:click={() => goto('/user/login')}>返回登录</Button>
 					</div>
 				</div>
 			{/if}

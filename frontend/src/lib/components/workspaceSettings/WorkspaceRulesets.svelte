@@ -69,7 +69,7 @@
 
 <Drawer bind:this={ruleDrawer}>
 	<DrawerContent
-		title={selectedRule ? `Protection Rule: ${selectedRule.name}` : 'New Protection Rule'}
+		title={selectedRule ? `保护规则：${selectedRule.name}` : '新建保护规则'}
 		on:close={ruleDrawer?.closeDrawer}
 	>
 		<RulesetEditor
@@ -84,15 +84,14 @@
 </Drawer>
 
 {#if !$enterpriseLicense}
-	<Alert type="warning" title="Workspace Protection Rules is an EE feature">
-		Workspace Protection Rules is a Windmill Enterprise Edition feature. It enables granular
-		governance and security policies scoped to specific groups and users.
+	<Alert type="warning" title="当前部署未开放工作区保护规则">
+		工作区保护规则用于按用户组和用户配置更细粒度的治理与安全策略，当前部署未开放。
 	</Alert>
 	<div class="pb-4"></div>
 {/if}
 
 <div class="flex flex-row justify-between items-center mb-4">
-	<div class="text-xs font-semibold text-emphasis">Protection Rules</div>
+	<div class="text-xs font-semibold text-emphasis">保护规则</div>
 	<Button
 		unifiedSize="md"
 		variant="accent"
@@ -102,7 +101,7 @@
 			ruleDrawer?.openDrawer()
 		}}
 	>
-		New rule
+		新建规则
 	</Button>
 </div>
 

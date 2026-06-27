@@ -42,9 +42,9 @@
 		instanceAiSummary = undefined,
 		customSave = undefined,
 		onSave = undefined,
-		title = 'Windmill AI',
-		description = 'Windmill AI integrates with your favorite AI providers and models.',
-		link = 'https://www.windmill.dev/docs/core_concepts/ai_generation',
+		title = '平台 AI',
+		description = '平台 AI 可接入常用 AI 服务商和模型，为脚本、流程和应用编辑提供辅助能力。',
+		link = undefined,
 		promptScope = 'workspace'
 	}: {
 		initialConfig?: AIConfig | undefined

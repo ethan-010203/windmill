@@ -358,7 +358,7 @@
 <CenteredPage>
 	<PageHeader
 		title="Postgres triggers"
-		tooltip="Windmill enables real-time responsiveness by listening to specific database transactions—such as inserts, updates, and deletes—and automatically triggering scripts or workflows in response."
+		tooltip="平台可以监听指定数据库事务，例如新增、更新和删除，并自动触发脚本或流程。"
 	>
 		<Button
 			unifiedSize="md"

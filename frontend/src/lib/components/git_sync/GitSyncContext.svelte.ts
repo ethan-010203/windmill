@@ -654,7 +654,7 @@ export function createGitSyncContext(workspace: string) {
 
 	function addSyncRepository() {
 		if (!get(enterpriseLicense) && repositories && repositories.length >= 1) {
-			sendUserToast('Multiple repositories requires Enterprise Edition', true)
+			sendUserToast('当前部署未开放多仓库同步', true)
 			return
 		}
 		repositories.push({
@@ -681,7 +681,7 @@ export function createGitSyncContext(workspace: string) {
 
 	function addPromotionRepository() {
 		if (!get(enterpriseLicense)) {
-			sendUserToast('Promotion mode requires Enterprise Edition', true)
+			sendUserToast('当前部署未开放推广模式', true)
 			return
 		}
 		repositories.push({

@@ -22,12 +22,12 @@
 		try {
 			await UserService.requestPasswordReset({ requestBody: { email } })
 			submitted = true
-			sendUserToast('If an account with that email exists, a password reset link has been sent.')
+			sendUserToast('如果该邮箱存在账号，系统会发送密码重置链接。')
 		} catch (err: any) {
 			if (err?.body?.includes('SMTP is not configured')) {
-				sendUserToast('Password reset is not available. SMTP is not configured.', true)
+				sendUserToast('当前无法重置密码，邮件服务尚未配置。', true)
 			} else {
-				sendUserToast('An error occurred. Please try again later.', true)
+				sendUserToast('操作失败，请稍后再试。', true)
 			}
 		} finally {
 			loading = false
@@ -53,10 +53,10 @@
 			{/if}
 		</div>
 		<h2 class="mt-6 text-center text-2xl font-semibold tracking-tight text-emphasis">
-			Reset password
+			重置密码
 		</h2>
 		<p class="mt-2 text-center text-xs text-secondary">
-			Enter your email address and we'll send you a link to reset your password
+			输入邮箱后，系统会发送密码重置链接
 		</p>
 	</div>
 
@@ -68,19 +68,19 @@
 			{#if submitted}
 				<div class="text-center space-y-4">
 					<p class="text-secondary">
-						If an account with that email exists, we've sent a password reset link.
+						如果该邮箱存在账号，系统会发送密码重置链接。
 					</p>
 					<p class="text-secondary text-sm">
-						Please check your email and follow the instructions to reset your password.
+						请检查邮箱并按提示完成密码重置。
 					</p>
 					<div class="pt-4">
-						<Button variant="accent" on:click={() => goto('/user/login')}>Back to login</Button>
+						<Button variant="accent" on:click={() => goto('/user/login')}>返回登录</Button>
 					</div>
 				</div>
 			{:else}
 				<div class="space-y-6">
 					<div class="space-y-1">
-						<label for="email" class="block text-xs font-semibold text-emphasis">Email</label>
+						<label for="email" class="block text-xs font-semibold text-emphasis">邮箱</label>
 						<div>
 							<input
 								type="email"
@@ -94,9 +94,9 @@
 
 					<div class="pt-2 flex flex-col gap-2">
 						<Button on:click={requestPasswordReset} variant="accent" disabled={!email || loading}>
-							{loading ? 'Sending...' : 'Send reset link'}
+							{loading ? '发送中...' : '发送重置链接'}
 						</Button>
-						<Button variant="subtle" on:click={() => goto('/user/login')}>Back to login</Button>
+						<Button variant="subtle" on:click={() => goto('/user/login')}>返回登录</Button>
 					</div>
 				</div>
 			{/if}

@@ -18,7 +18,7 @@
 
 	let {
 		subtitle = undefined,
-		title = 'Windmill',
+		title = '部门工具平台',
 		disableLogo = false,
 		large = false,
 		centerVertically = true,

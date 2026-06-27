@@ -411,8 +411,8 @@
 					value="HashiCorpVault"
 					label="HashiCorp Vault"
 					tooltip={vaultDisabled
-						? 'Requires Enterprise Edition'
-						: 'Store secrets in HashiCorp Vault'}
+						? '当前部署未开放此功能'
+						: '将密钥存储到 HashiCorp Vault'}
 					item={toggleButton}
 					disabled={vaultDisabled}
 				/>
@@ -420,8 +420,8 @@
 					value="AzureKeyVault"
 					label="Azure Key Vault"
 					tooltip={vaultDisabled
-						? 'Requires Enterprise Edition'
-						: 'Store secrets in Azure Key Vault'}
+						? '当前部署未开放此功能'
+						: '将密钥存储到 Azure Key Vault'}
 					item={toggleButton}
 					disabled={vaultDisabled}
 				/>
@@ -429,8 +429,8 @@
 					value="AwsSecretsManager"
 					label="AWS Secrets Manager"
 					tooltip={vaultDisabled
-						? 'Requires Enterprise Edition'
-						: 'Store secrets in AWS Secrets Manager'}
+						? '当前部署未开放此功能'
+						: '将密钥存储到 AWS Secrets Manager'}
 					item={toggleButton}
 					disabled={vaultDisabled}
 				/>
@@ -438,7 +438,7 @@
 		</ToggleButtonGroup>
 		{#if vaultDisabled}
 			<div class="flex items-center gap-1">
-				<EEOnly>External secret store integrations require Enterprise Edition</EEOnly>
+				<EEOnly>当前部署未开放外部密钥存储集成</EEOnly>
 			</div>
 		{/if}
 	</div>

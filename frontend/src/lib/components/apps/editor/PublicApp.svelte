@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { User, UserRoundX } from 'lucide-svelte'
-	import { enterpriseLicense, userStore } from '$lib/stores'
+	import { userStore } from '$lib/stores'
 	import { base } from '$app/paths'
 	import { page } from '$app/state'
 	import Login from '$lib/components/Login.svelte'
-	import { isCloudHosted } from '$lib/cloud'
 	import { Alert, Skeleton } from '$lib/components/common'
-	import { WindmillIcon } from '$lib/components/icons'
 	import { onMount, setContext } from 'svelte'
 	import { IS_APP_PUBLIC_CONTEXT_KEY, type EditorBreakpoint } from '../types'
 	import { UserService, type AppWithLastVersion, type GlobalWhoamiResponse } from '$lib/gen'
@@ -71,16 +69,6 @@
 	})
 </script>
 
-<div
-	class="z-50 text-xs fixed bottom-1 right-2 {$enterpriseLicense && !isCloudHosted()
-		? 'transition-opacity delay-1000 duration-1000 opacity-20 hover:delay-0 hover:opacity-100'
-		: ''}"
->
-	<a href="https://windmill.dev" class="whitespace-nowrap text-primary inline-flex items-center"
-		>Powered by &nbsp;<WindmillIcon />&nbsp;Windmill</a
-	>
-</div>
-
 {#snippet userInfo(child)}
 	<div class="flex gap-1 items-center"><User size={14} />{child}</div>
 {/snippet}
@@ -95,18 +83,18 @@
 
 {#if notExists}
 	<div class="px-4 mt-20"
-		><Alert type="error" title="Not found"
-			>There was an error loading the app, is the url correct? <a href={base}>Go to Windmill</a>
+		><Alert type="error" title="未找到应用"
+			>应用加载失败，请确认链接是否正确。<a href={base}>返回首页</a>
 		</Alert></div
 	>
 {:else if noPermission}
-	<div class="px-4 mt-20 w-full text-center font-bold text-xl"> This app requires read access </div>
+	<div class="px-4 mt-20 w-full text-center font-bold text-xl">此应用需要读取权限</div>
 	<div class="text-center mt-8 text-sm text-primary">
-		{#if $userStore}You are logged in but have no read access to this app{:else if globalUser && effectiveWorkspace}
-			You are logged in but are not a member of the workspace <span class="text-xl font-bold"
+		{#if $userStore}你已登录，但没有此应用的读取权限{:else if globalUser && effectiveWorkspace}
+			你已登录，但不是工作空间 <span class="text-xl font-bold"
 				>{effectiveWorkspace}</span
-			> this app is part of
-		{:else}You must be logged in and have read access to this app{/if}</div
+			> 的成员
+		{:else}请登录并确保拥有此应用的读取权限{/if}</div
 	>
 	<div class="px-2 mx-auto mt-20 max-w-xl w-full">
 		{#if !jwtError}
@@ -125,8 +113,8 @@
 			/>
 		{:else if app.raw_app && !effectiveWorkspace}
 			<div class="px-4 mt-20">
-				<Alert type="error" title="Configuration error">
-					Unable to load raw app: workspace information is missing.
+				<Alert type="error" title="配置错误">
+					无法加载应用：缺少工作空间信息。
 				</Alert>
 			</div>
 		{:else}

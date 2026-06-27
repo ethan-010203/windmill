@@ -10,12 +10,12 @@
 </script>
 
 <Tooltip>
-	<Badge verySmall color="blue" class="px-2">EE</Badge>
+	<Badge verySmall color="blue" class="px-2">受限</Badge>
 	{#snippet text()}
 		{#if children}
 			{@render children()}
 		{:else}
-			Enterprise Edition only feature
+			当前部署未开放此功能
 		{/if}
 	{/snippet}
 </Tooltip>

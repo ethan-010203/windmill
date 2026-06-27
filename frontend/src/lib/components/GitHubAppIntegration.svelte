@@ -17,6 +17,7 @@
 		handleInstallClick,
 		type GitHubAppState
 	} from '$lib/githubApp'
+	import { base } from '$lib/base'
 	import RepositorySelector from './RepositorySelector.svelte'
 
 	interface Props {
@@ -177,7 +178,7 @@
 	{/if}
 	{#if showGitHubApp}
 		<Popover
-			documentationLink="https://www.windmill.dev/docs/integrations/git_repository#github-app"
+			documentationLink={`${base}/tutorials`}
 			bind:this={githubAppPopover}
 			disabled={!$enterpriseLicense || githubState.loadingGithubInstallations}
 			contentClasses="overflow-auto"
@@ -193,7 +194,7 @@
 					}}
 					nonCaptureEvent
 				>
-					{$enterpriseLicense ? 'GitHub App' : 'GitHub App (ee only)'}
+					{$enterpriseLicense ? 'GitHub App' : 'GitHub App（受限）'}
 				</Button>
 			{/snippet}
 			{#snippet content({ close })}
@@ -201,15 +202,15 @@
 					<div class="flex flex-col gap-4 w-[600px]">
 						{#if githubState.workspaceGithubInstallations.length > 0}
 							<div class="flex flex-col gap-2">
-								<p class="text-sm font-semibold text-secondary">Select Repository</p>
+								<p class="text-sm font-semibold text-secondary">选择仓库</p>
 								<div class="flex flex-row gap-2 w-full">
 									<div class="flex flex-col gap-1 flex-1">
-										<p class="text-sm font-semibold text-secondary">GitHub Account ID</p>
+										<p class="text-sm font-semibold text-secondary">GitHub 账号 ID</p>
 										<select bind:value={githubState.selectedGHAppAccountId}>
-											<option value="" disabled>Select GitHub Account ID</option>
+											<option value="" disabled>选择 GitHub 账号 ID</option>
 											{#each githubState.workspaceGithubInstallations as installation (`select-${installation.installation_id}-${installation.workspace_id}`)}
 												<option value={installation.account_id} disabled={!!installation.error}>
-													{installation.account_id}{installation.error ? ' (token error)' : ''}
+													{installation.account_id}{installation.error ? '（令牌错误）' : ''}
 												</option>
 											{/each}
 										</select>
@@ -220,7 +221,7 @@
 										)}
 										{#if selectedInstallation}
 											<div class="flex flex-col gap-1 flex-1">
-												<p class="text-sm font-semibold text-secondary">Repository</p>
+												<p class="text-sm font-semibold text-secondary">仓库</p>
 												<RepositorySelector
 													bind:selectedRepository={githubState.selectedGHAppRepository}
 													accountId={githubState.selectedGHAppAccountId}
@@ -239,7 +240,7 @@
 											disabled={!githubState.selectedGHAppRepository}
 											on:click={() => handleApplyRepositoryURL(close)}
 										>
-											Apply
+											应用
 										</Button>
 									</div>
 								</div>
@@ -274,20 +275,20 @@
 										}}
 									>
 										{githubState.isCheckingInstallation
-											? 'Checking for new installations...'
-											: 'Add new installation'}
+											? '正在检查新的安装...'
+											: '添加新安装'}
 									</Button>
 								</div>
 								{#if githubState.workspaceGithubInstallations.length > 0}
 									<div class="flex flex-col gap-2">
-										<p class="text-sm font-semibold text-secondary">Current installations:</p>
+										<p class="text-sm font-semibold text-secondary">当前安装：</p>
 										<div class="flex flex-col gap-1">
 											<table class="w-full text-sm">
 												<thead>
 													<tr class="text-left text-xs text-primary">
-														<th class="pb-2 w-1/3">Org</th>
-														<th class="pb-2 w-1/6">Workspace</th>
-														<th class="pb-2 w-1/6">Repos</th>
+														<th class="pb-2 w-1/3">组织</th>
+														<th class="pb-2 w-1/6">工作区</th>
+														<th class="pb-2 w-1/6">仓库</th>
 														<th class="pb-2 w-1/3"></th>
 													</tr>
 												</thead>
@@ -305,9 +306,9 @@
 																	{#if installation.provisioned_by_admin}
 																		<span
 																			class="text-2xs px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-																			title="Assigned by the instance super-admin from instance settings. Only the super-admin can remove it."
+																			title="由实例超级管理员在实例设置中分配，仅超级管理员可以移除。"
 																		>
-																			Provisioned by admin
+																			管理员分配
 																		</span>
 																	{/if}
 																</div>
@@ -320,10 +321,10 @@
 																{#if installation.error}
 																	<span
 																		class="text-yellow-600 dark:text-yellow-400 text-xs"
-																		title={installation.error}>Token error</span
+																		title={installation.error}>令牌错误</span
 																	>
 																{:else}
-																	{installation.repositories.length} repos
+																	{installation.repositories.length} 个仓库
 																{/if}
 															</td>
 															<td class="py-2 text-right">
@@ -332,12 +333,12 @@
 																		<Button
 																			size="xs2"
 																			variant="accent"
-																			title="Export installation to other instance"
+																			title="导出安装到其他实例"
 																			startIcon={{ icon: Download }}
 																			on:click={() =>
 																				handleExportInstallation(installation.installation_id)}
 																		>
-																			Export
+																			导出
 																		</Button>
 																	{/if}
 																	{#if !installation.provisioned_by_admin}
@@ -345,12 +346,12 @@
 																			size="xs2"
 																			variant="default"
 																			destructive
-																			title="Remove installation from workspace"
+																			title="从工作区移除安装"
 																			startIcon={{ icon: Minus }}
 																			on:click={() =>
 																				handleDeleteInstallation(installation.installation_id)}
 																		>
-																			Remove
+																			移除
 																		</Button>
 																	{/if}
 																</div>
@@ -365,15 +366,15 @@
 								{#if githubInstallationsNotInWorkspace.length > 0}
 									<div class="flex flex-col gap-2">
 										<p class="text-sm font-semibold text-secondary"
-											>Installations in other workspaces:</p
+											>其他工作区中的安装：</p
 										>
 										<div class="flex flex-col gap-1">
 											<table class="w-full text-sm">
 												<thead>
 													<tr class="text-left text-xs text-primary">
-														<th class="pb-2 w-1/3">Org</th>
-														<th class="pb-2 w-1/6">Workspace</th>
-														<th class="pb-2 w-1/6">Repos</th>
+														<th class="pb-2 w-1/3">组织</th>
+														<th class="pb-2 w-1/6">工作区</th>
+														<th class="pb-2 w-1/6">仓库</th>
 														<th class="pb-2 w-1/3"></th>
 													</tr>
 												</thead>
@@ -398,17 +399,17 @@
 																{#if installation.error}
 																	<span
 																		class="text-yellow-600 dark:text-yellow-400 text-xs"
-																		title={installation.error}>Token error</span
+																		title={installation.error}>令牌错误</span
 																	>
 																{:else}
-																	{installation.repositories.length} repos
+																	{installation.repositories.length} 个仓库
 																{/if}
 															</td>
 															<td class="pl-8 py-2 text-right">
 																<Button
 																	size="xs2"
 																	variant="accent"
-																	title="Add installation to workspace"
+																	title="添加安装到当前工作区"
 																	startIcon={{ icon: Plus }}
 																	on:click={() => {
 																		if (installation.workspace_id) {
@@ -419,7 +420,7 @@
 																		}
 																	}}
 																>
-																	Add to workspace
+																	添加到工作区
 																</Button>
 															</td>
 														</tr>
@@ -435,12 +436,12 @@
 						{#if !githubState.isGhesSelfManaged}
 							<div class="mt-4 flex flex-col gap-2">
 								<p class="text-sm font-semibold text-secondary"
-									>Import installation from other instance:</p
+									>从其他实例导入安装：</p
 								>
 								<div class="flex gap-2">
 									<input
 										type="text"
-										placeholder="Paste JWT token here"
+										placeholder="粘贴 JWT 令牌"
 										bind:value={githubState.importJwt}
 										class="flex-1"
 									/>
@@ -449,7 +450,7 @@
 										on:click={handleImportInstallation}
 										disabled={!githubState.importJwt}
 									>
-										Import
+										导入
 									</Button>
 								</div>
 							</div>
@@ -479,9 +480,9 @@
 		>
 			{$enterpriseLicense
 				? githubState.isCheckingInstallation
-					? 'Waiting for installation...'
-					: 'Install GitHub App'
-				: 'GitHub App (ee only)'}
+					? '等待安装完成...'
+					: '安装 GitHub App'
+				: 'GitHub App（受限）'}
 		</Button>
 	{/if}
 {/if}

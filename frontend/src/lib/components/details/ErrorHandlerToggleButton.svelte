@@ -72,15 +72,15 @@
 	{#if errorHandlerMuted === undefined || !errorHandlerMuted}
 		<div class="flex flex-row items-center">
 			{#if !iconOnly}
-				Mute
+				停用
 			{/if}
 		</div>
 	{:else}
 		<div class="flex flex-row items-center">
 			{#if !iconOnly}
-				Unmute
+				启用
 			{/if}
 		</div>
 	{/if}
-	<Tooltip>Disable workspace error handler, EE only</Tooltip>
+	<Tooltip>停用工作区错误处理程序，当前部署未开放。</Tooltip>
 </Button>

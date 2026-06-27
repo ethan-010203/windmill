@@ -111,7 +111,7 @@
 					variant="subtle"
 				>
 					Disconnect {capitalizedPlatform}
-					{!$enterpriseLicense && platform === 'teams' ? '(EE only)' : ''}
+					{!$enterpriseLicense && platform === 'teams' ? '(未开放)' : ''}
 				</Button>
 			</div>
 		</div>
@@ -141,7 +141,7 @@
 						disabled={!selectedTeam || !$enterpriseLicense}
 					>
 						Connect to {platform.charAt(0).toUpperCase() + platform.slice(1)}
-						{$enterpriseLicense ? '' : '(EE only)'}
+						{$enterpriseLicense ? '' : '(未开放)'}
 					</Button>
 				{:else}
 					<Button

@@ -37,10 +37,10 @@
 
 		if (isFileset) {
 			prompt =
-				'You are a helpful assistant that generates file contents for a Windmill fileset resource. A fileset is a JSON object mapping file paths to their string contents, e.g. {"path/to/file.txt": "file content", "other/file.md": "# Title"}. You MUST return ONLY valid JSON (a flat object with string keys and string values), no markdown fences, no explanation, no extra text.'
+				'You are a helpful assistant that generates file contents for an internal fileset resource. A fileset is a JSON object mapping file paths to their string contents, e.g. {"path/to/file.txt": "file content", "other/file.md": "# Title"}. You MUST return ONLY valid JSON (a flat object with string keys and string values), no markdown fences, no explanation, no extra text.'
 		} else {
 			prompt =
-				'You are a helpful assistant that generates JSON values for Windmill resources. You MUST return ONLY valid JSON, no markdown fences, no explanation, no extra text.'
+				'You are a helpful assistant that generates JSON values for internal platform resources. You MUST return ONLY valid JSON, no markdown fences, no explanation, no extra text.'
 		}
 
 		if (resourceType) {
@@ -172,11 +172,11 @@
 			{:else}
 				<div class="block text-primary">
 					<p class="text-sm"
-						>Enable Windmill AI in the <a
+						>请先在<a
 							href="{base}/workspace_settings?tab=ai"
 							target="_blank"
 							class="inline-flex flex-row items-center gap-1"
-							>workspace settings <ExternalLink size={16} /></a
+							>工作区设置 <ExternalLink size={16} /></a>中启用平台 AI。
 						></p
 					>
 				</div>

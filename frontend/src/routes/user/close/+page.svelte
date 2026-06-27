@@ -4,7 +4,7 @@
 </script>
 
 <CenteredModal>
-	There was an error during login
+	登录过程中出现错误
 
-	<Button on:click={() => window.close()}>close</Button>
+	<Button on:click={() => window.close()}>关闭</Button>
 </CenteredModal>

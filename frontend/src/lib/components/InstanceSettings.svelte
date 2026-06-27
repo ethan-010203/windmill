@@ -1045,8 +1045,7 @@
 			<SettingsPageHeader title="Telemetry" />
 			{#if $enterpriseLicense}
 				<div class="text-primary pb-4 text-xs">
-					Telemetry is required on Enterprise Edition for license compliance. When minimal telemetry
-					is enabled, only the following data is sent:
+					启用授权能力时需要保留最小遥测以满足授权合规要求。启用最小遥测后，仅会发送以下数据：
 					<ul class="list-disc list-inside pl-2">
 						<li>version of your instance</li>
 						<li>instance base URL</li>

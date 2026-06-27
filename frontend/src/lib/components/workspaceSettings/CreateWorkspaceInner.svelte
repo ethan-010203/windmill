@@ -570,13 +570,9 @@
 					<div class="flex flex-col gap-1">
 						<label for="ai-key" class="flex flex-row gap-2">
 							<span class="text-xs font-semibold text-emphasis">
-								AI key for Windmill AI
+								平台 AI 密钥
 								<Tooltip>
-									Find out how it can help you <a
-										href="https://www.windmill.dev/docs/core_concepts/ai_generation"
-										target="_blank"
-										rel="noopener noreferrer">in the docs</a
-									>
+									配置后可在脚本、流程和应用编辑中使用 AI 辅助能力。
 								</Tooltip>
 							</span>
 							<span class="text-2xs text-secondary">(optional but recommended)</span>

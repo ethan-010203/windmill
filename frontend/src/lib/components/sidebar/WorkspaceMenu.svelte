@@ -131,7 +131,7 @@
 				icon={GitFork}
 				iconProps={iconColor ? { style: `color: ${iconColor}` } : undefined}
 				label={removePrefix($workspaceStore ?? '', 'wm-fork-')}
-				sublabel={parentWorkspace?.name ? `Fork of ${parentWorkspace.name}` : undefined}
+				sublabel={parentWorkspace?.name ? `${parentWorkspace.name} 的分支` : undefined}
 				{isCollapsed}
 				color={$workspaceColor}
 				{trigger}
@@ -179,7 +179,7 @@
 										)}
 										title={workspace.name}
 									>
-										{workspace.name}{workspace.disabled ? ' (user disabled)' : ''}
+										{workspace.name}{workspace.disabled ? '（用户已禁用）' : ''}
 									</div>
 									<div
 										class={twMerge(
@@ -200,7 +200,7 @@
 				<div class="py-1" role="none">
 					<MenuItem href="{base}/user/create_workspace" class={itemClass} {item}>
 						<Plus size={16} />
-						Workspace
+						工作区
 					</MenuItem>
 				</div>
 			{/if}
@@ -212,7 +212,7 @@
 						onClick={() => (globalForkModal.val = { opened: true })}
 					>
 						<GitFork size={16} />
-						Fork current workspace
+						创建当前工作区分支
 					</MenuItem>
 				</div>
 			{/if}
@@ -224,7 +224,7 @@
 						class={itemClass}
 						{item}
 					>
-						All workspaces
+						所有工作区
 					</MenuItem>
 				</div>
 			{/if}
@@ -232,7 +232,7 @@
 				<div class="py-1" role="none">
 					<MenuItem href="{base}/workspace_settings" class={itemClass} {item}>
 						<Settings size={16} />
-						Workspace settings
+						工作区设置
 					</MenuItem>
 				</div>
 			{/if}
@@ -241,7 +241,7 @@
 			<div class="py-1" role="none">
 				{#if $workspaceStore != 'demo'}
 					<span class="text-secondary block w-full text-left px-4 py-2 text-xs"
-						>{$workspaceUsageStore}/1000 free workspace execs</span
+						>{$workspaceUsageStore}/1000 次免费工作区执行</span
 					>
 					<div class="w-full bg-gray-200 h-1">
 						<div class="bg-blue-400 h-1" style="width: {Math.min($workspaceUsageStore, 1000) / 10}%"
@@ -259,7 +259,7 @@
 						}}
 						{item}
 					>
-						Upgrade
+						升级方案
 					</MenuItem>
 				{/if}
 			</div>

@@ -102,8 +102,6 @@
 	let slackOAuthClientSecret: string = $state('')
 	let slackOAuthConfigLoaded: boolean = $state(false)
 	let itemKind: 'flow' | 'script' = $state('flow')
-	let plan: string | undefined = $state(undefined)
-	let customer_id: string | undefined = $state(undefined)
 	let webhook: string | undefined = $state(undefined)
 	let workspaceToDeployTo: string | undefined = $state(undefined)
 	let errorHandlerSelected: ErrorHandler = $state('slack')
@@ -501,8 +499,6 @@
 		teamsScriptPath = (settings.teams_command_script ?? '').split('/').slice(1).join('/')
 		slackInitialPath = slackScriptPath
 		teamsInitialPath = teamsScriptPath
-		plan = settings.plan
-		customer_id = settings.customer_id
 		workspaceToDeployTo = settings.deploy_to
 		webhook = settings.webhook
 
@@ -1236,7 +1232,7 @@
 							/>
 							<WorkspaceRulesets />
 						{:else if tab == 'premium'}
-							<PremiumInfo {customer_id} {plan} />
+							<PremiumInfo />
 						{:else if tab == 'slack'}
 							<SettingsPageHeader
 								title="Workspace connections to Slack and Teams"
@@ -1740,15 +1736,13 @@ export async function main(
 							</Section>
 						{:else if tab == 'critical_alerts'}
 							<SettingsPageHeader
-								title="Workspace critical alerts"
-								description="Critical alerts within the scope of a workspace are sent to the workspace admins through a UI notification."
-								link="https://www.windmill.dev/docs/core_concepts/critical_alerts"
+								title="工作区关键告警"
+								description="工作区范围内的关键告警会通过界面通知发送给工作区管理员。"
 							/>
 							<div class="flex flex-col gap-6 py-4">
 								{#if !$enterpriseLicense}
-									<Alert type="info" title="Workspace critical alerts is an EE feature">
-										Workspace critical alerts is a Windmill Enterprise Edition feature that sends
-										notifications to workspace admins when critical events occur.
+									<Alert type="info" title="当前部署未开放工作区关键告警">
+										工作区关键告警用于在关键事件发生时通知工作区管理员，当前部署未开放。
 									</Alert>
 								{/if}
 								<Toggle
@@ -1841,13 +1835,12 @@ export async function main(
 							<WorkspaceDependenciesSettings />
 						{:else if tab == 'default_app'}
 							<SettingsPageHeader
-								title="Workspace default app"
-								description="If configured, users who are operators in this workspace will be redirected to this app automatically when logging into this workspace. Make sure the default app is shared with all the operators of this workspace before turning this feature on."
-								link="https://www.windmill.dev/docs/apps/default_app"
+								title="工作区默认应用"
+								description="配置后，当前工作区的使用者登录时会自动进入该应用。启用前请确保默认应用已共享给所有使用者。"
 							/>
 							{#if !$enterpriseLicense}
-								<Alert type="warning" title="Windmill EE only feature">
-									Default app can only be set on Windmill Enterprise Edition.
+								<Alert type="warning" title="当前部署未开放默认应用">
+									当前部署暂不支持设置工作区默认应用。
 								</Alert>
 							{:else}
 								<Alert type="info" title="Default app must be accessible to all operators">

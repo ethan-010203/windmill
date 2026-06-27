@@ -239,7 +239,7 @@
 		<div>
 			<div class="flex justify-between">
 				<div class="text-xs pt-1 text-secondary flex flex-col">
-					<div>Windmill <Version /></div>
+					<div>部门工具平台 <Version /></div>
 				</div>
 				<div><Uptodate /></div></div
 			>
@@ -252,7 +252,7 @@
 					href="{base}/?workspace=admins"
 					endIcon={{ icon: ExternalLink }}
 				>
-					Admins workspace
+					管理员工作区
 				</Button>
 			</div>
 		{/if}
@@ -332,20 +332,19 @@
 
 							{#if extJwtTokens.length > 0}
 								<Tabs bind:selected={usersSubTab} class="mb-4">
-									<Tab value="users" label="Users" />
-									<Tab value="ext_jwt" label="External JWTs" />
+									<Tab value="users" label="用户" />
+									<Tab value="ext_jwt" label="外部 JWT" />
 								</Tabs>
 							{/if}
 
 							{#if usersSubTab === 'users' || extJwtTokens.length === 0}
 								<SettingsPageHeader
-									title="Instance users ({users.length})"
-									description="Manage all users across your Windmill instance."
-									link="https://www.windmill.dev/docs/advanced/instance_settings#global-users"
+									title="实例用户（{users.length}）"
+									description="管理当前实例中的全部用户。"
 								/>
 								<div class="flex flex-row gap-2 items-center">
 									<TextInput
-										inputProps={{ placeholder: 'Search users' }}
+										inputProps={{ placeholder: '搜索用户' }}
 										bind:value={filter}
 										class="w-60"
 									/><Toggle

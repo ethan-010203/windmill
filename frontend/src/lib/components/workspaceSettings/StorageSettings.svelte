@@ -139,24 +139,16 @@
 </Portal>
 
 <SettingsPageHeader
-	title="Workspace object storage (S3/Azure Blob/GCS)"
-	description="Connect your Windmill workspace to your S3 bucket, Azure Blob storage, or Google Cloud Storage to enable users to read and write from object storage without having to have access to the credentials."
-	link="https://www.windmill.dev/docs/core_concepts/object_storage_in_windmill#workspace-object-storage"
+	title="工作区对象存储（S3/Azure Blob/GCS）"
+	description="连接工作区对象存储后，用户无需直接接触存储凭据，也可以通过资源读取和写入对象存储。"
 />
 {#if !$enterpriseLicense}
-	<Alert type="info" title="S3 storage is limited to 20 files in Windmill CE">
-		Windmill S3 bucket browser will not work for buckets containing more than 20 files and uploads
-		are limited to files {'<'} 50MB. Consider upgrading to Windmill EE to use this feature with large
-		buckets.
+	<Alert type="info" title="当前部署限制">
+		当前部署中，对象存储浏览器最多展示 20 个文件，上传文件大小限制为 50 MB。
 	</Alert>
 {:else}
-	<Alert type="info" title="Logs storage is set at the instance level">
-		This setting is only for storage of large files allowing to upload files directly to object
-		storage using S3Object and use the wmill sdk to read and write large files backed by an object
-		storage. Large-scale log management and distributed dependency caching is under <a
-			href="https://www.windmill.dev/docs/core_concepts/object_storage_in_windmill#instance-object-storage"
-			>Instance object storage</a
-		>, set by the superadmins in the instance settings UI.
+	<Alert type="info" title="日志存储在实例级配置">
+		此设置仅用于大文件对象存储。大规模日志管理和分布式依赖缓存请由超级管理员在实例对象存储中配置。
 	</Alert>
 {/if}
 {#if s3ResourceSettings}
@@ -384,10 +376,9 @@
 		{#if !$enterpriseLicense}
 			<Alert
 				type={storage.advancedPermissions ? 'error' : 'info'}
-				title="Advanced permission rules are an Enterprise feature"
+				title="当前部署未开放高级权限规则"
 			>
-				Consider upgrading to Windmill EE to use advanced permission rules to control access to your
-				object storage at a more granular level.</Alert
+				高级权限规则用于更细粒度地控制对象存储访问权限，当前部署未开放。</Alert
 			>
 		{/if}
 		<Toggle

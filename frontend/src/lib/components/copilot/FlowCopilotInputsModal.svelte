@@ -23,7 +23,7 @@
 			dispatch('confirmed')
 		}}
 		on:canceled
-		title="Windmill AI wants to add the following inputs to the flow:"
+		title="平台 AI 想为流程添加以下输入："
 	>
 		<ul class=" list-disc pl-5">
 			{#each inputs as input}
@@ -41,7 +41,7 @@
 				color="light"
 				size="sm"
 			>
-				<span class="inline-flex gap-2">Add <Badge color="dark-green">Enter</Badge></span>
+				<span class="inline-flex gap-2">添加 <Badge color="dark-green">Enter</Badge></span>
 			</Button>
 			{/snippet}
 	</Modal>

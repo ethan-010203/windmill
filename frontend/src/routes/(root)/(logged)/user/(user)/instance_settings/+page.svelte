@@ -692,8 +692,7 @@
 	>
 		<div class="flex flex-col w-full space-y-4">
 			<span>
-				You are running the Enterprise Edition image but have not entered a license key. A valid
-				license key is required to use EE features. Are you sure you want to continue without one?
+				当前镜像需要授权密钥才能启用受限功能。尚未配置有效授权密钥，确定继续吗？
 			</span>
 		</div>
 	</ConfirmationModal>

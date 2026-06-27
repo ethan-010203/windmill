@@ -34,7 +34,7 @@
 			nonCaptureEvent={true}
 			startIcon={{ icon: MailPlus }}
 		>
-			Invite
+			邀请
 		</Button>
 	{/snippet}
 	{#snippet content()}
@@ -42,7 +42,7 @@
 			<input
 				type="email"
 				onkeyup={handleKeyUp}
-				placeholder="email"
+				placeholder="邮箱"
 				bind:value={email}
 				class="mr-4"
 			/>
@@ -50,22 +50,22 @@
 				{#snippet children({ item })}
 					<ToggleButton
 						value="operator"
-						label="Operator"
-						tooltip="An operator can only execute and view scripts/flows/apps from your workspace, and only those that he has visibility on."
+						label="使用者"
+						tooltip="使用者只能运行和查看当前工作区内自己有权限访问的脚本、流程和应用。"
 						{item}
 					/>
 
 					<ToggleButton
 						value="developer"
-						label="Developer"
-						tooltip="A Developer can execute and view scripts/flows/apps, but they can also create new ones and edit those they are allowed to by their path (either u/ or Writer or Admin of their folder found at /f)."
+						label="开发者"
+						tooltip="开发者可以运行和查看脚本、流程和应用，也可以创建新内容，并编辑自己路径或所在文件夹授权范围内的内容。"
 						{item}
 					/>
 
 					<ToggleButton
 						value="admin"
-						label="Admin"
-						tooltip="An admin has full control over a specific Windmill workspace, including the ability to manage users, edit entities, and control permissions within the workspace."
+						label="管理员"
+						tooltip="管理员拥有当前工作区的完整管理权限，包括用户管理、内容编辑和权限控制。"
 						{item}
 					/>
 				{/snippet}
@@ -76,7 +76,7 @@
 				on:click={() => inviteUser(email, selected)}
 				disabled={!email || email.trim() === ''}
 			>
-				Invite
+				邀请
 			</Button>
 		</div>
 	{/snippet}

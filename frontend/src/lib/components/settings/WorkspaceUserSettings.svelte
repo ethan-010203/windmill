@@ -941,7 +941,7 @@
 										variant="default"
 										startIcon={{ icon: LogIn }}
 										disabled={!$enterpriseLicense}
-										title={!$enterpriseLicense ? 'Requires Enterprise Edition' : undefined}
+										title={!$enterpriseLicense ? '当前部署未开放此功能' : undefined}
 										onClick={async () => {
 											try {
 												// Backend sets the impersonation cookie and returns the old token

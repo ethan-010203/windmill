@@ -417,7 +417,7 @@
 					{:else}
 						<XCircle size={14} class="text-red-700" />
 					{/if}
-					Git sync resource checked via Windmill job
+					Git 同步资源已通过平台任务检查
 					<a
 						target="_blank"
 						href={`/run/${gitSyncTestJob.jobId}?workspace=${$workspaceStore}`}
@@ -445,7 +445,7 @@
 			{#if repo.script_path}
 				<Alert type="warning" title="Pinned git sync script version">
 					This repository uses a pinned sync script: <code>{repo.script_path}</code>. Switch to
-					auto-managed to always use the latest version bundled with Windmill.
+					自动管理模式会使用当前部署内置的最新版本。
 					<div class="flex mt-2">
 						<Button
 							size="xs"
@@ -537,9 +537,7 @@
 					<p class="text-2xs text-secondary"
 						>{displayDescription}
 						{#if mode === 'promotion'}
-							<a target="_blank" href="https://www.windmill.dev/docs/advanced/deploy_gh_gl"
-								>Learn more about Git Promotion</a
-							>
+							<span>请参考内部部署说明配置 Git 推广流程。</span>
 						{/if}
 					</p>
 				{/if}

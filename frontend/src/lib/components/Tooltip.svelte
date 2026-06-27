@@ -8,6 +8,7 @@
 	import { InfoIcon } from 'lucide-svelte'
 	import { getContext, hasContext } from 'svelte'
 	import { twMerge } from 'tailwind-merge'
+	import { internalDocumentationLink } from '$lib/utils/internalLinks'
 	interface Props {
 		light?: boolean
 		wrapperClass?: string
@@ -43,7 +44,7 @@
 		{placement}
 		class={twMerge(wrapperClass)}
 		style="transform: scale({parseFloat(customSize) / 100});"
-		{documentationLink}
+		documentationLink={internalDocumentationLink(documentationLink)}
 	>
 		<div
 			class="inline-flex w-3 mx-0.5 h-3 {light

@@ -247,16 +247,16 @@ input_name2: expression2
 				<div class="p-4">
 					<p class="text-sm">
 						{#if !$copilotInfo.enabled}
-							Enable Windmill AI in the{' '}
+							请先在{' '}
 							<a
 								href="{base}/workspace_settings?tab=ai"
 								target="_blank"
 								class="inline-flex flex-row items-center gap-1"
 							>
-								workspace settings <ExternalLink size={16} />
-							</a>
+								工作区设置 <ExternalLink size={16} />
+							</a>中启用平台 AI。
 						{:else}
-							Enable step input completion in the{' '}
+							请先在{' '}
 							<a
 								href="#user-settings"
 								class="inline-flex flex-row items-center gap-1"
@@ -264,8 +264,8 @@ input_name2: expression2
 									close()
 								}}
 							>
-								user settings
-							</a>
+								用户设置
+							</a>中启用步骤输入补全。
 						{/if}
 					</p>
 				</div>

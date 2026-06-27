@@ -522,7 +522,7 @@
 
 		if (SCRIPT_VIEW_SHOW_PUBLISH_TO_HUB) {
 			menuItems.push({
-				label: 'Publish to Hub',
+				label: '发布到模板库',
 				Icon: Globe2,
 				onclick: () => {
 					if (!script) return

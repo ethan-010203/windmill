@@ -51,14 +51,14 @@
 			? forceDisabledMessage
 			: !hasCopilot
 				? $aiUserDisabled
-					? 'Windmill AI is disabled in your account settings'
+					? '你的账号设置中已关闭平台 AI'
 					: isAdmin
-						? `Enable Windmill AI in your [workspace settings](${base}/workspace_settings?tab=ai) to use this chat`
-						: 'Ask an admin to enable Windmill AI in this workspace to use this chat'
+						? `请先在[工作区设置](${base}/workspace_settings?tab=ai)中启用平台 AI 后再使用对话`
+						: '请联系管理员在当前工作区启用平台 AI 后再使用对话'
 				: aiChatManager.mode === AIMode.SCRIPT &&
 					  aiChatManager.scriptEditorOptions?.lang &&
 					  !SUPPORTED_CHAT_SCRIPT_LANGUAGES.includes(aiChatManager.scriptEditorOptions.lang)
-					? `Windmill AI does not support the ${aiChatManager.scriptEditorOptions.lang} language yet.`
+					? `平台 AI 暂不支持 ${aiChatManager.scriptEditorOptions.lang} 语言。`
 					: ''
 	)
 

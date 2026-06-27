@@ -69,8 +69,8 @@
 	checked={toggleState}
 	on:change={toggleErrorHandler}
 	options={{
-		right: 'Mute',
-		rightTooltip: 'Disable workspace error handler, EE only',
+		right: '停用',
+		rightTooltip: '停用工作区错误处理程序，当前部署未开放。',
 		rightDocumentationLink:
 			'https://www.windmill.dev/docs/core_concepts/error_handling#workspace-error-handler'
 	}}

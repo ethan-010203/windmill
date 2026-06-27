@@ -53,16 +53,13 @@
 								<div class="flex flex-row items-center text-yellow-500 text-xs">
 									<EEOnly />
 									<Tooltip light>
-										App CSS editor is an exclusive feature of the Enterprise Edition. You can
-										experiment with this feature in the editor, but please note that the changes
-										will not be visible once deployed.
+										应用 CSS 编辑器当前未开放。你可以在编辑器中预览，但部署后不会生效。
 									</Tooltip>
 								</div>
 								<div class="flex flex-row items-center text-blue-500 text-xs">
-									Component styling available in CE
+									组件样式仍可配置
 									<Tooltip light>
-										You can still style components in the Community Edition in the styling section
-										of the component's configuration.
+										仍可在组件配置的样式区域调整组件样式。
 									</Tooltip>
 								</div>
 							</div>

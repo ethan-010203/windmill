@@ -293,7 +293,7 @@
 	<CenteredPage>
 		<PageHeader
 			title="Kafka triggers"
-			tooltip="Windmill can consume kafka events and trigger scripts or flows based on them."
+			tooltip="平台可以消费 Kafka 事件，并基于事件触发脚本或流程。"
 		>
 			<Button
 				unifiedSize="md"

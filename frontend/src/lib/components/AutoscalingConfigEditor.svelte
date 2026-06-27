@@ -264,10 +264,9 @@
 										unifiedSize="md"
 										variant="default"
 										endIcon={{ icon: ExternalLink }}
-										href="https://windmill.dev/docs/core_concepts/autoscaling#kubernetes"
-										target="_blank"
+										href="/tutorials"
 									>
-										Setup Guide (Roles & Bindings)
+										配置说明（角色与绑定）
 									</Button>
 									<Button
 										unifiedSize="md"

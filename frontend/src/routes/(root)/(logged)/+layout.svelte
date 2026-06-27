@@ -581,7 +581,7 @@
 										{#if $whitelabelNameStore}
 											{$whitelabelNameStore}
 										{:else}
-											Windmill
+											部门工具平台
 										{/if}
 									</div>
 									<div class="px-2 py-4 border-y border-light dark:border-gray-700">
@@ -661,7 +661,7 @@
 										<div class="text-sm mt-0.5 text-emphasis">
 											{#if $whitelabelNameStore}{capitalize(
 													$whitelabelNameStore
-												)}{:else}Windmill{/if}
+												)}{:else}部门工具平台{/if}
 										</div>
 									{/if}
 								</div>
@@ -782,7 +782,7 @@
 								<WindmillIcon white={darkMode} height="20px" width="20px" />
 								{#if !isCollapsed}{#if $whitelabelNameStore}{capitalize(
 											$whitelabelNameStore
-										)}{:else}Windmill{/if}{/if}
+										)}{:else}部门工具平台{/if}{/if}
 							</div>
 
 							<div class="px-2 py-4 space-y-2 border-y border-light dark:border-gray-700">

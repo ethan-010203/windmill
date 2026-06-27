@@ -14,21 +14,21 @@
 
 	onMount(async () => {
 		if (error) {
-			sendUserToast(`Error trying to add slack connection: ${error}`, true)
+			sendUserToast(`添加 Slack 连接失败：${error}`, true)
 		} else if (code && state) {
 			await OauthService.connectSlackCallbackInstance({
 				requestBody: { code, state }
 			})
-			sendUserToast('Slack workspace connected to your Windmill instance.')
+			sendUserToast('Slack 工作区已连接到当前实例。')
 		} else {
-			sendUserToast('Missing code or state as query params', true)
+			sendUserToast('缺少 code 或 state 查询参数', true)
 		}
 		goto('/#superadmin-settings')
 	})
 </script>
 
 <CenteredPage>
-	<PageHeader title="Connection to slack in progress" />
+	<PageHeader title="正在连接 Slack" />
 	<div class="mx-auto w-0">
 		<WindmillIcon height="80px" width="80px" spin="fast" />
 	</div>

@@ -129,37 +129,36 @@
 				<div
 					class="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mb-4"
 				></div>
-				<p class="text-lg text-secondary">Processing GitHub app installation...</p>
+				<p class="text-lg text-secondary">正在处理 GitHub App 安装...</p>
 			</div>
 		{:else if isSuccess}
 			<div class="flex flex-col">
 				<h1 class="text-2xl font-bold pb-6 flex flex-row items-center gap-2">
 					<CheckCircle class="w-8 h-8 text-green-500" />
-					Windmill GitHub app installation completed successfully
+					GitHub App 安装成功
 				</h1>
 				<p class="text-secondary mb-8">
-					The GitHub app has been successfully installed. You can now close this window and return
-					to Windmill to start using the GitHub integration.
+					GitHub App 已安装成功。现在可以关闭此窗口并返回系统继续使用 GitHub 集成。
 				</p>
 				<button
 					onclick={closeWindow}
 					class="w-full py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded transition-colors"
 				>
-					Close this window
+					关闭窗口
 				</button>
 			</div>
 		{:else}
 			<div class="flex flex-col">
 				<h1 class="text-2xl font-bold pb-6 flex flex-row items-center gap-2">
 					<XCircle class="w-8 h-8 text-red-500" />
-					Failed to install Windmill GitHub app
+					GitHub App 安装失败
 				</h1>
-				<p class="text-secondary pb-4">There was an error during the installation process:</p>
+				<p class="text-secondary pb-4">安装过程中出现错误：</p>
 				<div class="bg-surface-secondary p-4 rounded border border-red-300 text-red-600 mb-8">
 					{errorMessage}
 				</div>
 				<p class="text-secondary mb-8">
-					Please try again or contact your administrator for assistance.
+					请重试，或联系系统管理员处理。
 				</p>
 				<button
 					onclick={closeWindow}

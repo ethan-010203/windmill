@@ -62,7 +62,7 @@
 						主题 <DarkModeToggle forcedDarkMode={false} />
 					</div>
 					<div class="text-xs text-emphasis flex-col flex">
-						Windmill <Version />
+						部门工具平台 <Version />
 					</div>
 				</div>
 				<div class="grid grid-cols-1 lg:grid-cols-2 w-full gap-4">

@@ -592,12 +592,8 @@
 								>wmill.yaml</code
 							>
 							file in your git repository. To modify them, edit the file in your repository, commit the
-							changes, and sync using the commands below. Learn more about
-							<a
-								href="https://www.windmill.dev/docs/advanced/cli/sync#wmillyaml"
-								target="_blank"
-								rel="noopener noreferrer">the wmill.yaml format</a
-							>.
+							changes, and sync using the commands below. See your internal deployment notes for
+							the wmill.yaml format.
 						</div>
 					{/if}
 					<pre class="text-xs bg-surface p-3 rounded overflow-x-auto whitespace-pre-wrap break-all">

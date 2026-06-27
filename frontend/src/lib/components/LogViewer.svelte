@@ -183,9 +183,9 @@
 		} else if (prefixInfo.prefixIndex == 0) {
 			return 'Download the previous logs from the instance configured object store'
 		} else if (prefixInfo.prefixIndex == 1) {
-			return 'Attempt to download the logs from disk. Assume there is a shared disk between the workers and the server at /tmp/windmill/logs. Upgrade to EE to use an object store such as S3 instead of a shared volume.'
+			return '尝试从磁盘下载日志。此模式假设 worker 和 server 之间共享 /tmp/windmill/logs。对象存储日志下载能力当前未开放。'
 		} else if (prefixInfo.prefixIndex == 2) {
-			return 'Attempt to download the logs from disk. Assume there is a shared disk between the workers and the server at /tmp/windmill/logs. Since you are on EE, you can alternatively use an object store such as S3 configured in the instance settings instead of a shared volume..'
+			return '尝试从磁盘下载日志。此模式假设 worker 和 server 之间共享 /tmp/windmill/logs。也可以在实例设置中配置对象存储。'
 		}
 	}
 

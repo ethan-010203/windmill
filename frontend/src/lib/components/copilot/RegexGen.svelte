@@ -166,20 +166,20 @@
 								{/each}
 								<button
 									class="underline text-xs text-start px-2 text-secondary font-normal"
-									onclick={clearPromptHistory}>clear history</button
+									onclick={clearPromptHistory}>清空历史</button
 								>
 							</div>
 						{/if}
 					</div>
 				{:else}
 					<p class="text-sm">
-						Enable Windmill AI in the <a
+						请先在<a
 							href="{base}/workspace_settings?tab=ai"
 							target="_blank"
 							class="inline-flex flex-row items-center gap-1"
 						>
-							workspace settings <ExternalLink size={16} />
-						</a>
+							工作区设置 <ExternalLink size={16} />
+						</a>中启用平台 AI。
 					</p>
 				{/if}
 			</div>

@@ -140,9 +140,8 @@
 		{initialConfig}
 		workspace="admins"
 		{disableChatOffset}
-		title="Windmill AI"
-		description="Windmill AI integrates with your favorite AI providers and models. Set your AI settings at the instance level to be able to use them on all your workspaces. Workspace-level settings can override these."
-		link="https://www.windmill.dev/docs/core_concepts/ai_generation"
+		title="平台 AI"
+		description="平台 AI 可对接常用 AI 服务和模型。在实例级配置后，各工作空间都可以使用；工作空间级配置可以覆盖实例配置。"
 		promptScope="instance"
 		customSave={handleCustomSave}
 	/>

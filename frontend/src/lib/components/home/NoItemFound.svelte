@@ -9,16 +9,15 @@
 {#if hasFilters}
 	<div class="flex justify-center items-center h-48">
 		<div class="text-primary text-center">
-			<div class="text-lg font-semibold text-emphasis">No items found</div>
-			<div class="text-xs font-normal text-hint">Try changing your search or filters</div>
+			<div class="text-lg font-semibold text-emphasis">未找到内容</div>
+			<div class="text-xs font-normal text-hint">请调整搜索条件或筛选条件</div>
 		</div>
 	</div>
 {:else}
 	<div class="flex justify-center items-center h-48">
 		<div class="text-primary text-center">
-			<div class="text-lg font-semibold text-emphasis">Welcome to Windmill</div>
-			<div class="text-xs font-normal text-hint">Get started by creating your first script, flow, or app</div>
+			<div class="text-lg font-semibold text-emphasis">欢迎使用部门工具平台</div>
+			<div class="text-xs font-normal text-hint">可以先创建脚本、流程或应用</div>
 		</div>
 	</div>
 {/if}
-

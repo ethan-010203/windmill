@@ -405,7 +405,7 @@
 						}
 					},
 					{
-						displayName: 'Publish to Hub',
+						displayName: '发布到模板库',
 						icon: Globe2,
 						action: async () => {
 							const scriptData = await ScriptService.getScriptByPath({

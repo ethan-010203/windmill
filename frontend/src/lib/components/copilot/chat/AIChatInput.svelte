@@ -103,13 +103,13 @@
 			case AIMode.APP:
 				return 'Modify this app...'
 			case AIMode.NAVIGATOR:
-				return 'Navigate Windmill UI...'
+				return '导航平台界面...'
 			case AIMode.API:
 				return 'Make API calls...'
 			case AIMode.GLOBAL:
 				return globalSuggestion
 			case AIMode.ASK:
-				return 'Ask questions about Windmill...'
+				return '询问平台使用问题...'
 			default:
 				return 'Ask anything'
 		}

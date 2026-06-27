@@ -21,7 +21,7 @@
 	<DarkPopover>
 		{#snippet text()}
 			<div class="flex flex-row gap-1">
-				Show the AI Panel.
+				显示 AI 面板。
 
 				<div class="flex flex-row items-center !text-md opacity-60 gap-0 font-normal">
 					{getModifierKey()}L
@@ -38,14 +38,14 @@
 		{#snippet content()}
 			<div class="block text-primary p-4">
 				{#if $aiUserDisabled}
-					<p class="text-sm">Windmill AI is disabled in your account settings.</p>
+					<p class="text-sm">你的账号设置中已关闭平台 AI。</p>
 				{:else}
 					<p class="text-sm"
-						>Enable Windmill AI in the <a
+						>请先在<a
 							href="{base}/workspace_settings?tab=ai"
 							target="_blank"
 							class="inline-flex flex-row items-center gap-1"
-							>workspace settings <ExternalLink size={16} /></a
+							>工作区设置 <ExternalLink size={16} /></a>中启用平台 AI。
 						></p
 					>
 				{/if}
@@ -64,6 +64,6 @@
 		iconOnly
 		{btnClasses}
 	>
-		AI Panel
+		AI 面板
 	</Button>
 {/snippet}

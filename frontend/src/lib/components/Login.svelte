@@ -105,7 +105,7 @@
 
 	async function login(): Promise<void> {
 		if (!email || !password) {
-			sendUserToast('Please fill in both email and password', true)
+			sendUserToast('请输入邮箱和密码', true)
 			return
 		}
 
@@ -117,7 +117,7 @@
 		try {
 			await UserService.login({ requestBody })
 		} catch (err) {
-			sendUserToast('Invalid credentials', true)
+			sendUserToast('账号或密码不正确', true)
 			return
 		}
 
@@ -419,7 +419,7 @@
 
 	function redirectSaml(): boolean {
 		if (!saml) {
-			sendUserToast('No SAML login available', true)
+			sendUserToast('当前没有可用的单点登录', true)
 			return false
 		}
 		let target = saml
@@ -459,7 +459,7 @@
 
 <div class="bg-surface px-4 py-8 border sm:rounded-lg sm:px-10">
 	{#if autoRedirecting}
-		<p class="text-sm text-center text-secondary py-4">Signing you in…</p>
+		<p class="text-sm text-center text-secondary py-4">正在登录...</p>
 	{/if}
 	<div
 		class="grid {logins && logins.length > 2 ? 'grid-cols-2' : ''} gap-4 {autoRedirecting
@@ -505,7 +505,7 @@
 					showPassword = !showPassword
 				}}
 			>
-				Log in without third-party
+				使用账号密码登录
 			</Button>
 		</div>
 	{/if}
@@ -514,25 +514,22 @@
 		<div>
 			{#if firstTime}
 				<p class="text-xs text-center w-full pb-4 text-secondary">
-					Welcome! Default credentials admin@windmill.dev / changeme have been prefilled.
+					欢迎使用，默认管理员账号已自动填入。
 				</p>
 			{/if}
 			<div class="space-y-6">
 				{#if isCloudHosted()}
-					<p class="text-xs text-secondary pb-6">
-						To get credentials without the OAuth providers above, send an email at
-						contact@windmill.dev
-					</p>
+					<p class="text-xs text-secondary pb-6">如需账号密码登录，请联系系统管理员。</p>
 				{/if}
 				<div class="space-y-1">
-					<label for="email" class="block text-xs font-semibold text-emphasis"> Email </label>
+					<label for="email" class="block text-xs font-semibold text-emphasis"> 邮箱 </label>
 					<div>
 						<input type="email" bind:value={email} id="email" autocomplete="email" />
 					</div>
 				</div>
 
 				<div class="space-y-1">
-					<label for="password" class="block text-xs font-semibold text-emphasis"> Password </label>
+					<label for="password" class="block text-xs font-semibold text-emphasis"> 密码 </label>
 					<div>
 						<input
 							onkeyup={handleKeyUp}
@@ -548,14 +545,14 @@
 								href="{base}/user/forgot-password"
 								class="text-2xs text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
 							>
-								Forgot password?
+								忘记密码？
 							</a>
 						</div>
 					{/if}
 				</div>
 
 				<div class="pt-2">
-					<Button onClick={login} variant="accent" disabled={!email || !password}>Sign in</Button>
+					<Button onClick={login} variant="accent" disabled={!email || !password}>登录</Button>
 				</div>
 			</div>
 

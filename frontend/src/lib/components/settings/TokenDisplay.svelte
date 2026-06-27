@@ -14,12 +14,10 @@
 
 	let { token, mcpUrl, title, onClose }: Props = $props()
 
-	const displayTitle = $derived(
-		title || (mcpUrl ? 'MCP URL generated successfully' : 'Token created successfully')
-	)
+	const displayTitle = $derived(title || (mcpUrl ? 'MCP URL 已生成' : '令牌已创建'))
 
 	const info = $derived(
-		`Make sure to copy your ${mcpUrl ? 'MCP Server URL' : 'personal access token'} now. You won\'t be able to see it again!`
+		`请立即复制${mcpUrl ? ' MCP 服务 URL' : '个人访问令牌'}，关闭后将无法再次查看。`
 	)
 
 	const tokenOrUrl = $derived(mcpUrl ? mcpUrl : token)
@@ -35,7 +33,7 @@
 		<button
 			onclick={onClose}
 			class="absolute top-2 right-2 p-1 text-secondary hover:text-primary surface-hover hover:surface-secondary rounded transition-colors"
-			title="Close"
+			title="关闭"
 		>
 			<X size={16} />
 		</button>
@@ -65,7 +63,7 @@
 
 				<!-- Warning alert using existing Alert component -->
 				<div class="mt-1">
-					<Alert type="warning" title="Important" size="xs">
+					<Alert type="warning" title="重要" size="xs">
 						{info}
 					</Alert>
 				</div>
@@ -74,8 +72,7 @@
 					<!-- Additional info using alert info styling -->
 					<div class="mt-1 {alertStyles.bgClass} rounded-md p-2">
 						<p class="text-xs {alertStyles.descriptionClass}">
-							<strong>Next steps:</strong> Use this URL in your MCP-compatible client (like Claude Desktop)
-							to access your Windmill scripts and flows as tools.
+							<strong>下一步：</strong>在支持 MCP 的客户端中使用此 URL，即可把平台内的脚本和流程作为工具调用。
 						</p>
 					</div>
 				{/if}

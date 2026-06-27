@@ -19,6 +19,7 @@
 	import { createEventDispatcher, untrack } from 'svelte'
 	import { Button } from '$lib/components/common'
 	import DocLink from '$lib/components/apps/editor/settingsPanel/DocLink.svelte'
+	import { internalDocumentationLink } from '$lib/utils/internalLinks'
 	import type { FloatingConfig } from '@melt-ui/svelte/internal/actions/floating'
 	import type { EscapeBehaviorType } from '@melt-ui/svelte/internal/actions'
 
@@ -294,7 +295,7 @@
 		{/if}
 		{#if documentationLink}
 			<div class="absolute right-1.5 top-1.5">
-				<DocLink docLink={documentationLink} size="sm" />
+				<DocLink docLink={internalDocumentationLink(documentationLink) ?? documentationLink} size="sm" />
 			</div>
 		{/if}
 		{#if closeButton}

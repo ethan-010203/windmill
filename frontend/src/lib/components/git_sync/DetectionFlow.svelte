@@ -89,7 +89,7 @@
 						options={{
 							right: 'Group all changes from same folder in the same branch',
 							rightTooltip:
-								'Instead of creating a branch per object, Windmill will create a branch per folder containing objects being deployed.'
+								'开启后，系统会按文件夹创建分支，而不是为每个对象单独创建分支。'
 						}}
 					/>
 				</div>
@@ -115,8 +115,8 @@
 			</div>
 		{:else if repo.detectionState === 'no-wmill'}
 			<!-- No wmill.yaml found - new repository -->
-			<Alert type="info" title="Uninitialized Windmill repository found" class="mb-2">
-				No git sync configuration found. Configure your sync settings below.
+			<Alert type="info" title="发现未初始化的 Git 仓库" class="mb-2">
+				未找到 Git 同步配置，请在下方完成同步设置。
 			</Alert>
 
 			<GitSyncFilterSettings
@@ -142,8 +142,8 @@
 			</div>
 		{:else if repo.detectionState === 'has-wmill'}
 			<!-- wmill.yaml found - existing repository -->
-			<Alert type="success" title="Existing Windmill repository found" class="mb-2">
-				Found existing git sync configuration. Settings loaded from repository.
+			<Alert type="success" title="发现已有 Git 同步配置" class="mb-2">
+				已从仓库加载现有 Git 同步配置。
 			</Alert>
 
 			<GitSyncFilterSettings

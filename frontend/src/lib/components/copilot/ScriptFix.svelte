@@ -55,11 +55,11 @@
 				<div class="p-4">
 					<div class="w-80">
 						<p class="text-sm"
-							>Enable Windmill AI in the <a
+							>请先在 <a
 								class="inline-flex flex-row items-center gap-1"
 								href="{base}/workspace_settings?tab=ai"
-								target="_blank">workspace settings</a
-							></p
+								target="_blank">工作空间设置</a
+							> 中启用平台 AI</p
 						></div
 					>
 				</div>

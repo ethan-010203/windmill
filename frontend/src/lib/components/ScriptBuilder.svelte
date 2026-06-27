@@ -1554,9 +1554,9 @@
 										/>
 										{#if script.dedicated_worker}
 											<div class="py-2">
-												<Alert type="info" title="Require dedicated workers">
-													A worker group needs to be configured to listen to this script. Select it
-													in the dedicated workers section of the worker group configuration.
+												<Alert type="info" title="需要专用 Worker">
+													需要配置一个 Worker 组来监听此脚本。请在 Worker 组配置的专用 Worker
+													区域选择它。
 												</Alert>
 											</div>
 										{/if}
@@ -1564,34 +1564,29 @@
 											<Tooltip
 												documentationLink="https://www.windmill.dev/docs/core_concepts/dedicated_workers"
 											>
-												In this mode, the script is meant to be run on dedicated workers that run
-												the script at native speed. Can reach &gt;1500rps per dedicated worker. Only
-												available on enterprise edition and for Python3, Deno, Bun and Bunnative.
-												For other languages, the efficiency is already on par with dedicated workers
-												since they do not spawn a full runtime</Tooltip
+												此模式下，脚本会在专用 Worker 上以接近原生的速度运行。当前部署未开放此能力；
+												其他语言通常不需要启动完整运行时，执行效率已经接近专用 Worker。</Tooltip
 											>
 										{/snippet}
 									</Section>
-									<Section label="Delete after completion">
+									<Section label="完成后删除">
 										{#snippet header()}
 											<Tooltip
 												documentationLink="https://www.windmill.dev/docs/script_editor/settings#delete-after-use"
 											>
-												WARNING: This settings ONLY applies to synchronous webhooks or when the
-												script is used within a flow. If used individually, this script must be
-												triggered using a synchronous endpoint to have the desired effect.
+												警告：此设置仅适用于同步 Webhook，或脚本在流程中使用的场景。单独运行脚本时，
+												必须通过同步端点触发才会生效。
 												<br />
 												<br />
-												The logs, arguments and results of the job will be completely deleted from Windmill
-												after the specified delay once it is complete and the result has been returned.
-												Set to 0 for immediate deletion.
+												任务完成并返回结果后，日志、参数和结果会在指定延迟后被完全删除。设置为 0
+												表示立即删除。
 												<br />
 												<br />
-												The deletion is irreversible.
+												删除不可恢复。
 												{#if !$enterpriseLicense}
 													<br />
 													<br />
-													This option is only available on Windmill Enterprise Edition.
+													当前部署未开放此选项。
 												{/if}
 											</Tooltip>
 										{/snippet}

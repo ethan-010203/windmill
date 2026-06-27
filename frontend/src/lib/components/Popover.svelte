@@ -10,6 +10,7 @@
 
 	import { ExternalLink } from 'lucide-svelte'
 	import { untrack } from 'svelte'
+	import { internalDocumentationLink } from '$lib/utils/internalLinks'
 
 	interface Props {
 		placement?: PopoverPlacement
@@ -115,9 +116,9 @@
 			<div class="max-w-sm break-words">
 				{@render text?.()}
 				{#if documentationLink}
-					<a href={documentationLink} target="_blank">
+					<a href={internalDocumentationLink(documentationLink)} target="_blank">
 						<div class="flex flex-row gap-2 mt-4">
-							See documentation
+							查看说明
 							<ExternalLink size="16" />
 						</div>
 					</a>
