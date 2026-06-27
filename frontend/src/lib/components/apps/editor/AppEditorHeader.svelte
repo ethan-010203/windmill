@@ -156,7 +156,6 @@
 	let deployedBy: string | undefined = $state(undefined) // Author
 	let confirmCallback: () => void = $state(() => {}) // What happens when user clicks `override` in warning
 	let open: boolean = $state(false) // Is confirmation modal open
-	let customPathError: string = $state('')
 
 	const {
 		app,
@@ -387,20 +386,6 @@
 		}
 		if ($appPath !== npath) {
 			onSavedNewAppPath?.(npath)
-		}
-	}
-
-	async function setPublishState() {
-		policy = await updatePolicy($app, policy)
-		await AppService.updateApp({
-			workspace: $workspaceStore!,
-			path: $appPath,
-			requestBody: { policy }
-		})
-		if (policy.execution_mode == 'anonymous') {
-			sendUserToast('App require no login to be accessed')
-		} else {
-			sendUserToast('App require login and read-access')
 		}
 	}
 
@@ -776,7 +761,7 @@
 				<Button
 					variant="accent"
 					startIcon={{ icon: Save }}
-					disabled={pathError != '' || customPathError != ''}
+					disabled={pathError != ''}
 					on:click={() => {
 						// Use `newApp` (set for /apps/add and draft-only paths), not
 						// `$appPath` — its `draft_{uuid}` is a poor create signal.
@@ -793,20 +778,15 @@
 		{/snippet}
 		<AppEditorHeaderDeploy
 			{newPath}
-			{newApp}
 			{policy}
-			{setPublishState}
 			appPath={$appPath}
 			{onLatest}
 			{savedApp}
 			bind:summary={$summary}
-			bind:customPath
 			bind:deploymentMsg
-			bind:customPathError
 			bind:pathError
 			bind:newEditedPath
 			bind:preserveOnBehalfOf
-			hideSecretUrl={true}
 		/>
 	</DrawerContent>
 </Drawer>

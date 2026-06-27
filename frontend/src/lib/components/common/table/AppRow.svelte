@@ -14,8 +14,6 @@
 	import InheritedLabels from '$lib/components/InheritedLabels.svelte'
 	import Badge from '../badge/Badge.svelte'
 	import {
-		ExternalLink,
-		Eye,
 		File,
 		FileJson,
 		FolderOpen,
@@ -27,8 +25,6 @@
 		Trash,
 		Copy
 	} from 'lucide-svelte'
-	import { goto as gotoUrl } from '$app/navigation'
-	import { page } from '$app/state'
 	import type DeployWorkspaceDrawer from '$lib/components/DeployWorkspaceDrawer.svelte'
 	import { copyToClipboard } from '$lib/utils'
 	import AppDeploymentHistory from '$lib/components/apps/editor/AppDeploymentHistory.svelte'
@@ -115,9 +111,6 @@
 	{keyboardSelected}
 >
 	{#snippet badges()}
-		{#if app.execution_mode == 'anonymous'}
-			<Badge small icon={{ icon: Eye }}>Public</Badge>
-		{/if}
 		{#if app.raw_app}
 			<Badge small icon={{ icon: FileJson }}>Raw</Badge>
 		{/if}
@@ -189,7 +182,7 @@
 			aiId={`app-row-dropdown-${app.summary?.length > 0 ? app.summary : app.path}`}
 			aiDescription={`Open dropdown for app ${app.summary?.length > 0 ? app.summary : app.path} options`}
 			items={async () => {
-				let { draft_only, canWrite, summary, execution_mode, path } = app
+				let { draft_only, canWrite, summary, path } = app
 
 				const canEdit = canWrite && showEditButton
 				if (draft_only) {
@@ -289,25 +282,6 @@
 							copyToClipboard(path)
 						}
 					},
-					...(execution_mode == 'anonymous'
-						? [
-								{
-									displayName: 'Go to public page',
-									icon: ExternalLink,
-									action: async () => {
-										let secretUrl = await AppService.getPublicSecretOfApp({
-											workspace: $workspaceStore ?? '',
-											path
-										})
-										let url =
-											page.url.protocol +
-											'//' +
-											`${page.url.hostname}/public/${$workspaceStore}/${secretUrl}`
-										gotoUrl(url)
-									}
-								}
-							]
-						: []),
 					{
 						displayName: 'Delete',
 						icon: Trash,

@@ -436,20 +436,6 @@
 		onDeploy?.({ path: npath })
 	}
 
-	async function setPublishState() {
-		await computeTriggerables()
-		await AppService.updateApp({
-			workspace: $workspaceStore!,
-			path: appPath,
-			requestBody: { policy }
-		})
-		if (policy.execution_mode == 'anonymous') {
-			sendUserToast('App require no login to be accessed')
-		} else {
-			sendUserToast('App require login and read-access')
-		}
-	}
-
 	async function save() {
 		saveDrawerOpen = true
 		return
@@ -525,7 +511,6 @@
 	const dispatch = createEventDispatcher()
 
 	let customPath = $state(savedApp?.custom_path)
-	let customPathError = $state('')
 
 	let jobsDrawerOpen = $state(false)
 
@@ -599,7 +584,7 @@
 					variant="accent"
 					unifiedSize="md"
 					startIcon={{ icon: Save }}
-					disabled={pathError != '' || customPathError != '' || app == undefined}
+					disabled={pathError != '' || app == undefined}
 					on:click={() => {
 						if (newApp || appPath == '') {
 							createApp(newEditedPath)
@@ -615,20 +600,14 @@
 
 		<AppEditorHeaderDeploy
 			{newPath}
-			{newApp}
 			{policy}
-			{setPublishState}
 			{appPath}
 			{onLatest}
 			{savedApp}
-			rawApp
 			bind:summary
-			bind:customPath
 			bind:deploymentMsg
-			bind:customPathError
 			bind:pathError
 			bind:newEditedPath
-			hideSecretUrl={true}
 		/>
 	</DrawerContent>
 </Drawer>
