@@ -864,16 +864,14 @@
 			</PageHeader>
 
 			{#if worstVersionWarning === 'critical'}
-				<Alert type="error" title="Critical: Workers below minimum version" class="my-4">
-					One or more workers are running below the minimum supported version. This may cause
-					undefined behavior and cluster instability. Upgrade these workers immediately—running
-					workers this old is untested and strongly discouraged.
+				<Alert type="error" title="严重：Worker 低于最低支持版本" class="my-4">
+					一个或多个 Worker 低于最低支持版本，可能导致行为异常和集群不稳定。请立即升级这些
+					Worker；继续运行过旧版本存在较高风险。
 				</Alert>
 			{:else if worstVersionWarning === 'warning'}
-				<Alert type="warning" title="Workers significantly behind" class="my-4">
-					One or more workers are significantly behind the server ({serverVersion}) by more than 50
-					minor versions. While they should still function, the risk of issues is elevated. Further
-					server upgrades may push these workers into a critical state. Upgrading is recommended.
+				<Alert type="warning" title="Worker 版本明显落后" class="my-4">
+					一个或多个 Worker 落后服务器版本（{serverVersion}）超过 50 个小版本。虽然它们通常仍可运行，但问题风险会升高。
+					后续服务器升级可能让这些 Worker 进入严重不兼容状态，建议尽快升级。
 				</Alert>
 			{:else if worstVersionWarning === 'newer'}
 				<Alert type="warning" title="Workers ahead of server" class="my-4">
@@ -1164,32 +1162,24 @@
 																		{@const isAgent = worker.startsWith('ag-')}
 																		<div class="max-w-xs text-xs">
 																			{#if versionWarning === 'critical'}
-																				<strong>Critical:</strong> This {isAgent
-																					? 'agent worker'
-																					: 'worker'} is running below the minimum supported version
+																				<strong>严重：</strong>此{isAgent
+																					? '代理 Worker'
+																					: 'Worker'}低于最低支持版本
 																				({isAgent
 																					? agentMinKeepAliveVersion
-																					: minKeepAliveVersion}). This may cause undefined behavior
-																				and cluster instability. Upgrade this {isAgent
-																					? 'agent worker'
-																					: 'worker'} immediately—running {isAgent
-																					? 'agent workers'
-																					: 'workers'} this old is untested and strongly discouraged.
+																					: minKeepAliveVersion})，可能导致行为异常和集群不稳定。请立即升级此{isAgent
+																					? '代理 Worker'
+																					: 'Worker'}；继续运行过旧版本存在较高风险。
 																			{:else if versionWarning === 'warning'}
-																				<strong>Warning:</strong> This worker is significantly
-																				behind the server ({serverVersion}) by more than 50 minor
-																				versions. While it should still function, the risk of issues
-																				is elevated. Further server upgrades may push this worker
-																				into a critical state. Upgrading is recommended.
+																				<strong>警告：</strong>此 Worker 落后服务器版本（{serverVersion}）超过
+																				50 个小版本。虽然它通常仍可运行，但问题风险会升高。后续服务器升级可能让此
+																				Worker 进入严重不兼容状态，建议尽快升级。
 																			{:else if versionWarning === 'newer'}
-																				<strong>Warning:</strong> This worker is running a newer
-																				version than the server ({serverVersion}). Workers should be
-																				at or behind the server version. This may cause undefined
-																				behavior.
+																				<strong>警告：</strong>此 Worker 版本高于服务器版本（{serverVersion}）。Worker
+																				版本应不高于服务器版本，否则可能导致行为异常。
 																			{:else}
-																				<strong>Note:</strong> This worker is behind the server version.
-																				While generally fine, keeping all workers aligned with the server
-																				provides the best stability and is most thoroughly tested.
+																				<strong>提示：</strong>此 Worker 版本低于服务器版本。通常这不会立即导致问题，但保持
+																				Worker 与服务器版本一致可以获得更好的稳定性。
 																			{/if}
 																		</div>
 																	{/snippet}

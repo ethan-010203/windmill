@@ -5,7 +5,7 @@
 	import TextInput from '$lib/components/text_input/TextInput.svelte'
 	import { Popover } from '$lib/components/meltComponents'
 	import MultiSelect from '$lib/components/select/MultiSelect.svelte'
-	import { Plus, Edit3, Save, X, Trash, ExternalLink } from 'lucide-svelte'
+	import { Plus, Edit3, Save, X, Trash } from 'lucide-svelte'
 	import { sendUserToast } from '$lib/toast'
 	import { twMerge } from 'tailwind-merge'
 	import { ConfigService, SettingService, type Alert } from '$lib/gen'
@@ -363,14 +363,7 @@
 	{/snippet}
 
 	{#if !$enterpriseLicense}
-		<div class="text-xs text-primary">
-			Queue Metric Alerts is an enterprise feature allowing you to monitor queues for waiting jobs.
-			Please upgrade to access this functionality. <a
-				href="https://www.windmill.dev/pricing"
-				target="_blank"
-				>Learn more about our plans <ExternalLink size={12} class="inline-block" /></a
-			>
-		</div>
+		<div class="text-xs text-primary">当前部署未开放队列指标告警。</div>
 	{:else if queueAlertConfig.length === 0}
 		<div class="text-center py-8">
 			<p class="text-sm text-secondary">No queue alerts configured</p>

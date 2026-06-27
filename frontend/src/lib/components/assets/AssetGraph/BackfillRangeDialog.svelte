@@ -46,8 +46,7 @@
 	<div class="flex flex-col gap-4">
 		{#if !$enterpriseLicense}
 			<p class="text-sm text-secondary">
-				Partition backfill is an enterprise feature. Materializing a single partition is available
-				in the open-source edition; reprocessing a historical range requires an enterprise license.
+				当前部署未开放分区范围回填。你仍然可以处理单个分区。
 			</p>
 		{:else}
 			<p class="text-sm text-secondary">

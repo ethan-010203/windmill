@@ -548,8 +548,8 @@ export function insertNewGridItem(
 	const data = builddata(id)
 
 	if (data.type == 'aggridcomponentee' && !get(enterpriseLicense)) {
-		sendUserToast('AgGrid Enterprise Edition require Windmill Enterprise Edition', true)
-		throw Error('AgGrid Enterprise Edition require Windmill Enterprise Edition')
+		sendUserToast('当前部署未开放 AG Grid 高级组件', true)
+		throw Error('当前部署未开放 AG Grid 高级组件')
 	}
 	if (!app.subgrids) {
 		app.subgrids = {}

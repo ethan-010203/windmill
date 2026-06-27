@@ -55,7 +55,7 @@
 		<LanguageIcon {lang} width={13} height={13} />
 	{/if}
 	<span class="grow truncate text-left {eeRestricted ? 'text-disabled' : ''}">
-		{label}{#if eeRestricted}&nbsp;(EE){/if}
+		{label}{#if eeRestricted}&nbsp;（未开放）{/if}
 		{#if lang === 'claudesandbox'}
 			<span class="text-primary !text-xs">(new)</span>
 		{/if}

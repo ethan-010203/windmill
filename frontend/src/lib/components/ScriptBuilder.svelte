@@ -1655,8 +1655,7 @@
 												>
 													Jobs from script labeled as high priority take precedence over the other
 													jobs when in the jobs queue.
-													{#if !$enterpriseLicense}This is a feature only available on enterprise
-														edition.{/if}
+													{#if !$enterpriseLicense}当前部署未开放此功能。{/if}
 												</Tooltip>
 											{/snippet}
 										</Section>

@@ -12,7 +12,7 @@
 		text?: string
 	}
 
-	let { text = 'Approval Help' }: Props = $props()
+	let { text = '审批说明' }: Props = $props()
 </script>
 
 <Button
@@ -25,18 +25,17 @@
 </Button>
 
 <Drawer bind:this={drawer}>
-	<DrawerContent title="Suspend/Approval/Prompt help" on:close={drawer?.closeDrawer}>
+	<DrawerContent title="暂停/审批/提示说明" on:close={drawer?.closeDrawer}>
 		<div class="flex flex-col gap-y-6 text-xs text-primary font-normal">
-			<Section label="Form/Payload">
-				To add a form, go to the <b>Form</b> tab, inside the Advanced {'->'} Suspend tab, and add a form.
-				You can then get back the payloads using `resume` (single approver), or `resumes` (multiple approvers)
-				in the next step. Forms are an EE feature only. The approver list itself is fetchable using `approvers`
+			<Section label="表单/载荷">
+				如需添加表单，请进入高级设置里的暂停配置，再在表单页签中添加表单。下一步可以通过
+				`resume`（单个审批人）或 `resumes`（多个审批人）读取提交内容。当前部署未开放审批表单功能；审批人列表仍可通过
+				`approvers` 获取。
 			</Section>
-			<Section label="Prompt">
-				A prompt is simply an approval step that can be self-approved. To do this, include the
-				resume url in the returned payload of the step. The UX will automatically adapt and show the
-				prompt to the operator when running the flow. Additionally, adding the cancel url will also
-				render a cancel button, providing the operator with an option to cancel the step. e.g:
+			<Section label="提示">
+				提示是一种允许自助确认的审批步骤。你可以在步骤返回内容中包含继续执行链接，运行流程时界面会自动展示给操作人。
+				如果同时加入取消链接，也会展示取消操作。
+				示例：
 				<Tabs selected="bun" class="pt-4">
 					<Tab value="bun" label="TypeScript (Bun)" />
 					<Tab value="python" label="Python" />
@@ -44,7 +43,7 @@
 					{#snippet content()}
 						<TabContent value="bun" class="p-2">
 							<HighlightCode
-								language={'deno'}
+								language="deno"
 								code={`import * as wmill from "windmill-client"
         
 export async function main() {
@@ -53,15 +52,15 @@ export async function main() {
     return {
         resume: urls['resume'],
         cancel: urls['cancel'],
-        default_args: {}, // optional, see below
-        enums: {} // optional, see below
+        default_args: {}, // 可选，见下方说明
+        enums: {} // 可选，见下方说明
     }
 }`}
 							/>
 						</TabContent>
 						<TabContent value="python" class="p-2">
 							<HighlightCode
-								language={'python3'}
+								language="python3"
 								code={`import wmill
 
 def main():
@@ -69,8 +68,8 @@ def main():
     return {
         "resume": urls["resume"],
         "cancel": urls["cancel"],
-        "default_args": {}, # optional, see below
-        "enums": {} # optional, see below
+        "default_args": {}, # 可选，见下方说明
+        "enums": {} # 可选，见下方说明
     }
                                     `}
 							/>
@@ -78,20 +77,19 @@ def main():
 					{/snippet}
 				</Tabs>
 			</Section>
-			<Section label="Default args">
-				As one of the return key of this step, return an object `default_args` that contains the
-				default arguments of the form arguments. e.g:
+			<Section label="默认参数">
+				你可以在此步骤的返回值中加入 `default_args` 对象，用于设置表单参数的默认值。示例：
 				<HighlightCode
-					language={'deno'}
-					code={`//this assumes the Form tab has a string field named "foo" and a checkbox named "bar"
+					language="deno"
+					code={`// 假设表单页签中有一个名为 "foo" 的字符串字段，以及一个名为 "bar" 的复选框
 
 import * as wmill from "npm:windmill-client@^1.158.2"
 
 export async function main() {
-    // if no argument is passed, if user is logged in, it will use the user's username
+    // 如果未传入参数且用户已登录，将使用当前用户的用户名
     const urls = await wmill.getResumeUrls("approver1") 
 
-    // send the resumeUrls to the recipient or see Prompt section above
+    // 将 resumeUrls 发送给接收人，或参考上方“提示”说明
 
     return {
         default_args: {
@@ -102,22 +100,21 @@ export async function main() {
 }`}
 				/>
 			</Section>
-			<Section label="Dynamics enums">
-				As one of the return key of this step, return an object `enums` that contains the default
-				options of the form arguments. e.g:
+			<Section label="动态枚举">
+				你可以在此步骤的返回值中加入 `enums` 对象，用于设置表单参数的候选选项。示例：
 				<HighlightCode
-					language={'deno'}
+					language="deno"
 					code={`
 
-//this assumes the Form tab has a string field named "foo"
+// 假设表单页签中有一个名为 "foo" 的字符串字段
 
 import * as wmill from "npm:windmill-client@^1.158.2"
 
 export async function main() {
-    // if no argument is passed, if user is logged in, it will use the user's username
+    // 如果未传入参数且用户已登录，将使用当前用户的用户名
     const url = await wmill.getResumeUrls("approver1") 
 
-    // send the resumeUrls to the recipient or see Prompt section above
+    // 将 resumeUrls 发送给接收人，或参考上方“提示”说明
 
     return {
         enums: {

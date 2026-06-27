@@ -243,7 +243,7 @@
 {/snippet}
 {#snippet restartTriggerButton(usePlayIcon: boolean)}
 	<Button
-		title={`Re-start this flow from step ${displayStepId} (included).${enterpriseOnly ? ' This is a feature only available in enterprise edition.' : ''}`}
+		title={`Re-start this flow from step ${displayStepId} (included).${enterpriseOnly ? ' 当前部署未开放此功能。' : ''}`}
 		{variant}
 		{unifiedSize}
 		{disabled}
@@ -260,7 +260,7 @@
 			{displayStepId}
 		</Badge>
 		{#if enterpriseOnly && disabled}
-			(EE)
+			(受限)
 		{/if}
 	</Button>
 {/snippet}

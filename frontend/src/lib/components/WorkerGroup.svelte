@@ -1270,7 +1270,7 @@
 								variant="subtle"
 								on:click={() => {
 									if (!hasEnterpriseFeatures) {
-										sendUserToast('Worker Management UI is an EE feature', true)
+										sendUserToast('当前部署未开放 Worker 管理界面', true)
 									} else {
 										openDelete = true
 									}
@@ -1328,7 +1328,7 @@
 									displayName: 'Delete config',
 									action: () => {
 										if (!hasEnterpriseFeatures) {
-											sendUserToast('Worker Management UI is an EE feature', true)
+											sendUserToast('当前部署未开放 Worker 管理界面', true)
 										} else {
 											openDelete = true
 										}

@@ -260,7 +260,7 @@
 
 			{#if schema && Object.keys(schema).length > 0 && !completed}
 				{#if emptyString($enterpriseLicense)}
-					<Alert type="warning" title="Adding a form to the approval page is an EE feature" />
+					<Alert type="warning" title="当前部署未开放审批表单功能" />
 				{:else}
 					<SchemaForm
 						onlyMaskPassword

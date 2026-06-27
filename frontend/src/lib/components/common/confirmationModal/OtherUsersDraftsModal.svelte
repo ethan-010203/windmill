@@ -130,10 +130,7 @@
 		<div class="flex gap-3 items-start">
 			<Users size={20} class="text-blue-500 shrink-0 mt-0.5" />
 			<p class="text-sm text-secondary">
-				Their drafts are independent of yours. For advanced collaboration, consider using <a
-					target="_blank"
-					href="https://www.windmill.dev/docs/advanced/workspace_forks">workspace forks (EE)</a
-				>
+				其他人的草稿与你的草稿相互独立。当前部署未开放高级协作功能。
 			</p>
 		</div>
 

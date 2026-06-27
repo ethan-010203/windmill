@@ -595,19 +595,19 @@
 				<Tab
 					value="slack"
 					disabled={!$enterpriseLicense}
-					label="Slack{!$enterpriseLicense ? ' (EE only)' : ''}"
+					label="Slack{!$enterpriseLicense ? '（未开放）' : ''}"
 				/>
 
 				<Tab
 					value="discord"
 					disabled={!$enterpriseLicense}
-					label="Discord{!$enterpriseLicense ? ' (EE only)' : ''}"
+					label="Discord{!$enterpriseLicense ? '（未开放）' : ''}"
 				/>
 
 				<Tab
 					value="email"
 					disabled={!$enterpriseLicense}
-					label="Email{!$enterpriseLicense ? ' (EE only)' : ''}"
+					label="Email{!$enterpriseLicense ? '（未开放）' : ''}"
 				/>
 
 				{#if $enterpriseLicense}

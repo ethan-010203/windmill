@@ -425,8 +425,8 @@
 <div class="mt-6"></div>
 
 {#if !$enterpriseLicense}
-	<Alert type="warning" title="Enterprise license required"
-		>Deploy to staging/prod from the web UI is only available with an enterprise license</Alert
+	<Alert type="warning" title="当前部署未开放跨环境发布"
+		>当前内部部署暂未开放从网页直接发布到预发/生产工作区。</Alert
 	>
 {:else if notSet == true}
 	<Alert type="error" title="Staging/Prod deploy not set up"

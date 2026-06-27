@@ -147,7 +147,7 @@
 					/>
 					<ToggleButton
 						value="service_account"
-						label={$enterpriseLicense ? 'Service Account' : 'Service Account (EE)'}
+						label={$enterpriseLicense ? 'Service Account' : '服务账号（未开放）'}
 						tooltip="A service account is a workspace-scoped identity for automation. It cannot log in directly and can be impersonated by admins."
 						disabled={!$enterpriseLicense}
 						{item}

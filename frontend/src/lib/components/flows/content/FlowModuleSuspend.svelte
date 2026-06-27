@@ -240,7 +240,7 @@
 				{#if flowModule?.suspend?.resume_form}
 					<EditableSchemaDrawer bind:schema={flowModule.suspend.resume_form.schema} {jsonView} />
 				{:else if emptyString($enterpriseLicense)}
-					<Alert type="warning" title="Adding a form to the approval page is an EE feature" />
+					<Alert type="warning" title="当前部署未开放审批表单功能" />
 				{:else}
 					<div class="flex flex-col items-end mb-2 w-full">
 						<Toggle
@@ -278,7 +278,7 @@
 			<div class="col-span-2 flex flex-col gap-4">
 				{#if flowModule.suspend}
 					{#if emptyString($enterpriseLicense)}
-						<Alert type="warning" title="Adding a form to the approval page is an EE feature" />
+						<Alert type="warning" title="当前部署未开放审批表单功能" />
 					{/if}
 
 					<div class="flex flex-col gap-2">

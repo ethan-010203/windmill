@@ -324,7 +324,7 @@
 
 		// Add custom option
 		items.push({
-			displayName: `Custom OAuth client ${!$enterpriseLicense ? '(requires ee)' : ''}`,
+			displayName: `自定义 OAuth 客户端${!$enterpriseLicense ? '（未开放）' : ''}`,
 			action: handleCustomOAuthClient,
 			disabled: !$enterpriseLicense
 		})
@@ -442,7 +442,7 @@
 							disabled={!$enterpriseLicense}
 							onclick={handleSsoPopoverOpen}
 						>
-							Add custom SSO client {!$enterpriseLicense ? '(requires ee)' : ''}
+							添加自定义 SSO 客户端 {!$enterpriseLicense ? '（未开放）' : ''}
 						</Button>
 					{/snippet}
 					{#snippet content()}

@@ -1364,14 +1364,7 @@
 	export async function setCollaborationMode() {
 		await setLicense()
 		if (!$enterpriseLicense) {
-			sendUserToast(`Multiplayer is an enterprise feature`, true, [
-				{
-					label: 'Upgrade',
-					callback: () => {
-						window.open('https://www.windmill.dev/pricing', '_blank')
-					}
-				}
-			])
+			sendUserToast('当前部署未开放多人协作编辑', true)
 			return
 		}
 

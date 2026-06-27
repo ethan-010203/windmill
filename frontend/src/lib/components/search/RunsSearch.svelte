@@ -253,8 +253,8 @@
 				{#if !$enterpriseLicense}
 					<div class="py-6"></div>
 
-					<Alert title="This is an EE feature" type="warning">
-						Full-text search on jobs is only available on EE.
+					<Alert title="当前部署未开放运行记录全文搜索" type="warning">
+						当前部署未开放运行记录全文搜索。
 					</Alert>
 				{/if}
 			</div>

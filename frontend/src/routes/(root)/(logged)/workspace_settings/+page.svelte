@@ -1219,9 +1219,8 @@
 								/>
 							{:else}
 								<div class="my-2"
-									><Alert type="warning" title="Enterprise license required"
-										>Deploy to staging/prod from the web UI is only available with an enterprise
-										license</Alert
+									><Alert type="warning" title="当前部署未开放跨环境发布"
+										>当前内部部署暂未开放从网页直接发布到预发/生产工作区。</Alert
 									></div
 								>
 							{/if}
@@ -1390,10 +1389,8 @@
 								{:else if slack_tabs === 'teams_commands'}
 									{#if !$enterpriseLicense}
 										<div class="pt-4"></div>
-										<Alert type="warning" title="Workspace Teams commands is an EE feature">
-											Workspace Teams commands is a Windmill EE feature. It enables using your
-											current Slack / Teams connection to run a custom script and send
-											notifications.
+										<Alert type="warning" title="当前部署未开放 Teams 命令">
+											当前内部部署暂未开放通过 Teams 命令运行脚本和发送通知。
 										</Alert>
 										<div class="pb-2"></div>
 									{:else}
@@ -1579,8 +1576,8 @@
 								link="https://www.windmill.dev/docs/core_concepts/error_handling#workspace-error-handler"
 							/>
 							{#if !$enterpriseLicense}
-								<Alert type="warning" title="Workspace error/success handler is an EE feature">
-									Workspace error and success handlers are Windmill EE features.
+								<Alert type="warning" title="当前部署未开放工作区错误/成功处理程序">
+									当前内部部署暂未开放工作区级错误和成功处理程序。
 								</Alert>
 							{/if}
 

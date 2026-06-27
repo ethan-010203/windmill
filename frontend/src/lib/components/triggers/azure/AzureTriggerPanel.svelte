@@ -33,8 +33,8 @@
 </script>
 
 {#if !$enterpriseLicense}
-	<Alert title="EE Only" type="warning" size="xs">
-		Azure Event Grid triggers are an enterprise only feature.
+	<Alert title="当前部署未开放 Azure Event Grid 触发器" type="warning" size="xs">
+		当前内部部署暂未开放 Azure Event Grid 触发器。
 	</Alert>
 {:else}
 	<div class="flex flex-col gap-4">

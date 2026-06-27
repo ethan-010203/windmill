@@ -25,8 +25,8 @@
 </script>
 
 <div class="p-2">
-	<span class="text-xs font-semibold">AgGrid EE License Key</span>
-	<input type="text" bind:value={license} placeholder="AgGrid Enterprise" />
+	<span class="text-xs font-semibold">AgGrid 许可证密钥</span>
+	<input type="text" bind:value={license} placeholder="许可证密钥" />
 
 	{#if valid}
 		<Badge color="green">Valid</Badge>

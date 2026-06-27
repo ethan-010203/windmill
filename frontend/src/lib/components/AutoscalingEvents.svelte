@@ -63,7 +63,7 @@
 	</div>
 
 	{#if !$enterpriseLicense}
-		<div class="text-xs font-normal text-secondary">Autoscaling is an EE feature</div>
+		<div class="text-xs font-normal text-secondary">当前部署未开放自动伸缩</div>
 	{:else if loading}
 		<Skeleton layout={[[12], 1]} />
 	{:else if events}

@@ -232,9 +232,8 @@
 		{#if !$enterpriseLicense}
 			<div class="py-1"></div>
 
-			<Alert title="Content Search is an EE feature" type="warning">
-				Without EE, content search will only search among 10 scripts, 3 flows, 3 apps and 3
-				resources.
+			<Alert title="当前部署未开放完整内容搜索" type="warning">
+				当前搜索范围仅包含部分脚本、流程、应用和资源。
 			</Alert>
 			<div class="py-1"></div>
 		{/if}

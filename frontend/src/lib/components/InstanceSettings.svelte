@@ -1014,7 +1014,7 @@
 				link="https://www.windmill.dev/docs/advanced/imports"
 			/>
 			{#if !$enterpriseLicense}
-				<Alert type="info" title="Private registries configuration is an EE feature" class="mb-2" />
+				<Alert type="info" title="当前部署未开放私有仓库配置" class="mb-2" />
 			{/if}
 		{:else if category == 'Alerts'}
 			<SettingsPageHeader
@@ -1037,7 +1037,7 @@
 			{#if !$enterpriseLicense}
 				<Alert
 					type="info"
-					title="Full text search across jobs and service logs is an EE feature"
+					title="当前部署未开放运行记录和服务日志全文搜索"
 					class="mb-2"
 				/>
 			{/if}
