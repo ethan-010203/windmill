@@ -160,6 +160,7 @@
 		// has no `app` row to look up and would 404, leaving the UI
 		// component spinning indefinitely.
 		!newApp &&
+			!hideSecretUrl &&
 			appPath &&
 			appPath != '' &&
 			savedApp &&

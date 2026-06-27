@@ -23,7 +23,6 @@
 		DiffIcon,
 		Expand,
 		FileJson,
-		FileUp,
 		FormInput,
 		History,
 		Laptop2,
@@ -37,12 +36,10 @@
 		Undo,
 		Redo,
 		Zap,
-		Globe
 	} from 'lucide-svelte'
 	import { getContext, untrack } from 'svelte'
 	import { orderedJsonStringify, type Value, replaceFalseWithUndefined } from '../../../utils'
 	import type { App, AppEditorContext, AppViewerContext } from '../types'
-	import { toStatic } from '../utils'
 	import AppExportButton from './AppExportButton.svelte'
 	import AppInputs from './AppInputs.svelte'
 	import PreviewToggle from './PreviewToggle.svelte'
@@ -71,7 +68,6 @@
 	import LazyModePanel from './contextPanel/LazyModePanel.svelte'
 	import type { DiffDrawerI } from '$lib/components/diff_drawer'
 	import AppEditorHeaderDeploy from './AppEditorHeaderDeploy.svelte'
-	import { computeSecretUrl } from './appDeploy.svelte'
 	import { updatePolicy } from './appPolicy'
 	import { isRuleActive } from '$lib/workspaceProtectionRules.svelte'
 	import { buildForkEditUrl } from '$lib/utils/editInFork'
@@ -169,7 +165,6 @@
 		appPath,
 		jobs,
 		jobsById,
-		staticExporter,
 		errorByComponent,
 		openDebugRun,
 		mode,
@@ -557,25 +552,6 @@
 				appExport?.open($app)
 			}
 		},
-		{
-			displayName: 'Public URL',
-			icon: Globe,
-			action: async () => {
-				const secretUrl = await AppService.getPublicSecretOfApp({
-					workspace: $workspaceStore!,
-					path: $appPath
-				})
-				window.open(computeSecretUrl(secretUrl), '_blank')
-			}
-		},
-		// {
-		// 	displayName: 'Publish to Hub',
-		// 	icon: faGlobe,
-		// 	action: () => {
-		// 		const url = appToHubUrl(toStatic($app, $staticExporter, $summary, $hubBaseUrlStore))
-		// 		window.open(url.toString(), '_blank')
-		// 	}
-		// },
 
 		{
 			displayName: 'App inputs',
@@ -631,13 +607,6 @@
 			icon: Zap,
 			action: () => {
 				lazyDrawerOpen = true
-			}
-		},
-		{
-			displayName: 'Hub export',
-			icon: FileUp,
-			action: () => {
-				appExport?.open(toStatic($app, $staticExporter, $summary).app)
 			}
 		},
 		{
@@ -837,7 +806,7 @@
 			bind:pathError
 			bind:newEditedPath
 			bind:preserveOnBehalfOf
-			hideSecretUrl={false}
+			hideSecretUrl={true}
 		/>
 	</DrawerContent>
 </Drawer>
