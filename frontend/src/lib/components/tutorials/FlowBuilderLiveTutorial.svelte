@@ -149,7 +149,7 @@
 						language: 'bun',
 						input_transforms: {}
 					},
-					summary: 'Validate temperature input'
+					summary: '校验温度输入'
 				},
 				{
 					id: 'b',
@@ -165,7 +165,7 @@
 							}
 						}
 					},
-					summary: 'Convert to Fahrenheit'
+					summary: '转换为华氏度'
 				},
 				{
 					id: 'c',
@@ -185,7 +185,7 @@
 							}
 						}
 					},
-					summary: 'Categorize temperature'
+					summary: '温度分类'
 				}
 			]
 		},
@@ -195,7 +195,7 @@
 			properties: {
 				celsius: {
 					type: 'number',
-					description: 'Temperature in Celsius',
+					description: '摄氏温度',
 					default: ''
 				}
 			},
@@ -221,9 +221,9 @@
 		const steps: DriveStep[] = [
 			{
 				popover: {
-					title: 'Build your first flow',
+					title: '构建第一个流程',
 					description:
-						"Let's create a temperature converter that validates input and converts Celsius to Fahrenheit.",
+						'我们来创建一个温度转换器：先校验输入，再把摄氏度转换为华氏度。',
 					onNextClick: async () => {
 						const emptyFlow: Flow = {
 							summary: '',
@@ -279,13 +279,13 @@
 					}
 				},
 				popover: {
-					title: 'Set the input',
-					description: 'Every flow starts with input. Here we define a temperature in Celsius.',
+					title: '设置输入',
+					description: '每个流程都从输入开始。这里我们定义一个摄氏温度。',
 					side: 'bottom',
 					align: 'start',
 					onNextClick: () => {
 						if (!step2Complete) {
-							sendUserToast('Please wait for the input to be filled...', false, [], undefined, 3000)
+							sendUserToast('请等待输入自动填充完成...', false, [], undefined, 3000)
 							return
 						}
 						driver.moveNext()
@@ -354,13 +354,13 @@
 					}
 				},
 				popover: {
-					title: 'Choose TypeScript',
-					description: 'Pick TypeScript (Bun) to write our validation script.',
+					title: '选择 TypeScript',
+					description: '选择 TypeScript (Bun) 来编写校验脚本。',
 					side: 'top',
 					onNextClick: () => {
 						if (!step3Complete) {
 							sendUserToast(
-								'Please wait for the script to be created...',
+								'请等待脚本创建完成...',
 								false,
 								[],
 								undefined,
@@ -371,7 +371,7 @@
 						driver.moveNext()
 					},
 					onPrevClick: () => {
-						sendUserToast('Previous is not available for this step', true, [], undefined, 3000)
+						sendUserToast('此步骤不能返回上一步', true, [], undefined, 3000)
 					}
 				}
 			},
@@ -397,7 +397,7 @@
 						'input[placeholder="Summary"]'
 					) as HTMLInputElement
 					if (summaryInput) {
-						const summaryText = 'Validate temperature input'
+						const summaryText = '校验温度输入'
 						await typeText(summaryInput, summaryText)
 						updateModuleSummary('a', summaryText)
 						await wait(DELAY_LONG)
@@ -460,14 +460,14 @@
 					}
 				},
 				popover: {
-					title: 'Add validation logic',
-					description: 'Watch as we write code to validate the temperature input.',
+					title: '添加校验逻辑',
+					description: '接下来会自动写入校验温度输入的代码。',
 					side: 'bottom',
 					onNextClick: () => {
 						// Only proceed if code writing is complete
 						if (!step4Complete) {
 							sendUserToast(
-								'Please wait for the code to finish typing...',
+								'请等待代码自动输入完成...',
 								false,
 								[],
 								undefined,
@@ -501,7 +501,7 @@
 						driver.moveNext()
 					},
 					onPrevClick: () => {
-						sendUserToast('Previous is not available for this step', true, [], undefined, 3000)
+						sendUserToast('此步骤不能返回上一步', true, [], undefined, 3000)
 					}
 				}
 			},
@@ -588,18 +588,18 @@
 					step5Complete = true
 				},
 				popover: {
-					title: 'Wire it up and test',
-					description: 'Connect the input, then run a quick test to verify the validation works.',
+					title: '连接输入并测试',
+					description: '连接输入，然后快速运行一次测试，确认校验逻辑可以正常工作。',
 					onNextClick: async () => {
 						if (!step5Complete) {
-							sendUserToast('Please wait for the test to complete...', false, [], undefined, 3000)
+							sendUserToast('请等待测试完成...', false, [], undefined, 3000)
 							return
 						}
 						cleanupCustomOverlay()
 						driver.moveNext()
 					},
 					onPrevClick: () => {
-						sendUserToast('Previous is not available for this step', true, [], undefined, 3000)
+						sendUserToast('此步骤不能返回上一步', true, [], undefined, 3000)
 					}
 				}
 			},
@@ -663,7 +663,7 @@
 						'input[placeholder="Summary"]'
 					) as HTMLInputElement
 					if (summaryInputB) {
-						const summaryTextB = 'Convert to Fahrenheit'
+						const summaryTextB = '转换为华氏度'
 						await typeText(summaryInputB, summaryTextB)
 						updateModuleSummary('b', summaryTextB)
 						await wait(DELAY_LONG)
@@ -684,7 +684,7 @@
 						'input[placeholder="Summary"]'
 					) as HTMLInputElement
 					if (summaryInputC) {
-						const summaryTextC = 'Categorize temperature'
+						const summaryTextC = '温度分类'
 						await typeText(summaryInputC, summaryTextC)
 						updateModuleSummary('c', summaryTextC)
 						await wait(DELAY_LONG)
@@ -703,12 +703,12 @@
 					step6Complete = true
 				},
 				popover: {
-					title: 'Add the final steps',
-					description: 'Two more scripts to convert and categorize the temperature.',
+					title: '添加最后两个步骤',
+					description: '再添加两个脚本，用于转换温度并进行分类。',
 					onNextClick: () => {
 						if (!step6Complete) {
 							sendUserToast(
-								'Please wait for the summaries to be added...',
+								'请等待摘要添加完成...',
 								false,
 								[],
 								undefined,
@@ -728,22 +728,22 @@
 						driver.moveNext()
 					},
 					onPrevClick: () => {
-						sendUserToast('Previous is not available for this step', true, [], undefined, 3000)
+						sendUserToast('此步骤不能返回上一步', true, [], undefined, 3000)
 					}
 				}
 			},
 			{
 				element: '#flow-editor-test-flow',
 				popover: {
-					title: 'Ready to test!',
+					title: '可以开始测试了！',
 					description:
-						'Run the complete flow and see your temperature converter in action.<p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 Want to learn more?</strong> Access more tutorials from the <strong>Tutorials</strong> page in the main menu or in the <strong>Help</strong> submenu.</p>',
+						'运行完整流程，看看温度转换器的实际效果。<p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 想继续学习？</strong>你可以从主菜单的 <strong>教程</strong> 页面，或 <strong>帮助</strong> 子菜单访问更多教程。</p>',
 					onNextClick: () => {
 						updateProgress(index)
 						driver.destroy()
 					},
 					onPrevClick: () => {
-						sendUserToast('Previous is not available for this step', true, [], undefined, 3000)
+						sendUserToast('此步骤不能返回上一步', true, [], undefined, 3000)
 					}
 				}
 			}

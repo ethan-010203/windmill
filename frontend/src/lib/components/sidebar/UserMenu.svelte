@@ -53,16 +53,16 @@
 			</p>
 			<span class="text-xs text-primary flex flex-row gap-2 items-center">
 				{#if $userStore?.is_admin}
-					Admin of this workspace <Crown size={14} />
+					此工作空间管理员 <Crown size={14} />
 				{:else if $userStore?.operator}
-					Operator in this workspace <ServerCog size={14} />
+					此工作空间操作员 <ServerCog size={14} />
 				{/if}
 			</span>
 		</div>
 		<div class="py-1">
 			<MenuItem href={USER_SETTINGS_HASH} class={itemClass} {item}>
 				<Settings size={16} />
-				Account settings
+				账号设置
 			</MenuItem>
 
 			<MenuItem
@@ -83,12 +83,12 @@
 				{:else}
 					<Moon size={16} />
 				{/if}
-				Switch theme
+				切换主题
 			</MenuItem>
 
 			<MenuItem onClick={() => logout()} class={itemClass} {item}>
 				<LogOut size={16} />
-				Sign out
+				退出登录
 			</MenuItem>
 		</div>
 

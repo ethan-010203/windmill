@@ -99,14 +99,14 @@
 
 		const actions: ToastAction[] = [
 			{
-				label: 'Skip tutorials',
+				label: '跳过教程',
 				callback: handleSkipAllTutorials,
 				buttonType: 'default'
 			}
 		]
 
 		sendUserToast(
-			'You can still access tutorials from the Tutorials page in the main menu or in the Help submenu.',
+			'你仍然可以从主菜单的“教程”页面或“帮助”子菜单访问教程。',
 			false,
 			actions,
 			undefined,
@@ -128,16 +128,16 @@
 			<div class="flex-1 min-w-0">
 				<div class="text-emphasis flex-wrap text-left text-xs font-semibold">
 					{#if hasCompletedAny}
-						New tutorial available!
+						有新的教程可用！
 					{:else}
-						Learn with interactive tutorials
+						通过交互式教程学习
 					{/if}
 				</div>
 				<div class="text-hint text-3xs truncate text-left font-normal">
 					{#if hasCompletedAny}
-						Continue your learning journey and master new Windmill skills.
+						继续学习并掌握更多平台使用技巧。
 					{:else}
-						Get started quickly with step-by-step guides on building flows, scripts, and more.
+						通过分步指南快速了解如何构建流程、脚本等内容。
 					{/if}
 				</div>
 			</div>
@@ -149,12 +149,12 @@
 				onclick={goToTutorials}
 				startIcon={{ icon: GraduationCap }}
 			>
-				View tutorials
+				查看教程
 			</Button>
 			<button
 				onclick={dismissBanner}
 				class="p-1.5 rounded hover:bg-surface-hover text-secondary hover:text-primary transition-colors"
-				aria-label="Dismiss tutorial banner"
+				aria-label="关闭教程提示"
 			>
 				<X size={16} />
 			</button>

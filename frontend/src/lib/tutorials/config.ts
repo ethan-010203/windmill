@@ -42,7 +42,7 @@ export function getTutorialIndex(id: string): number {
 
 export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 	quickstart: {
-		label: 'Quickstart',
+		label: '快速入门',
 		roles: ['admin', 'developer', 'operator'],
 		progressBar: true,
 		active: true,
@@ -50,8 +50,8 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 			{
 				id: 'workspace-onboarding',
 				icon: GraduationCap,
-				title: 'Workspace onboarding',
-				description: 'Discover the basics of Windmill with a quick tour of the workspace.',
+				title: '工作空间入门',
+				description: '通过快速导览了解工作空间的基础用法。',
 				onClick: () => {
 					window.location.href = `${base}/?tutorial=workspace-onboarding`
 				},
@@ -64,8 +64,8 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 			{
 				id: 'flow-live-tutorial',
 				icon: Workflow,
-				title: 'Build a flow',
-				description: 'Learn how to build workflows in Windmill with our interactive tutorial.',
+				title: '构建流程',
+				description: '通过交互式教程学习如何构建工作流。',
 				onClick: () => {
 					window.location.href = `${base}/flows/add?tutorial=flow-live-tutorial`
 				},
@@ -78,8 +78,8 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 			{
 				id: 'troubleshoot-flow',
 				icon: Wrench,
-				title: 'Fix a broken flow',
-				description: 'Learn how to monitor and debug your script and flow executions.',
+				title: '修复异常流程',
+				description: '学习如何监控和调试脚本、流程的执行结果。',
 				onClick: () => {
 					window.location.href = `${base}/flows/add?tutorial=troubleshoot-flow`
 				},
@@ -92,8 +92,8 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 			{
 				id: 'runs-tutorial',
 				icon: History,
-				title: 'Discover your monitoring dashboard',
-				description: 'Learn how to monitor, filter, and manage your script and flow executions.',
+				title: '了解监控看板',
+				description: '学习如何监控、筛选和管理脚本与流程执行记录。',
 				onClick: () => {
 					window.location.href = `${base}/runs?tutorial=runs-tutorial`
 				},
@@ -106,8 +106,8 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 			{
 				id: 'workspace-onboarding-operator',
 				icon: GraduationCap,
-				title: 'Workspace onboarding',
-				description: 'Discover the basics of Windmill with a quick tour of the workspace.',
+				title: '工作空间入门',
+				description: '通过快速导览了解工作空间的基础用法。',
 				onClick: () => {
 					window.location.href = `${base}/?tutorial=workspace-onboarding-operator`
 				},
@@ -120,7 +120,7 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 		]
 	},
 	app_editor: {
-		label: 'App Editor',
+		label: '应用编辑器',
 		roles: ['developer', 'admin'],
 		progressBar: false,
 		active: true,
@@ -128,8 +128,8 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
             {
 				id: 'backgroundrunnables',
 				icon: PlayCircle,
-				title: 'Background runnables',
-				description: 'Learn how to create and use background runnables in your apps.',
+				title: '后台运行项',
+				description: '学习如何在应用中创建和使用后台运行项。',
 				onClick: () => {
 					window.location.href = `${base}/apps/add?tutorial=backgroundrunnables`
 				},
@@ -142,8 +142,8 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
 			{
 				id: 'connection',
 				icon: Link2,
-				title: 'Connection',
-				description: 'Learn how to connect component inputs to outputs in your apps.',
+				title: '组件连接',
+				description: '学习如何把应用中的组件输入连接到输出。',
 				onClick: () => {
 					window.location.href = `${base}/apps/add?tutorial=connection`
 				},
@@ -156,4 +156,3 @@ export const TUTORIALS_CONFIG: Record<TabId, TabConfig> = {
         ]
 	}
 } as const
-

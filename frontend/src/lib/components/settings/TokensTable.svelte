@@ -143,15 +143,15 @@
 </script>
 
 <div class="flex flex-col p-4 border border-border-light rounded-md">
-	<h2 class="text-emphasis text-sm font-semibold mb-1">Tokens</h2>
+	<h2 class="text-emphasis text-sm font-semibold mb-1">令牌</h2>
 	<div class="text-xs text-secondary mb-2">
-		Authenticate to the Windmill API with access tokens.
+		使用访问令牌认证部门工具平台 API。
 	</div>
 	{#if expiringSoonCount > 0}
 		<div class="mb-2">
 			<Alert
 				type="warning"
-				title="{expiringSoonCount} token{expiringSoonCount > 1 ? 's' : ''} expiring within 7 days"
+				title="{expiringSoonCount} 个令牌将在 7 天内过期"
 				size="xs"
 			/>
 		</div>
@@ -168,10 +168,10 @@
 		<TableCustom>
 			{#snippet headerRow()}
 				<tr>
-					<th>Prefix</th>
-					<th>Label</th>
-					<th>Expiration</th>
-					<th>Scopes</th>
+					<th>前缀</th>
+					<th>标签</th>
+					<th>过期时间</th>
+					<th>权限范围</th>
 					<th></th>
 				</tr>
 			{/snippet}
@@ -197,7 +197,7 @@
 								>
 									<div class="flex items-center gap-1.5 truncate">
 										{#if read_only}
-											<Badge color="blue" small>Read-only</Badge>
+											<Badge color="blue" small>只读</Badge>
 										{/if}
 										<span class="truncate">{scopes?.join(', ') ?? ''}</span>
 									</div>
@@ -206,7 +206,7 @@
 									<div class="flex items-center justify-center gap-1">
 										<Button
 											variant="subtle"
-											title="Edit token"
+											title="编辑令牌"
 											on:click={() =>
 												handleEditClick(
 													token_prefix,
@@ -232,20 +232,20 @@
 						{/each}
 					{:else if tokens && tokens.length === 0}
 						<tr class="px-6">
-							<td class="text-secondary italic text-2xs"> There are no tokens yet</td>
+							<td class="text-secondary italic text-2xs">还没有令牌</td>
 						</tr>
 					{:else}
-						<tr><td class="text-secondary text-xs">Loading...</td></tr>
+						<tr><td class="text-secondary text-xs">加载中...</td></tr>
 					{/if}
 				</tbody>
 			{/snippet}
 		</TableCustom>
 		<div class="flex flex-row-reverse gap-2 w-full mt-2">
 			{#if tokens?.length == 100}
-				<Button variant="subtle" size="xs" on:click={handleNextPage}>Next</Button>
+				<Button variant="subtle" size="xs" on:click={handleNextPage}>下一页</Button>
 			{/if}
 			{#if tokenPage > 1}
-				<Button variant="subtle" size="xs" on:click={handlePreviousPage}>Previous</Button>
+				<Button variant="subtle" size="xs" on:click={handlePreviousPage}>上一页</Button>
 			{/if}
 		</div>
 	</div>

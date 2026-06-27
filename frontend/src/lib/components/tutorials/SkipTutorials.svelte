@@ -16,7 +16,7 @@
 			dispatch('skipThis')
 		}}
 	>
-		Mark this tutorial as completed
+		将此教程标记为已完成
 	</Button>
 	<Button
 		size="xs"
@@ -27,6 +27,6 @@
 			dispatch('skipAll')
 		}}
 	>
-		Mark all tutorials as completed
+		将全部教程标记为已完成
 	</Button>
 </div>

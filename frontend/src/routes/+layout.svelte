@@ -2,6 +2,7 @@
 	import { page } from '$app/state'
 
 	import { SvelteToast } from '@zerodevx/svelte-toast'
+	import { installChineseLocalizer } from '$lib/i18n/zhLocalizer'
 	import '$lib/assets/app.css'
 	interface Props {
 		children?: import('svelte').Snippet
@@ -30,6 +31,8 @@
 			target.blur()
 		}
 	}
+
+	$effect(() => installChineseLocalizer())
 </script>
 
 <svelte:document onwheel={handleWheel} />
@@ -42,7 +45,7 @@
 			src="https://snippet.meticulous.ai/v1/meticulous.js"
 		></script>
 	{/if} -->
-	<title>{page.data?.stuff?.title ? `${page.data?.stuff?.title} | ` : ''}Windmill</title>
+	<title>{page.data?.stuff?.title ? `${page.data?.stuff?.title} | ` : ''}部门工具平台</title>
 </svelte:head>
 
 {@render children?.()}

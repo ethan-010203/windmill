@@ -257,8 +257,8 @@
 
 <CenteredPage>
 	<PageHeader
-		title="Tutorials"
-		tooltip="Learn how to use Windmill with our interactive tutorials"
+		title="教程"
+		tooltip="通过交互式教程学习如何使用部门工具平台"
 		documentationLink="https://www.windmill.dev/docs/intro"
 	>
 		{#if activeTabs.length > 0}
@@ -272,7 +272,7 @@
 						await syncTutorialsTodos()
 					}}
 				>
-					Mark all as completed
+					全部标记为已完成
 				</Button>
 				<Button
 					size="xs"
@@ -283,7 +283,7 @@
 						await syncTutorialsTodos()
 					}}
 				>
-					Reset all
+					全部重置
 				</Button>
 			</div>
 		{/if}
@@ -292,7 +292,7 @@
 		{#if $userStore?.is_admin}
 			<div class="flex flex-col gap-1">
 				<div class="flex items-center gap-2">
-					<span class="text-xs text-secondary">View as an</span>
+					<span class="text-xs text-secondary">预览角色</span>
 					<ToggleButtonGroup
 						bind:selected={selectedPreviewRole}
 						onSelected={(v) => {
@@ -303,33 +303,33 @@
 						{#snippet children({ item })}
 							<ToggleButton
 								value={userEffectiveRole}
-								label="Admin (me)"
+								label="管理员（我）"
 								icon={Shield}
 								size="sm"
 								{item}
-								tooltip="View tutorials as yourself (admin)"
+								tooltip="以当前管理员身份查看教程"
 							/>
 							<ToggleButton
 								value="developer"
-								label="Developer"
+								label="开发者"
 								icon={Code}
 								size="sm"
 								{item}
-								tooltip="Preview tutorials visible to developers"
+								tooltip="预览开发者可见的教程"
 							/>
 							<ToggleButton
 								value="operator"
-								label="Operator"
+								label="操作员"
 								icon={UserCog}
 								size="sm"
 								{item}
-								tooltip="Preview tutorials visible to operators"
+								tooltip="预览操作员可见的教程"
 							/>
 						{/snippet}
 					</ToggleButtonGroup>
 				</div>
 				<span class="text-3xs text-secondary">
-					This allows you to see which tutorials your team members can access
+					用于查看团队成员在不同角色下可访问的教程
 				</span>
 			</div>
 		{/if}
@@ -372,7 +372,7 @@
 						<TutorialProgressBar
 							completed={completedTutorials}
 							total={totalTutorials}
-							label="tutorials"
+							label="个教程"
 						/>
 					{/if}
 					<div class="flex gap-2 flex-shrink-0 pt-1">
@@ -382,7 +382,7 @@
 							startIcon={{ icon: CheckCheck }}
 							onclick={skipCurrentTabTutorials}
 						>
-							Mark as completed
+							标记为已完成
 						</Button>
 						<Button
 							size="xs"
@@ -390,7 +390,7 @@
 							startIcon={{ icon: RefreshCw }}
 							onclick={resetCurrentTabTutorials}
 						>
-							Reset
+							重置
 						</Button>
 					</div>
 				</div>
@@ -414,14 +414,14 @@
 		{:else if currentTabConfig}
 			<div class="pt-8">
 				<div class="text-center text-secondary text-sm py-8">
-					No tutorials available for this section yet.
+					此栏目暂时没有可用教程。
 				</div>
 			</div>
 		{/if}
 	{:else}
 		<div class="pt-8">
 			<div class="text-center text-secondary text-sm py-8">
-				No tutorials available for now. Coming soon.
+				当前暂时没有可用教程，敬请期待。
 			</div>
 		</div>
 	{/if}

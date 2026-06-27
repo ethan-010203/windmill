@@ -35,9 +35,9 @@
 		const steps: DriveStep[] = [
 			{
 				popover: {
-					title: 'Welcome to your Windmill workspace! 🎉',
+					title: '欢迎来到你的工作空间！🎉',
 					description:
-						"Let's take a quick tour! We will show you the main sections of your workspace.",
+						'我们快速浏览一下工作空间的主要区域。',
 					onNextClick: () => {
 						// Wait a bit to ensure the page is fully rendered before moving to next step
 						setTimeout(() => {
@@ -45,7 +45,7 @@
 							if (button) {
 								driver.moveNext()
 							} else {
-								alert('Could not find the Create Script button. Please make sure you are on the home page.')
+								alert('找不到“创建脚本”按钮。请确认你当前在首页。')
 							}
 						}, 100)
 					}
@@ -53,9 +53,9 @@
 			},
 			{
 				popover: {
-					title: 'Create your first script',
+					title: '创建第一个脚本',
 					description:
-						'<img src="/languages.png" alt="Programming Languages" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p>Scripts turn code into tools. Write in Python, TypeScript, Go, Bash, SQL and more. Run them manually, on schedule, or via webhooks.</p>',
+						'<img src="/languages.png" alt="编程语言" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p>脚本可以把代码变成可直接使用的工具。你可以使用 Python、TypeScript、Go、Bash、SQL 等语言编写，并手动运行、定时运行，或通过 Webhook 触发。</p>',
 					onNextClick: async () => {
 						// Move to the next step (Create Flow button)
 						setTimeout(() => {
@@ -63,7 +63,7 @@
 							if (button) {
 								driver.moveNext()
 							} else {
-								alert('Could not find the Create Flow button. Please make sure you are on the home page.')
+								alert('找不到“创建流程”按钮。请确认你当前在首页。')
 							}
 						}, 100)
 					}
@@ -72,9 +72,9 @@
 			},
 			{
 				popover: {
-					title: 'Create your first flow',
+					title: '创建第一个流程',
 					description:
-						'<img src="/flow.png" alt="Flow" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p>Flows orchestrate multiple scripts. Chain them together with branching, loops, and error handling to build complex workflows.</p>',
+						'<img src="/flow.png" alt="流程" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p>流程用于编排多个脚本。你可以把脚本串联起来，并通过分支、循环和错误处理构建复杂工作流。</p>',
 					onNextClick: async () => {
 						// Move to the next step (Create App button)
 						setTimeout(() => {
@@ -82,7 +82,7 @@
 							if (button) {
 								driver.moveNext()
 							} else {
-								alert('Could not find the Create App button. Please make sure you are on the home page.')
+								alert('找不到“创建应用”按钮。请确认你当前在首页。')
 							}
 						}, 100)
 					}
@@ -91,9 +91,9 @@
 			},
 			{
 				popover: {
-					title: 'Create your first app',
+					title: '创建第一个应用',
 					description:
-						'<img src="/app.png" alt="App" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p>Apps are custom UIs built with drag-and-drop. Combine tables, forms, charts, and buttons that trigger your scripts and flows.. That\'s it for the tour!</p><p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 Want to learn more?</strong> Access more tutorials from the <strong>Tutorials</strong> page in the main menu or in the <strong>Help</strong> submenu.</p>',
+						'<img src="/app.png" alt="应用" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p>应用是通过拖拽方式构建的自定义界面。你可以组合表格、表单、图表和按钮，并触发脚本或流程。本次导览到这里就结束了。</p><p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 想继续学习？</strong>你可以从主菜单的 <strong>教程</strong> 页面，或 <strong>帮助</strong> 子菜单访问更多教程。</p>',
 					onNextClick: async () => {
 						// Mark tutorial as complete
 						updateProgress(index)

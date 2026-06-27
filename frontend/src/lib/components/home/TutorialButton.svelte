@@ -33,14 +33,14 @@
 		if (isCompleted && isHovered && onReset) {
 			return {
 				icon: RefreshCw,
-				label: 'Reset',
+				label: '重置',
 				onClick: onReset
 			}
 		}
 		if (!isCompleted && isHovered && onComplete) {
 			return {
 				icon: CheckCheck,
-				label: 'Mark as completed',
+				label: '标记为已完成',
 				onClick: onComplete
 			}
 		}
@@ -73,7 +73,7 @@
 			: ''} transition-colors">
 			{title}
 			{#if comingSoon}
-				<span class="ml-2 text-3xs text-secondary">(Coming soon)</span>
+				<span class="ml-2 text-3xs text-secondary">（即将推出）</span>
 			{/if}
 		</div>
 		<div class="text-hint text-3xs truncate text-left font-normal">
@@ -111,7 +111,7 @@
 					? 'text-green-500'
 					: 'text-blue-300'}"
 			>
-				{isCompleted ? 'Completed' : 'Not started'}
+				{isCompleted ? '已完成' : '未开始'}
 			</span>
 			{#if isCompleted}
 				<CheckCircle2 size={14} class="text-green-500 flex-shrink-0" />
@@ -121,4 +121,3 @@
 		{/if}
 	</div>
 </button>
-

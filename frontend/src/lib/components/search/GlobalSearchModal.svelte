@@ -71,7 +71,7 @@
 	let switchModeItems: quickMenuItem[] = [
 		{
 			search_id: 'switchto:run-search',
-			label: 'Search across completed runs' + (!$enterpriseLicense ? '' : ' (EE)'),
+			label: '搜索已完成运行记录' + (!$enterpriseLicense ? '' : ' (EE)'),
 			action: () => switchMode('runs'),
 			shortcutKey: RUNS_PREFIX,
 			icon: Search,
@@ -79,7 +79,7 @@
 		},
 		{
 			search_id: 'switchto:content-search',
-			label: 'Search scripts/flows/apps based on content',
+			label: '按内容搜索脚本、流程和应用',
 			action: () => switchMode('content'),
 			shortcutKey: CONTENT_SEARCH_PREFIX,
 			icon: SearchCode,
@@ -91,70 +91,70 @@
 	let hiddenMenuItems = [
 		{
 			search_id: 'nav:http_routes',
-			label: 'Go to HTTP routes',
+			label: '前往 HTTP 路由',
 			action: (newtab: boolean = false) => gotoPage('/routes', newtab),
 			icon: Route,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:web_sockets',
-			label: 'Go to WebSockets',
+			label: '前往 WebSocket 触发器',
 			action: (newtab: boolean = false) => gotoPage('/websocket_triggers', newtab),
 			icon: Unplug,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:postgres_triggers',
-			label: 'Go to Postgres triggers',
+			label: '前往 Postgres 触发器',
 			action: (newtab: boolean = false) => gotoPage('/postgres_triggers', newtab),
 			icon: Database,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:kafka_triggers',
-			label: 'Go to Kafka triggers' + (!$enterpriseLicense ? '' : ' (EE)'),
+			label: '前往 Kafka 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
 			action: (newtab: boolean = false) => gotoPage('/kafka_triggers', newtab),
 			icon: KafkaIcon,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:nats_triggers',
-			label: 'Go to NATS triggers' + (!$enterpriseLicense ? '' : ' (EE)'),
+			label: '前往 NATS 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
 			action: (newtab: boolean = false) => gotoPage('/nats_triggers', newtab),
 			icon: NatsIcon,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:sqs_triggers',
-			label: 'Go to SQS triggers' + (!$enterpriseLicense ? '' : ' (EE)'),
+			label: '前往 SQS 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
 			action: (newtab: boolean = false) => gotoPage('/sqs_triggers', newtab),
 			icon: AwsIcon,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:gcp_pub_sub',
-			label: 'Go to GCP Pub/Sub' + (!$enterpriseLicense ? '' : ' (EE)'),
+			label: '前往 GCP Pub/Sub 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
 			action: (newtab: boolean = false) => gotoPage('/gcp_triggers', newtab),
 			icon: GoogleCloudIcon,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:azure_event_grid',
-			label: 'Go to Azure Event Grid' + (!$enterpriseLicense ? '' : ' (EE)'),
+			label: '前往 Azure Event Grid 触发器' + (!$enterpriseLicense ? '' : ' (EE)'),
 			action: (newtab: boolean = false) => gotoPage('/azure_triggers', newtab),
 			icon: AzureIcon,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:mqtt_triggers',
-			label: 'Go to MQTT triggers',
+			label: '前往 MQTT 触发器',
 			action: (newtab: boolean = false) => gotoPage('/mqtt_triggers', newtab),
 			icon: MqttIcon,
 			disabled: $userStore?.operator
 		},
 		{
 			search_id: 'nav:email_triggers',
-			label: 'Go to Email triggers',
+			label: '前往邮件触发器',
 			action: (newtab: boolean = false) => gotoPage('/email_triggers', newtab),
 			icon: MailIcon,
 			disabled: $userStore?.operator
@@ -164,35 +164,35 @@
 	let defaultMenuItems: quickMenuItem[] = [
 		{
 			search_id: 'nav:home',
-			label: 'Go to Home',
+			label: '前往首页',
 			action: (newtab: boolean = false) => gotoPage('/', newtab),
 			icon: HomeIcon,
 			disabled: false
 		},
 		{
 			search_id: 'nav:runs',
-			label: 'Go to Runs',
+			label: '前往运行记录',
 			action: (newtab: boolean = false) => gotoPage('/runs', newtab),
 			icon: PlayIcon,
 			disabled: false
 		},
 		{
 			search_id: 'nav:variables',
-			label: 'Go to Variables',
+			label: '前往变量',
 			action: (newtab: boolean = false) => gotoPage('/variables', newtab),
 			icon: DollarSignIcon,
 			disabled: false
 		},
 		{
 			search_id: 'nav:resources',
-			label: 'Go to Resources',
+			label: '前往资源',
 			action: (newtab: boolean = false) => gotoPage('/resources', newtab),
 			icon: BoxesIcon,
 			disabled: false
 		},
 		{
 			search_id: 'nav:schedules_triggers',
-			label: 'Go to Schedules',
+			label: '前往定时任务',
 			action: (newtab: boolean = false) => gotoPage('/schedules', newtab),
 			icon: CalendarIcon,
 			disabled: false
@@ -200,7 +200,7 @@
 		...switchModeItems,
 		{
 			search_id: 'nav:service_logs',
-			label: 'Explore windmill service logs',
+			label: '查看服务日志',
 			action: (newtab: boolean = false) => gotoPage('/service_logs', newtab),
 			shortcutKey: LOGS_PREFIX,
 			icon: Logs,
@@ -454,13 +454,13 @@
 	function placeholderFromPrefix(text: string): string {
 		switch (text) {
 			case '':
-				return '   Search or type `?` for search options'
+				return '   搜索，或输入 `?` 查看搜索选项'
 			case RUNS_PREFIX:
-				return '   Search across completed runs'
+				return '   搜索已完成运行记录'
 			case LOGS_PREFIX:
-				return '   Search across completed runs'
+				return '   搜索已完成运行记录'
 			case CONTENT_SEARCH_PREFIX:
-				return '   Search flows/scripts/apps by content'
+				return '   按内容搜索流程、脚本和应用'
 			default:
 				return ''
 		}
@@ -686,7 +686,7 @@
 					{#if tab === 'default'}
 						{#if (itemMap[tab] ?? []).filter((e) => (combinedItems ?? []).includes(e)).length > 0}
 							<div class="p-2">
-								<div class="py-2 px-1 text-xs font-semibold text-primary"> Flows/Scripts/Apps </div>
+								<div class="py-2 px-1 text-xs font-semibold text-primary">流程/脚本/应用</div>
 								{#each (itemMap[tab] ?? []).filter((e) => (combinedItems ?? []).includes(e)) as el}
 									<QuickMenuItem
 										onselect={(shift) => {

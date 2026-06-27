@@ -135,10 +135,10 @@
 <List gap="sm">
 	{#if !hasCriticalAlertChannels && $superadmin}
 		<div class="w-full">
-			<Alert title="No critical alert channels are set up" type="warning" size="xs">
-				Go to the
-				<a href="/#superadmin-settings" onclick={preventDefault(goToCoreTab)}>Instance settings</a>
-				page to configure critical alert channels.
+			<Alert title="尚未设置重要告警通道" type="warning" size="xs">
+				请前往
+				<a href="/#superadmin-settings" onclick={preventDefault(goToCoreTab)}>实例设置</a>
+				页面配置重要告警通道。
 			</Alert>
 		</div>
 	{/if}
@@ -150,18 +150,18 @@
 					{#if $devopsRole}
 						<Toggle
 							bind:checked={workspaceContext}
-							options={{ right: `Workspace only` }}
+							options={{ right: `仅工作空间` }}
 							size="xs"
 						/>
 					{/if}
 
-					<Toggle bind:checked={hideAcknowledged} options={{ right: 'Non-Acked only' }} size="xs" />
+					<Toggle bind:checked={hideAcknowledged} options={{ right: '仅未确认' }} size="xs" />
 				</List>
 			</div>
 
 			<List wFull={false} horizontal gap="md" justify="end">
 				<div class="text-xs text-primary whitespace-nowrap"
-					>{`${totalNumberOfAlerts === 1000 ? '1000+' : (totalNumberOfAlerts ?? '?')} items`}
+					>{`${totalNumberOfAlerts === 1000 ? '1000+' : (totalNumberOfAlerts ?? '?')} 条`}
 				</div>
 				<RefreshButton loading={isRefreshing} onClick={refreshAlerts} />
 			</List>

@@ -45,13 +45,13 @@
 
 	// Text constants
 	const TEXT = {
-		convertToFahrenheit: 'Convert to Fahrenheit'
+		convertToFahrenheit: '转换为华氏度'
 	} as const
 
 	// Helper function to check if step is complete
 	function checkStepComplete(step: number): boolean {
 		if (!stepComplete[step]) {
-			sendUserToast('Please wait...', false, [], undefined, 3000)
+			sendUserToast('请稍候...', false, [], undefined, 3000)
 			return false
 		}
 		return true
@@ -161,8 +161,8 @@
 
 	// Pre-built flow - same as the flow builder tutorial result
 	const preBuiltFlow: Flow = {
-		summary: 'Temperature Converter',
-		description: 'Convert Celsius to Fahrenheit and categorize the temperature',
+		summary: '温度转换器',
+		description: '将摄氏度转换为华氏度并进行温度分类',
 		value: {
 			modules: [
 				{
@@ -179,7 +179,7 @@
 							}
 						}
 					},
-					summary: 'Validate temperature input'
+					summary: '校验温度输入'
 				},
 				{
 					id: 'b',
@@ -195,7 +195,7 @@
 							}
 						}
 					},
-					summary: 'Convert to Fahrenheit'
+					summary: '转换为华氏度'
 				},
 				{
 					id: 'c',
@@ -215,7 +215,7 @@
 							}
 						}
 					},
-					summary: 'Categorize temperature'
+					summary: '温度分类'
 				}
 			]
 		},
@@ -225,7 +225,7 @@
 			properties: {
 				celsius: {
 					type: 'number',
-					description: 'Temperature in Celsius',
+					description: '摄氏温度',
 					default: 25
 				}
 			},
@@ -251,9 +251,9 @@
 		const steps: DriveStep[] = [
 			{
 				popover: {
-					title: '🛠️ Troubleshoot a broken flow',
+					title: '🛠️ 排查异常流程',
 					description:
-						'We created a flow that is a temperature converter that validates input and converts Celsius to Fahrenheit. For this tutorial, our flow is intentionally broken.',
+						'我们已经创建了一个温度转换流程：它会校验输入，并把摄氏度转换为华氏度。本教程中，这个流程是故意做成异常状态的。',
 					onNextClick: () => {
 						driver.moveNext()
 					}
@@ -267,9 +267,9 @@
 					stepComplete[1] = true
 				},
 				popover: {
-					title: 'Test our flow',
+					title: '测试流程',
 					description:
-						'Let\'s run it so you can see what needs to be fixed.',
+						'先运行一次，看看哪里需要修复。',
 					side: 'bottom',
 					onNextClick: async () => {
 						if (!checkStepComplete(1)) return
@@ -293,9 +293,9 @@
 					stepComplete[2] = true
 				},
 				popover: {
-					title: 'Run the flow',
+					title: '运行流程',
 					description:
-						'Click "Next" to execute the flow. We\'ll use the results to troubleshoot the error.',
+						'点击“下一步”执行流程。随后我们会根据结果排查错误。',
 					side: 'left',
 					onNextClick: async () => {
 						if (!checkStepComplete(2)) return
@@ -319,9 +319,9 @@
 					stepComplete[3] = true
 				},
 				popover: {
-					title: 'Review the error',
+					title: '查看错误',
 					description:
-						'Our flow failed. Let\'s review the error and understand what happened.',
+						'流程运行失败了。我们来查看错误，并理解发生了什么。',
 					side: 'left',
 					onNextClick: () => {
 						if (!checkStepComplete(3)) return
@@ -337,9 +337,9 @@
 					stepComplete[4] = true
 				},
 				popover: {
-					title: 'Explore the tabs',
+					title: '查看标签页',
 					description:
-						'Use these tabs to navigate between different views: Result, Logs, and Graph. We\'ll focus on the Graph tab to review the error.',
+						'这些标签页可以在结果、日志和图表视图之间切换。这里我们重点查看图表标签页来定位错误。',
 					side: 'bottom',
 					onNextClick: () => {
 						if (!checkStepComplete(4)) return
@@ -367,9 +367,9 @@
 					stepComplete[5] = true
 				},
 				popover: {
-					title: 'Inspect the flow graph',
+					title: '检查流程图',
 					description:
-						'B step failed during the run. Let\'s take a closer look at its behavior.',
+						'运行过程中 B 步骤失败了。我们进一步查看它的执行情况。',
 					side: 'top',
 					onNextClick: () => {
 						if (!checkStepComplete(5)) return
@@ -385,9 +385,9 @@
 					stepComplete[6] = true
 				},
 				popover: {
-					title: 'Error spotted!',
+					title: '发现错误！',
 					description:
-						'We made a typo in the code. Let\'s fix it and run the flow again.',
+						'代码里有一个拼写错误。我们修复它，然后再次运行流程。',
 					side: 'left',
 					onNextClick: async () => {
 						if (!checkStepComplete(6)) return
@@ -423,9 +423,9 @@
 					stepComplete[7] = true
 				},
 				popover: {
-					title: 'Your turn now!',
+					title: '现在轮到你操作了！',
 					description:
-						'Fix the issue in the code, and run the flow again to confirm everything works.<p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 Want to learn more?</strong> Access more tutorials from the <strong>Tutorials</strong> page in the main menu or in the <strong>Help</strong> submenu.</p>',
+						'请修复代码中的问题，然后再次运行流程，确认一切正常。<p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 想继续学习？</strong>你可以从主菜单的 <strong>教程</strong> 页面，或 <strong>帮助</strong> 子菜单访问更多教程。</p>',
 					side: 'top',
 					onNextClick: () => {
 						if (!checkStepComplete(7)) return

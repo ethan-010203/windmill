@@ -24,9 +24,9 @@
 	getSteps={(driver) => [
 		{
 			popover: {
-				title: 'Expression evaluation tutorial',
+				title: '表达式判断教程',
 				description:
-					'Learn how to build our first branch to be executed on a condition. You can use arrow keys to navigate'
+					'学习如何构建第一个按条件执行的分支。你可以使用方向键切换步骤。'
 			}
 		}
 	]}

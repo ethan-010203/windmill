@@ -37,9 +37,9 @@
 		const steps: DriveStep[] = [
 			{
 				popover: {
-					title: 'Welcome to Windmill! 🎉',
+					title: '欢迎使用部门工具平台！🎉',
 					description:
-						"Let's take a quick tour! We'll show you the three main tools you can use: Scripts, Flows, and Apps.",
+						'我们快速看一下你会用到的三个主要工具：脚本、流程和应用。',
 					onNextClick: () => {
 						// Wait a bit to ensure the page is fully rendered before moving to next step
 						setTimeout(() => {
@@ -58,9 +58,9 @@
 			},
 			{
 				popover: {
-					title: 'Scripts - Run automated tasks',
+					title: '脚本：运行自动化任务',
 					description:
-						'<img src="/script-tutorial-operator.png" alt="Script Example" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p><strong>Scripts</strong> are ready-to-use tasks that do things automatically for you.</p><p style="margin-top: 8px;">You can <strong>run scripts</strong> whenever you need them - like generating a report, sending notifications, or processing data.</p>',
+						'<img src="/script-tutorial-operator.png" alt="脚本示例" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p><strong>脚本</strong>是可直接使用的任务，可以帮你自动完成操作。</p><p style="margin-top: 8px;">你可以在需要时<strong>运行脚本</strong>，例如生成报表、发送通知或处理数据。</p>',
 					onNextClick: async () => {
 						// Move to the next step (Flows)
 						setTimeout(() => {
@@ -78,9 +78,9 @@
 			},
 			{
 				popover: {
-					title: 'Flows - Run step-by-step processes',
+					title: '流程：运行多步骤处理',
 					description:
-						'<img src="/flow.png" alt="Flow" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p><strong>Flows</strong> are processes that run multiple tasks in order, one after another.</p><p style="margin-top: 8px;">You can <strong>start a flow</strong> and watch it complete each step automatically - perfect for tasks that have multiple stages.</p>',
+						'<img src="/flow.png" alt="流程" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p><strong>流程</strong>会按顺序运行多个任务，一步接一步自动完成。</p><p style="margin-top: 8px;">你可以<strong>启动流程</strong>并查看每个步骤自动完成，适合有多个阶段的工作。</p>',
 					onNextClick: async () => {
 						// Move to the next step (Apps)
 						setTimeout(() => {
@@ -98,9 +98,9 @@
 			},
 			{
 				popover: {
-					title: 'Apps - Use custom tools',
+					title: '应用：使用自定义工具',
 					description:
-						'<img src="/app.png" alt="App" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p><strong>Apps</strong> are easy-to-use tools with buttons, forms, and displays built just for your team.</p><p style="margin-top: 8px;">You can <strong>open an app</strong> to work with your data, fill out forms, or trigger tasks - no technical knowledge needed!</p>',
+						'<img src="/app.png" alt="应用" style="width: 100%; max-width: 400px; margin-bottom: 12px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto;" /><p><strong>应用</strong>是为团队定制的易用工具，里面可以包含按钮、表单和展示区域。</p><p style="margin-top: 8px;">你可以<strong>打开应用</strong>处理数据、填写表单或触发任务，不需要技术背景。</p>',
 					onNextClick: async () => {
 						// Move to the next step (cursor animation)
 						driver.moveNext()
@@ -110,8 +110,8 @@
 			},
 			{
 				popover: {
-					title: 'Finally, the Menu section',
-					description: 'Explore available tabs where you can access your history of runs, your scheduled scripts, your tutorials progress etc.<p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 Want to learn more?</strong> Access more tutorials from the <strong>Tutorials</strong> page in the main menu.</p>',
+					title: '最后看看菜单区域',
+					description: '你可以在这里访问运行历史、定时脚本、教程进度等栏目。<p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(128,128,128,0.3); font-size: 0.9em; opacity: 0.9;"><strong>💡 想继续学习？</strong>你可以从主菜单的 <strong>教程</strong> 页面访问更多教程。</p>',
 					onNextClick: async () => {
 						// Find the target button and click it
 						const targetButton = document.querySelector('[role="menuitem"]') as HTMLElement | null

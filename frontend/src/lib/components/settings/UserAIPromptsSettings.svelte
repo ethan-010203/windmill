@@ -47,13 +47,18 @@
 <div class="mt-4">
 	<Label label="Custom system prompts">
 		<div class="flex flex-col gap-4">
-			<p class="text-xs text-secondary">
-				Customize AI behavior with system prompts. These are stored locally in your browser and
-				apply in addition to {#if $userStore?.is_admin || $userStore?.is_super_admin}<a
-						href="/workspace_settings?tab=ai"
-						>workspace-level prompts <ExternalLink size={12} class="inline-block" /></a
-					>{:else}workspace-level prompts{/if}.
-			</p>
+			{#if $userStore?.is_admin || $userStore?.is_super_admin}
+				<p class="text-xs text-secondary">
+					通过系统提示词自定义 AI 行为。这些提示词保存在你的浏览器本地，并会与工作空间级提示词一起生效。
+					<a href="/workspace_settings?tab=ai"
+						>查看工作空间级提示词 <ExternalLink size={12} class="inline-block" /></a
+					>
+				</p>
+			{:else}
+				<p class="text-xs text-secondary">
+					通过系统提示词自定义 AI 行为。这些提示词保存在你的浏览器本地，并会与工作空间级提示词一起生效。
+				</p>
+			{/if}
 
 			<div class="flex justify-between items-center">
 				<div class="flex items-center gap-2">
@@ -63,15 +68,15 @@
 						unifiedSize="sm"
 						startIcon={{ icon: Settings }}
 					>
-						Configure AI prompts
+						配置 AI 提示词
 					</Button>
 					{#if hasPrompts}
-						<span class="text-xs text-secondary">({promptCount} configured)</span>
+						<span class="text-xs text-secondary">（已配置 {promptCount} 个）</span>
 					{/if}
 				</div>
 
 				{#if hasChanges}
-					<span class="text-xs text-yellow-600 dark:text-yellow-400"> Unsaved changes </span>
+					<span class="text-xs text-yellow-600 dark:text-yellow-400"> 有未保存的更改 </span>
 				{/if}
 			</div>
 		</div>

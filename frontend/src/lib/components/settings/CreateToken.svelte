@@ -159,7 +159,7 @@
 				class="mb-4 flex flex-row flex-shrink-0"
 				use:triggerableByAI={{
 					id: 'account-settings-create-mcp-token',
-					description: 'Create a new MCP token to authenticate to the Windmill API'
+						description: '创建新的 MCP 令牌，用于认证部门工具平台 API'
 				}}
 			>
 				<Toggle
@@ -172,9 +172,9 @@
 					}}
 					checked={mcpCreationMode}
 					options={{
-						right: 'Generate MCP URL',
-						rightTooltip:
-							'Generate a new MCP URL to make your scripts, flows, and API endpoints available as tools through your LLM clients.',
+							right: '生成 MCP URL',
+							rightTooltip:
+								'生成新的 MCP URL，让你的脚本、流程和 API 端点可以作为工具供 LLM 客户端使用。',
 						rightDocumentationLink: 'https://www.windmill.dev/docs/core_concepts/mcp'
 					}}
 					size="xs"
@@ -184,7 +184,7 @@
 
 		{#if scopes != undefined}
 			<div class="mb-4">
-				<span class="block mb-1 text-emphasis text-xs font-semibold">Scope</span>
+				<span class="block mb-1 text-emphasis text-xs font-semibold">权限范围</span>
 				{#each scopes as scope (scope)}
 					<TextInput inputProps={{ disabled: true }} value={scope} class="mb-2 w-full" />
 				{/each}
@@ -192,9 +192,9 @@
 					<Toggle
 						bind:checked={readOnly}
 						options={{
-							right: 'Read-only',
+							right: '只读',
 							rightTooltip:
-								'Restricts this token to GET/HEAD endpoints. Any mutating request (POST/PUT/PATCH/DELETE) or job-run action will be rejected with 403, regardless of the scopes listed above.'
+								'将此令牌限制为只能访问 GET/HEAD 接口。无论上方权限范围如何，任何修改请求（POST/PUT/PATCH/DELETE）或任务运行操作都会以 403 拒绝。'
 						}}
 						size="2xs"
 					/>
@@ -215,7 +215,7 @@
 			{#if mcpCreationMode}
 				{#if !lockWorkspace}
 					<div>
-						<span class="block mb-1 text-emphasis text-xs font-semibold">Workspace</span>
+						<span class="block mb-1 text-emphasis text-xs font-semibold">工作空间</span>
 						<Select
 							bind:value={newTokenWorkspace}
 							items={workspaces.map((w) => ({ label: w.name, value: w.id, subtitle: w.id }))}
@@ -227,7 +227,7 @@
 			{#if !mcpOnly}
 				<div>
 					<span class="block mb-1 text-emphasis text-xs font-semibold"
-						>Label <span class="text-xs text-primary">(optional)</span></span
+						>标签 <span class="text-xs text-primary">（可选）</span></span
 					>
 					<TextInput inputProps={{ type: 'text' }} bind:value={newTokenLabel} class="w-full" />
 				</div>
@@ -236,21 +236,21 @@
 			{#if !mcpCreationMode}
 				<div>
 					<span class="block mb-1 text-xs text-emphasis font-semibold"
-						>Expires In <span class="text-xs text-primary">(optional)</span></span
+						>过期时间 <span class="text-xs text-primary">（可选）</span></span
 					>
 					<Select
 						bind:value={newTokenExpiration}
-						placeholder="No expiration"
+						placeholder="永不过期"
 						inputClass="w-full"
 						items={[
-							{ label: 'No expiration', value: undefined },
-							{ label: '15 minutes', value: 15 * 60 },
-							{ label: '30 minutes', value: 30 * 60 },
-							{ label: '1 hour', value: 1 * 60 * 60 },
-							{ label: '1 day', value: 1 * 24 * 60 * 60 },
-							{ label: '7 days', value: 7 * 24 * 60 * 60 },
-							{ label: '30 days', value: 30 * 24 * 60 * 60 },
-							{ label: '90 days', value: 90 * 24 * 60 * 60 }
+							{ label: '永不过期', value: undefined },
+							{ label: '15 分钟', value: 15 * 60 },
+							{ label: '30 分钟', value: 30 * 60 },
+							{ label: '1 小时', value: 1 * 60 * 60 },
+							{ label: '1 天', value: 1 * 24 * 60 * 60 },
+							{ label: '7 天', value: 7 * 24 * 60 * 60 },
+							{ label: '30 天', value: 30 * 24 * 60 * 60 },
+							{ label: '90 天', value: 90 * 24 * 60 * 60 }
 						]}
 					/>
 				</div>

@@ -237,7 +237,7 @@
 								{item}
 							>
 								<Settings size={14} />
-								Account settings
+								账号设置
 							</MenuItem>
 						</div>
 
@@ -265,7 +265,7 @@
 								{:else}
 									<Moon size={14} />
 								{/if}
-								Switch theme
+								切换主题
 							</MenuItem>
 							<MenuItem
 								href="{base}/user/workspaces"
@@ -279,7 +279,7 @@
 								{item}
 							>
 								<Building size={14} />
-								All workspaces
+								全部工作空间
 							</MenuItem>
 
 							{#if $superadmin}
@@ -294,7 +294,7 @@
 									{item}
 								>
 									<ServerCog size={14} />
-									Instance settings
+									实例设置
 								</MenuItem>
 							{/if}
 
@@ -309,7 +309,7 @@
 								{item}
 							>
 								<LogOut size={14} />
-								Sign out
+								退出登录
 							</MenuItem>
 						</div>
 						<div role="none">
@@ -347,7 +347,7 @@
 												}}
 											>
 												<Plus size={12} />
-												<span class="text-2xs">More triggers</span>
+												<span class="text-2xs">更多触发器</span>
 											</div>
 											{#if showExtraTriggers}
 												{#each extraTriggerLinks as menuLink (menuLink.href)}

@@ -37,7 +37,7 @@
 </script>
 
 <div class="border border-border-light rounded-md p-4 h-full">
-	<h2 class="text-emphasis text-sm font-semibold mb-2">AI user settings</h2>
+	<h2 class="text-emphasis text-sm font-semibold mb-2">智能助手设置</h2>
 
 	<div class="flex flex-col gap-4">
 		<Toggle
@@ -46,9 +46,9 @@
 			}}
 			checked={!$aiUserDisabled}
 			options={{
-				right: 'Windmill AI',
+				right: '部门工具平台 AI',
 				rightTooltip:
-					'Enable Windmill AI for your account on this device. Turning this off hides the AI chat, code completion, metadata completion and flow step input completion.'
+					'在此设备上为你的账号启用部门工具平台 AI。关闭后会隐藏 AI 对话、代码补全、元数据补全和流程步骤输入补全。'
 			}}
 		/>
 
@@ -60,8 +60,8 @@
 				}}
 				checked={$codeCompletionSessionEnabled}
 				options={{
-					right: 'Code completion',
-					rightTooltip: 'AI completion in the code editors'
+					right: '代码补全',
+					rightTooltip: '代码编辑器中的 AI 补全'
 				}}
 			/>
 
@@ -72,8 +72,8 @@
 				}}
 				checked={$metadataCompletionEnabled}
 				options={{
-					right: 'Metadata completion',
-					rightTooltip: 'AI completion for summaries and descriptions'
+					right: '元数据补全',
+					rightTooltip: '用于摘要和说明的 AI 补全'
 				}}
 			/>
 			<Toggle
@@ -83,8 +83,8 @@
 				}}
 				checked={$stepInputCompletionEnabled}
 				options={{
-					right: 'Flow step input completion',
-					rightTooltip: 'AI completion for flow step inputs'
+					right: '流程步骤输入补全',
+					rightTooltip: '用于流程步骤输入的 AI 补全'
 				}}
 			/>
 		</div>

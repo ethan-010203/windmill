@@ -52,14 +52,14 @@
 </script>
 
 <Drawer bind:this={drawer} size="900px" on:close={removeHash} {disableChatOffset}>
-	<DrawerContent title="User settings" on:close={closeDrawer}>
+	<DrawerContent title="用户设置" on:close={closeDrawer}>
 		<div class="flex flex-col gap-6 pb-8">
 			{#if scopes == undefined}
 				<div
 					class="flex flex-row justify-between items-start gap-2 border border-border-light p-4 rounded-md"
 				>
 					<div class="font-semibold text-emphasis text-xs flex items-center">
-						Theme <DarkModeToggle forcedDarkMode={false} />
+						主题 <DarkModeToggle forcedDarkMode={false} />
 					</div>
 					<div class="text-xs text-emphasis flex-col flex">
 						Windmill <Version />

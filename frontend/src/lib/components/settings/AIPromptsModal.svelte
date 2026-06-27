@@ -40,30 +40,30 @@
 		modes = undefined,
 		readOnly = false,
 		readOnlyReason = undefined,
-		title = 'Customize AI System Prompts',
+		title = '自定义 AI 系统提示词',
 		target = '#content',
 		settingsHref = undefined,
 		fixedHeight = 'xxl'
 	}: Props = $props()
 
 	const placeholders: Record<AIMode, string> = {
-		[AIMode.SCRIPT]: 'Enter custom instructions for script generation and editing',
-		[AIMode.FLOW]: 'Enter custom instructions for workflow creation and automation',
-		[AIMode.APP]: 'Enter custom instructions for UI and app development',
-		[AIMode.NAVIGATOR]: 'Enter custom instructions for navigation and guidance',
-		[AIMode.API]: 'Enter custom instructions for API interactions and integrations',
-		[AIMode.GLOBAL]: 'Enter custom instructions for workspace-wide draft assistance',
-		[AIMode.ASK]: 'Enter custom instructions for general questions and assistance'
+		[AIMode.SCRIPT]: '输入用于脚本生成和编辑的自定义要求',
+		[AIMode.FLOW]: '输入用于流程创建和自动化的自定义要求',
+		[AIMode.APP]: '输入用于界面和应用开发的自定义要求',
+		[AIMode.NAVIGATOR]: '输入用于导航和操作指引的自定义要求',
+		[AIMode.API]: '输入用于 API 交互和集成的自定义要求',
+		[AIMode.GLOBAL]: '输入用于工作空间草稿辅助的自定义要求',
+		[AIMode.ASK]: '输入用于常规问题和辅助的自定义要求'
 	}
 
 	const modeLabels: Record<AIMode, string> = {
-		[AIMode.SCRIPT]: 'Script Mode',
-		[AIMode.FLOW]: 'Flow Mode',
-		[AIMode.APP]: 'App Mode',
-		[AIMode.NAVIGATOR]: 'Navigator Mode',
-		[AIMode.API]: 'API Mode',
-		[AIMode.GLOBAL]: 'Global Mode',
-		[AIMode.ASK]: 'Ask Mode'
+		[AIMode.SCRIPT]: '脚本模式',
+		[AIMode.FLOW]: '流程模式',
+		[AIMode.APP]: '应用模式',
+		[AIMode.NAVIGATOR]: '导航模式',
+		[AIMode.API]: 'API 模式',
+		[AIMode.GLOBAL]: '全局模式',
+		[AIMode.ASK]: '问答模式'
 	}
 
 	let visibleModes = $derived(modes ?? getVisibleAIModes())
@@ -104,14 +104,13 @@
 		<div class="grow min-h-0 overflow-y-auto" style="scrollbar-gutter: stable;">
 			{#if readOnly}
 				<div class="mb-6">
-					<Alert type="info" title="Read-only" size="xs">
+					<Alert type="info" title="只读" size="xs">
 						{#if readOnlyReason}
 							{readOnlyReason}
 						{:else if scope === 'workspace'}
-							Only workspace admins can edit the workspace AI prompt. It applies to all workspace
-							members.
+							只有工作空间管理员可以编辑工作空间 AI 提示词。它会应用于全部工作空间成员。
 						{:else}
-							This prompt is read-only.
+							此提示词为只读。
 						{/if}
 					</Alert>
 				</div>
@@ -119,30 +118,26 @@
 				<div class="text-xs text-secondary mb-6">
 					{#if scope === 'workspace'}
 						{#if singleMode}
-							Customize the workspace system prompt. It applies to all workspace members.
+							自定义工作空间系统提示词。它会应用于全部工作空间成员。
 						{:else}
-							Customize the system prompts for each AI mode. These prompts apply to all workspace
-							members.
+							为每个 AI 模式自定义系统提示词。这些提示词会应用于全部工作空间成员。
 						{/if}
 					{:else if scope === 'instance'}
 						{#if singleMode}
-							Customize the system prompt. It applies to workspaces using instance AI defaults.
+							自定义系统提示词。它会应用于使用实例 AI 默认配置的工作空间。
 						{:else}
-							Customize the system prompts for each AI mode. These prompts apply to workspaces using
-							instance AI defaults.
+							为每个 AI 模式自定义系统提示词。这些提示词会应用于使用实例 AI 默认配置的工作空间。
 						{/if}
 					{:else if singleMode}
-						Customize your system prompt. It is stored locally in your browser and applies in
-						addition to the workspace-level prompt.
+						自定义你的系统提示词。它会保存在浏览器本地，并与工作空间级提示词一起生效。
 					{:else}
-						Customize the system prompts for each AI mode. These prompts are stored locally in your
-						browser and apply in addition to workspace-level prompts.
+						为每个 AI 模式自定义系统提示词。这些提示词会保存在浏览器本地，并与工作空间级提示词一起生效。
 					{/if}
 				</div>
 			{/if}
 
 			{#if readOnly && displayModes.length === 0}
-				<div class="text-xs text-secondary">No workspace prompt configured.</div>
+				<div class="text-xs text-secondary">尚未配置工作空间提示词。</div>
 			{/if}
 			{#each displayModes as mode (mode)}
 				<div class="flex flex-col gap-2 pb-4 last:border-b-0">
@@ -167,7 +162,7 @@
 						{#if !readOnly}
 							<div class="flex justify-end mt-1">
 								<span class="text-2xs text-hint">
-									{(customPrompts[mode] ?? '').length}/{MAX_CUSTOM_PROMPT_LENGTH} characters
+									{(customPrompts[mode] ?? '').length}/{MAX_CUSTOM_PROMPT_LENGTH} 个字符
 								</span>
 							</div>
 						{/if}
@@ -187,7 +182,7 @@
 							size="sm"
 							endIcon={{ icon: ExternalLink }}
 						>
-							AI settings
+							AI 设置
 						</Button>
 					{/if}
 				</div>
@@ -198,7 +193,7 @@
 						disabled={!hasChanges || saving}
 						onclick={handleReset}
 					>
-						Reset
+						重置
 					</Button>
 					{#if onSave}
 						<Button
@@ -208,7 +203,7 @@
 							loading={saving}
 							onclick={handleSave}
 						>
-							Save Prompts
+							保存提示词
 						</Button>
 					{/if}
 				</div>

@@ -96,26 +96,26 @@
 	const saveDisabled = $derived(saving || !tokenPrefix || (isMcp && !pickedScopes))
 </script>
 
-<Modal bind:open title="Edit token" class="!max-w-3xl">
+<Modal bind:open title="编辑令牌" class="!max-w-3xl">
 	<div class="flex flex-col gap-3">
 		<div class="text-xs text-secondary">
-			Token <span class="font-mono">{tokenPrefix}****</span>
+			令牌 <span class="font-mono">{tokenPrefix}****</span>
 		</div>
 
 		<div class="flex flex-col gap-1">
-			<span class="text-xs font-semibold text-emphasis">Label</span>
+			<span class="text-xs font-semibold text-emphasis">标签</span>
 			<TextInput
-				inputProps={{ type: 'text', disabled: !labelEditable, placeholder: 'Add a label...' }}
+				inputProps={{ type: 'text', disabled: !labelEditable, placeholder: '添加标签...' }}
 				bind:value={labelValue}
 				class="w-full"
 			/>
 			{#if !labelEditable}
-				<span class="text-2xs text-tertiary">System token labels can't be changed.</span>
+				<span class="text-2xs text-tertiary">系统令牌标签不能修改。</span>
 			{/if}
 		</div>
 
 		<div class="flex flex-col gap-1">
-			<span class="text-xs font-semibold text-emphasis">Scopes</span>
+			<span class="text-xs font-semibold text-emphasis">权限范围</span>
 			{#key tokenPrefix}
 				<ScopesPicker
 					mode={isMcp ? 'mcp' : 'standard'}
@@ -128,6 +128,6 @@
 	</div>
 
 	{#snippet actions()}
-		<Button size="sm" variant="accent" disabled={saveDisabled} on:click={save}>Save</Button>
+		<Button size="sm" variant="accent" disabled={saveDisabled} on:click={save}>保存</Button>
 	{/snippet}
 </Modal>

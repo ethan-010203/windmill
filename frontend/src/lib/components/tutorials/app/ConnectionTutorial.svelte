@@ -47,8 +47,8 @@
 	getSteps={(driver) => [
 		{
 			popover: {
-				title: 'Connection tutorial',
-				description: 'We will connect the input of a text component to an output.',
+				title: '组件连接教程',
+				description: '我们会把文本组件的输入连接到一个输出。',
 				onNextClick: () => {
 					addComponent()
 					setTimeout(() => {
@@ -60,9 +60,9 @@
 		{
 			element: `#component-input`,
 			popover: {
-				title: 'Data source',
+				title: '数据源',
 				description:
-					'Here we can set the data source of the text component: it can be static, the result of an evaluation or the result of script or flow. We are going to connect the data source to an output.',
+					'这里可以设置文本组件的数据源：可以是静态值、表达式结果，也可以是脚本或流程结果。接下来我们会把数据源连接到一个输出。',
 				onNextClick: () => {
 					clickButtonBySelector('#component-input')
 					setTimeout(() => {
@@ -74,8 +74,8 @@
 		{
 			element: '[data-connection-button] button[title="Connect"]',
 			popover: {
-				title: 'Connect the text component',
-				description: 'Click on the plug icon to connect the text component',
+				title: '连接文本组件',
+				description: '点击插头图标来连接文本组件',
 				onNextClick: () => {
 					clickButtonBySelector('[data-connection-button] button[title="Connect"]')
 					setTimeout(() => {
@@ -87,9 +87,9 @@
 		{
 			element: '#output-ctx',
 			popover: {
-				title: 'Select the output',
+				title: '选择输出',
 				description:
-					"You can now select the output in the output menu. Let's select your email in the app context",
+					'现在可以在输出菜单中选择输出。这里选择应用上下文中的邮箱。',
 				onNextClick: () => {
 					clickButtonBySelector('#output-ctx')
 					setTimeout(() => {
@@ -101,8 +101,8 @@
 		{
 			element: '.val',
 			popover: {
-				title: 'Click on the output',
-				description: 'Simply click on the output to connect it',
+				title: '点击输出',
+				description: '点击输出即可完成连接',
 				onNextClick: () => {
 					clickButtonBySelector('.val')
 					setTimeout(() => {
@@ -113,8 +113,8 @@
 		},
 		{
 			popover: {
-				title: 'Connection done',
-				description: 'You can now see the email output connected to the text component input',
+				title: '连接完成',
+				description: '现在可以看到邮箱输出已经连接到文本组件输入',
 				onNextClick: () => {
 					updateProgress(6)
 
