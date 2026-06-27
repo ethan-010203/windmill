@@ -16,6 +16,9 @@ import { randomUUID } from '$lib/utils/uuid'
  */
 export function makeDraftAddLoad(editPrefix: string) {
 	return ({ url }: { url: URL }) => {
+		if (url.searchParams.has('hub')) {
+			redirect(307, `${base}/`)
+		}
 		const username = getUsernameForNamespace()
 		// Underscores not dashes — path segments are `[a-zA-Z0-9_]` words and
 		// downstream consumers treat `-` as foreign.

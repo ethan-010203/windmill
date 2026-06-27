@@ -66,6 +66,10 @@
 		// `draft_{uuid}` path. Skip the backend fetch (would 404) and seed empty
 		// with `path = ''` for the friendly auto-name. See /scripts/edit's loader.
 		if (page.url.searchParams.get('new_draft') === 'true') {
+			if (page.url.searchParams.has('hub')) {
+				goto('/')
+				return
+			}
 			// Suspend autosave across the bootstrap: the seed assignment and
 			// AppEditor's `firstMirror` are programmatic writes that must not POST
 			// as the first edit. AppEditor lifts it in `onMount`.

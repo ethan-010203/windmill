@@ -134,6 +134,10 @@
 		// any non-empty value is parsed verbatim. Empty `initialPath` also opens the
 		// metadata drawer. The flag is stripped only once the first save lands.
 		if (page.url.searchParams.get('new_draft') === 'true') {
+			if (page.url.searchParams.has('hub')) {
+				goto('/')
+				return
+			}
 			// Suspend autosave across the bootstrap: both the seed and
 			// ScriptBuilder's `initContent` are programmatic writes that must not
 			// post as the user's first edit. ScriptBuilder lifts it in

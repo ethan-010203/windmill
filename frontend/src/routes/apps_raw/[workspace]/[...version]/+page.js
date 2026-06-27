@@ -1,5 +1,5 @@
-export function load({ params }) {
-	return {
-		stuff: { title: `Public App` }
-	}
+import { redirect } from '@sveltejs/kit'
+
+export function load() {
+	redirect(307, '/')
 }

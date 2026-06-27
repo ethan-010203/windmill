@@ -1,11 +1,8 @@
 <script lang="ts">
-	// import { page } from '$app/state'
-	// import RawAppPreview from '$lib/components/raw_apps/RawAppPreview.svelte'
-	// import { userStore } from '$lib/stores'
-</script>
+	import { goto } from '$app/navigation'
+	import { onMount } from 'svelte'
 
-<!-- <RawAppPreview
-	workspace={page.params.workspace}
-	user={$userStore}
-	version={Number(page.params.version)}
-/> -->
+	onMount(() => {
+		goto('/')
+	})
+</script>

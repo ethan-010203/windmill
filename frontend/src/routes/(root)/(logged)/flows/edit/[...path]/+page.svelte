@@ -144,6 +144,10 @@
 		// `draft_{uuid}` path. Skip both fetches (they 404) and seed empty with
 		// `path = ''` for the friendly auto-name. See /scripts/edit's loader.
 		if (page.url.searchParams.get('new_draft') === 'true') {
+			if (page.url.searchParams.has('hub')) {
+				goto('/')
+				return
+			}
 			// Deploy must `createFlow` at the user-typed path, not `updateFlow` at the URL.
 			isNewFlow = true
 			// Page reused across same-route nav: clear the previous path's
