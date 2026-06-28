@@ -6,23 +6,35 @@ $ErrorActionPreference = "Stop"
 $DeployDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $DeployDir
 
+function Invoke-Checked {
+    param(
+        [Parameter(Mandatory = $true)]
+        [scriptblock]$Command
+    )
+
+    & $Command
+    if ($LASTEXITCODE -ne 0) {
+        throw "Command failed with exit code $LASTEXITCODE"
+    }
+}
+
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-    throw "未找到 docker 命令。请先安装 Docker Desktop，并确认已启用 Linux containers。"
+    throw "docker command was not found. Please install Docker Desktop and use Linux containers."
 }
 
 if (-not (Test-Path ".env")) {
-    throw "未找到 .env。请先运行：copy .env.example .env，然后修改其中的密码和密钥。"
+    throw ".env was not found. Copy .env.example to .env and update passwords/secrets first."
 }
 
-docker compose version | Out-Null
+Invoke-Checked { docker compose version | Out-Null }
 
-if ($NoBuild) {
-    docker compose up -d
-} else {
-    docker compose up -d --build
+if (-not $NoBuild) {
+    Invoke-Checked { docker compose pull }
 }
+
+Invoke-Checked { docker compose up -d }
 
 Write-Host ""
-Write-Host "系统已启动。" -ForegroundColor Green
-Write-Host "访问地址：请查看 .env 中的 BASE_URL，默认 http://127.0.0.1:8000"
-Write-Host "首次访问时请按页面提示创建管理员账号。"
+Write-Host "System started." -ForegroundColor Green
+Write-Host "Open the BASE_URL from .env, default: http://127.0.0.1:8000"
+Write-Host "On first visit, follow the page prompts to create the admin account."

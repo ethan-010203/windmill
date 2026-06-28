@@ -20,11 +20,6 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
 
   windmill_server:
-    build:
-      context: ../..
-      dockerfile: Dockerfile
-      args:
-        features: ${WINDMILL_BUILD_FEATURES:-ce}
     image: ${WINDMILL_IMAGE:-internal-windmill:local}
     restart: unless-stopped
     depends_on:
