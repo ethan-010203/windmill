@@ -183,7 +183,7 @@ oss_core = [
     "static_frontend", "mcp", "bedrock", "run_inline",
     "quickjs"
 ]
-ce_core = ["oss_core", "private", "operator"]
+ce_core = ["oss_core", "operator"]
 ee_core = [
     "enterprise", "stripe", "prometheus", "cloud",
     "kafka", "sqs_trigger", "nats", "gcp_trigger", "azure_trigger",

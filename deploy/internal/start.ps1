@@ -28,8 +28,42 @@ if (-not (Test-Path ".env")) {
 
 Invoke-Checked { docker compose version | Out-Null }
 
+function Get-DotEnvValue {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+
+    $Line = Get-Content ".env" | Where-Object { $_ -match "^\s*$Name\s*=" } | Select-Object -First 1
+    if (-not $Line) {
+        return ""
+    }
+
+    return ($Line -replace "^\s*$Name\s*=\s*", "").Trim().Trim('"').Trim("'")
+}
+
+function Test-LocalImageReference {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Image
+    )
+
+    $FirstPart = ($Image -split "/")[0]
+    return ($Image -notmatch "/" -or ($FirstPart -notmatch "[.:]" -and $FirstPart -ne "localhost"))
+}
+
 if (-not $NoBuild) {
-    Invoke-Checked { docker compose pull }
+    $WindmillImage = Get-DotEnvValue "WINDMILL_IMAGE"
+    if ($WindmillImage -and (Test-LocalImageReference $WindmillImage)) {
+        docker image inspect $WindmillImage | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            throw "Local image '$WindmillImage' was not found. Build it first, or set WINDMILL_IMAGE to a pullable registry image."
+        }
+
+        Write-Host "Using local Windmill image: $WindmillImage"
+    } else {
+        Invoke-Checked { docker compose pull }
+    }
 }
 
 Invoke-Checked { docker compose up -d }

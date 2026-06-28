@@ -36,7 +36,11 @@ pub const MAX_PER_PAGE: usize = 10000;
 pub const DEFAULT_PER_PAGE: usize = 1000;
 
 pub const GIT_VERSION: &str =
-    git_version!(args = ["--tag", "--always"], fallback = "unknown-version");
+    git_version!(
+        args = ["--tags", "--match", "v[0-9]*", "--match", "[0-9]*"],
+        cargo_prefix = "",
+        fallback = "unknown-version"
+    );
 
 pub const AGENT_JWT_PREFIX: &str = "jwt_agent_";
 pub const WORKER_NAME_PREFIX: &str = "wk";

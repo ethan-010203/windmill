@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$BackupFile
+    [string]$BackupFile,
+
+    [switch]$Force
 )
 
 $ErrorActionPreference = "Stop"
@@ -13,10 +15,12 @@ if (-not (Test-Path $BackupFile)) {
 
 Write-Host "About to restore database from: $BackupFile" -ForegroundColor Yellow
 Write-Host "Restore will overwrite the current database. Confirm that current data is backed up."
-$Confirm = Read-Host "Type RESTORE to continue"
-if ($Confirm -ne "RESTORE") {
-    Write-Host "Restore cancelled."
-    exit 0
+if (-not $Force) {
+    $Confirm = Read-Host "Type RESTORE to continue"
+    if ($Confirm -ne "RESTORE") {
+        Write-Host "Restore cancelled."
+        exit 0
+    }
 }
 
 docker compose up -d postgres

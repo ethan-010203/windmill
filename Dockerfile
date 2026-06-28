@@ -1,12 +1,26 @@
 ARG DEBIAN_IMAGE=debian:bookworm-slim
 ARG RUST_IMAGE=rust:1.93-slim-bookworm
+ARG APT_FLAGS="-o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30"
+ARG APT_MIRROR=""
+ARG APT_SECURITY_MIRROR=""
 
 FROM debian:bookworm-slim AS nsjail
+ARG APT_FLAGS
+ARG APT_MIRROR
+ARG APT_SECURITY_MIRROR
+
+RUN if [ -n "$APT_MIRROR" ]; then \
+    security_mirror="${APT_SECURITY_MIRROR:-${APT_MIRROR}-security}"; \
+    sed -i "s|http://deb.debian.org/debian-security|${security_mirror}|g" /etc/apt/sources.list.d/debian.sources; \
+    sed -i "s|http://deb.debian.org/debian|${APT_MIRROR}|g" /etc/apt/sources.list.d/debian.sources; \
+    fi
+
+RUN printf 'Acquire::Retries "5";\nAcquire::http::Timeout "30";\nAcquire::https::Timeout "30";\n' > /etc/apt/apt.conf.d/80-retries
 
 WORKDIR /nsjail
 
-RUN apt-get -y update \
-    && apt-get install -y \
+RUN apt-get $APT_FLAGS -y update \
+    && apt-get $APT_FLAGS install -y \
     bison=2:3.8.* \
     flex=2.6.* \
     g++=4:12.2.* \
@@ -22,11 +36,22 @@ RUN git clone -b master --single-branch https://github.com/google/nsjail.git . &
 RUN make
 
 FROM ${RUST_IMAGE} AS rust_base
+ARG APT_FLAGS
+ARG APT_MIRROR
+ARG APT_SECURITY_MIRROR
 
-RUN apt-get update && apt-get install -y git libssl-dev pkg-config npm mold clang
+RUN if [ -n "$APT_MIRROR" ]; then \
+    security_mirror="${APT_SECURITY_MIRROR:-${APT_MIRROR}-security}"; \
+    sed -i "s|http://deb.debian.org/debian-security|${security_mirror}|g" /etc/apt/sources.list.d/debian.sources; \
+    sed -i "s|http://deb.debian.org/debian|${APT_MIRROR}|g" /etc/apt/sources.list.d/debian.sources; \
+    fi
 
-RUN apt-get -y update \
-    && apt-get install -y \
+RUN printf 'Acquire::Retries "5";\nAcquire::http::Timeout "30";\nAcquire::https::Timeout "30";\n' > /etc/apt/apt.conf.d/80-retries
+
+RUN apt-get $APT_FLAGS update && apt-get $APT_FLAGS install -y git libssl-dev pkg-config npm mold clang
+
+RUN apt-get $APT_FLAGS -y update \
+    && apt-get $APT_FLAGS install -y \
     curl nodejs
 
 RUN rustup component add rustfmt
@@ -44,7 +69,7 @@ FROM rust_base AS windmill_duckdb_ffi_internal_builder
 
 WORKDIR /windmill-duckdb-ffi-internal
 
-RUN apt-get update && apt-get install -y clang=1:14.0-55.* libclang-dev=1:14.0-55.* cmake=3.25.* && \
+RUN apt-get $APT_FLAGS update && apt-get $APT_FLAGS install -y clang=1:14.0-55.* libclang-dev=1:14.0-55.* cmake=3.25.* && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -98,7 +123,7 @@ ARG features=""
 
 COPY --from=planner /windmill/recipe.json recipe.json
 
-RUN apt-get update && apt-get install -y libxml2-dev=2.9.* libxmlsec1-dev=1.2.* libkrb5-dev libsasl2-dev libcurl4-openssl-dev clang=1:14.0-55.* libclang-dev=1:14.0-55.* cmake=3.25.* && \
+RUN apt-get $APT_FLAGS update && apt-get $APT_FLAGS install -y libxml2-dev=2.9.* libxmlsec1-dev=1.2.* libkrb5-dev libsasl2-dev libcurl4-openssl-dev clang=1:14.0-55.* libclang-dev=1:14.0-55.* cmake=3.25.* && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -132,6 +157,15 @@ FROM scratch AS debuginfo
 COPY --from=builder /windmill/target/release/windmill.debug /windmill.debug
 
 FROM ${DEBIAN_IMAGE}
+ARG APT_FLAGS
+ARG APT_MIRROR
+ARG APT_SECURITY_MIRROR
+
+RUN if [ -n "$APT_MIRROR" ]; then \
+    security_mirror="${APT_SECURITY_MIRROR:-${APT_MIRROR}-security}"; \
+    sed -i "s|http://deb.debian.org/debian-security|${security_mirror}|g" /etc/apt/sources.list.d/debian.sources; \
+    sed -i "s|http://deb.debian.org/debian|${APT_MIRROR}|g" /etc/apt/sources.list.d/debian.sources; \
+    fi
 
 ARG TARGETPLATFORM
 ARG POWERSHELL_VERSION=7.5.0
@@ -155,6 +189,8 @@ ARG LATEST_STABLE_PY=3.12
 ENV UV_PYTHON_INSTALL_DIR=/tmp/windmill/cache/py_runtime
 ENV UV_PYTHON_PREFERENCE=only-managed
 
+RUN printf 'Acquire::Retries "5";\nAcquire::http::Timeout "30";\nAcquire::https::Timeout "30";\n' > /etc/apt/apt.conf.d/80-retries
+
 RUN mkdir -p /usr/local/uv
 ENV UV_TOOL_BIN_DIR=/usr/local/bin
 ENV UV_TOOL_DIR=/usr/local/uv
@@ -162,33 +198,33 @@ ENV UV_TOOL_DIR=/usr/local/uv
 ENV PATH /usr/local/bin:/root/.local/bin:/tmp/.local/bin:$PATH
 
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends netbase tzdata ca-certificates wget curl jq unzip build-essential unixodbc xmlsec1 software-properties-common tini gnupg lsb-release \
-    && if echo "$features" | grep -q "ee"; then apt-get install -y --no-install-recommends libsasl2-modules-gssapi-mit krb5-user; fi \
+RUN apt-get $APT_FLAGS update \
+    && apt-get $APT_FLAGS install -y --no-install-recommends netbase tzdata ca-certificates wget curl jq unzip build-essential unixodbc xmlsec1 software-properties-common tini gnupg lsb-release \
+    && if echo "$features" | grep -q "ee"; then apt-get $APT_FLAGS install -y --no-install-recommends libsasl2-modules-gssapi-mit krb5-user; fi \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install latest PostgreSQL client (pg_dump) from official PostgreSQL apt repository
 RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/postgresql-archive-keyring.gpg] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends postgresql-client \
+    && apt-get $APT_FLAGS update \
+    && apt-get $APT_FLAGS install -y --no-install-recommends postgresql-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN if [ "$WITH_GIT" = "true" ]; then \
-    apt-get update  -y \
-    && apt-get install -y git \
+    apt-get $APT_FLAGS update  -y \
+    && apt-get $APT_FLAGS install -y git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*; \
     else echo 'Building the image without git'; fi;
 
 RUN if [ "$WITH_POWERSHELL" = "true" ]; then \
-    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then apt-get update -y && apt install libicu-dev -y && wget -O 'pwsh.deb' "https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell_${POWERSHELL_DEB_VERSION}.deb_amd64.deb" && apt-get clean \
+    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then apt-get $APT_FLAGS update -y && apt-get $APT_FLAGS install libicu-dev -y && wget -O 'pwsh.deb' "https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell_${POWERSHELL_DEB_VERSION}.deb_amd64.deb" && apt-get clean \
     && rm -rf /var/lib/apt/lists/* && \
     dpkg --install 'pwsh.deb' && \
     rm 'pwsh.deb'; \
-    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then apt-get update -y && apt install libicu-dev -y && wget -O powershell.tar.gz "https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-${POWERSHELL_VERSION}-linux-arm64.tar.gz" && apt-get clean \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then apt-get $APT_FLAGS update -y && apt-get $APT_FLAGS install libicu-dev -y && wget -O powershell.tar.gz "https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-${POWERSHELL_VERSION}-linux-arm64.tar.gz" && apt-get clean \
     && rm -rf /var/lib/apt/lists/* && \
     mkdir -p /opt/microsoft/powershell/7 && \
     tar zxf powershell.tar.gz -C /opt/microsoft/powershell/7 && \
@@ -244,7 +280,7 @@ RUN UV_CACHE_DIR=/tmp/build_cache/uv UV_PYTHON_INSTALL_DIR=/tmp/build_cache/py_r
 
 
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
-RUN apt-get -y update && apt-get install -y curl procps nodejs awscli && apt-get clean \
+RUN apt-get $APT_FLAGS -y update && apt-get $APT_FLAGS install -y curl procps nodejs awscli && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # go build is slower the first time it is ran, so we prewarm it in the build
@@ -303,7 +339,7 @@ ENV CARGO_HOME="/tmp/windmill/cache/cargo"
 ENV LD_LIBRARY_PATH="."
 
 # nsjail runtime deps and binary
-RUN apt-get update && apt-get install -y --no-install-recommends libprotobuf32 libnl-route-3-200 libnl-3-200 \
+RUN apt-get $APT_FLAGS update && apt-get $APT_FLAGS install -y --no-install-recommends libprotobuf32 libnl-route-3-200 libnl-3-200 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --from=nsjail /nsjail/nsjail /bin/nsjail
 
