@@ -9,7 +9,6 @@
 	import { X, FileDiff, Loader2 } from 'lucide-svelte'
 	import { fade } from 'svelte/transition'
 	import { SettingsService } from '$lib/gen'
-	import { isCloudHosted } from '$lib/cloud'
 
 	interface Props {
 		disableChatOffset?: boolean
@@ -90,7 +89,7 @@
 </script>
 
 <Drawer bind:this={drawer} size="1200px" {disableChatOffset} on:close={handleDrawerClose}>
-	<DrawerContent noPadding overflow_y={false} title="Instance settings" on:close={handleClose}>
+	<DrawerContent noPadding overflow_y={false} title="实例设置" on:close={handleClose}>
 		{#snippet titleExtra()}
 			<MeltTooltip disablePopup={!uptodateVersion}>
 				<div class="text-xs text-secondary flex items-center gap-1 ml-6">
@@ -100,16 +99,8 @@
 					{/if}
 				</div>
 				{#snippet text()}
-							
-						{#if isCloudHosted()}
-							The cloud version is updated daily.
-						{:else}
-							How to update?<br />
-							- docker: <code>docker compose up -d</code><br />
-							- <a href="https://github.com/windmill-labs/windmill-helm-charts#install">helm</a>
-						{/if}
-					
-							{/snippet}
+					内部部署升级请先在测试环境构建镜像并完成验证，再按部署文档更新生产环境。
+				{/snippet}
 			</MeltTooltip>
 		{/snippet}
 		{#snippet actions()}
@@ -122,7 +113,7 @@
 							startIcon={{ icon: X }}
 							onClick={handleDiscard}
 						>
-							Discard
+							放弃
 						</Button>
 					</div>
 				{/if}
@@ -133,7 +124,7 @@
 					onClick={handleReviewChanges}
 					disabled={!hasUnsavedChanges}
 				>
-					Review changes
+					查看变更
 				</Button>
 				<Toggle
 					bind:checked={yamlMode}
@@ -155,11 +146,11 @@
 </Drawer>
 
 <Drawer bind:this={diffDrawer} size="1200px">
-	<DrawerContent title="Review changes" on:close={() => diffDrawer?.closeDrawer()}>
+	<DrawerContent title="查看变更" on:close={() => diffDrawer?.closeDrawer()}>
 		{#snippet actions()}
 			<Toggle
 				bind:checked={inlineDiff}
-				options={{ right: 'Unified' }}
+				options={{ right: '统一视图' }}
 				size="xs"
 			/>
 			<SaveButton onSave={handleSaveAndCloseDiff} disabled={!hasUnsavedChanges || hasAnyInvalid} size="xs" />
@@ -186,8 +177,8 @@
 {#if showCloseConfirmModal}
 	<ConfirmationModal
 		open={showCloseConfirmModal}
-		title="Unsaved changes"
-		confirmationText="Discard & close"
+		title="存在未保存变更"
+		confirmationText="放弃并关闭"
 		on:canceled={() => {
 			showCloseConfirmModal = false
 		}}
@@ -198,7 +189,7 @@
 		}}
 	>
 		<div class="flex flex-col w-full space-y-4">
-			<span>You have unsaved changes. Are you sure you want to discard them and close?</span>
+			<span>当前存在未保存变更，确定要放弃并关闭吗？</span>
 			<Button
 				variant="default"
 				size="sm"
@@ -208,7 +199,7 @@
 					handleReviewChanges()
 				}}
 			>
-				Review changes
+				查看变更
 			</Button>
 		</div>
 	</ConfirmationModal>

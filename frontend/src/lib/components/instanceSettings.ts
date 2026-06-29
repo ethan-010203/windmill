@@ -173,15 +173,6 @@ export const settings: Record<string, Setting[]> = {
 			triggersRestart: true
 		},
 		{
-			label: '授权配置',
-			description:
-				'用于启用当前部署未开放的高级能力。普通内部使用无需配置。',
-			key: 'license_key',
-			fieldType: 'license_key',
-			placeholder: '内部部署通常无需填写',
-			storage: 'setting'
-		},
-		{
 			label: '非生产实例',
 			description:
 				'是否将当前实例标记为非生产环境。',
@@ -1041,13 +1032,15 @@ export const instanceSettingsNavigationGroups = [
 				id: 'telemetry',
 				label: '遥测',
 				aiId: 'instance-settings-telemetry',
-				aiDescription: '实例遥测设置'
+				aiDescription: '实例遥测设置',
+				showIf: false
 			},
 			{
 				id: 'secret_storage',
 				label: '密钥存储',
 				aiId: 'instance-settings-secret-storage',
-				aiDescription: '实例密钥存储设置'
+				aiDescription: '实例密钥存储设置',
+				showIf: false
 			},
 			{
 				id: 'websocket',
@@ -1161,11 +1154,15 @@ export function buildSearchableSettingItems(
 	navigationGroups: typeof instanceSettingsNavigationGroups = instanceSettingsNavigationGroups
 ): SearchableSettingItem[] {
 	const items: SearchableSettingItem[] = []
-	const visibleTabIds = new Set(navigationGroups.flatMap((group) => group.items.map((item) => item.id)))
+	const visibleTabIds = new Set(
+		navigationGroups.flatMap((group) =>
+			group.items.filter((item) => item.showIf !== false).map((item) => item.id)
+		)
+	)
 
 	// Add sidebar navigation items (tab-level)
 	for (const group of navigationGroups) {
-		for (const navItem of group.items) {
+		for (const navItem of group.items.filter((item) => item.showIf !== false)) {
 			items.push({
 				label: navItem.label,
 				tabId: navItem.id,
@@ -1186,20 +1183,6 @@ export function buildSearchableSettingItems(
 				tabId,
 				settingKey: setting.key,
 				category,
-				description: setting.description?.replace(/<[^>]*>/g, '') ?? ''
-			})
-		}
-	}
-
-	// Add SCIM/SAML settings
-	if (visibleTabIds.has('scim_saml')) {
-		for (const setting of scimSamlSetting) {
-			if (!setting.label) continue
-			items.push({
-				label: setting.label,
-				tabId: 'scim_saml',
-				settingKey: setting.key,
-				category: 'SCIM/SAML',
 				description: setting.description?.replace(/<[^>]*>/g, '') ?? ''
 			})
 		}

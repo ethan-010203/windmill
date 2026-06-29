@@ -5,7 +5,7 @@
 	import Head from '$lib/components/table/Head.svelte'
 	import Cell from '$lib/components/table/Cell.svelte'
 	import InviteGlobalUser from '$lib/components/InviteGlobalUser.svelte'
-	import { Button } from '$lib/components/common'
+	import { Alert, Button } from '$lib/components/common'
 	import { sendUserToast } from '$lib/toast'
 	import { base } from '$lib/base'
 	import SearchItems from './SearchItems.svelte'
@@ -112,7 +112,7 @@
 			extJwtTokens = nextPage === 1 ? res : [...extJwtTokens, ...res]
 			extJwtHasMore = res.length === extJwtPerPage
 		} catch (e) {
-			sendUserToast(`Failed to load external JWT tokens: ${e}`, true)
+			sendUserToast(`加载外部 JWT 令牌失败：${e}`, true)
 		} finally {
 			extJwtLoading = false
 		}
@@ -145,7 +145,7 @@
 			requestBody: { value: true }
 		})
 		getAutomateUsernameCreationSetting()
-		sendUserToast('Automatic username creation enabled')
+		sendUserToast('用户名自动创建已启用')
 		listUsers(activeOnly)
 	}
 
@@ -157,16 +157,26 @@
 					name
 				}
 			})
-			sendUserToast('User updated')
+			sendUserToast('用户已更新')
 			listUsers(activeOnly)
 		} catch (e) {
-			sendUserToast('Error updating user', true)
+			sendUserToast('更新用户失败', true)
 		}
 	}
 
 	// The category name for InstanceSettings based on current sidebar tab
 	let instanceSettingsCategory = $derived(tabToCategoryMap[tab] ?? 'Core')
 	let authSubTab: 'sso' | 'oauth' | 'scim' = $derived(tabToAuthSubTab[tab] ?? 'sso')
+	let availableInstanceSettingTabs = $derived(
+		new Set(
+			instanceSettingsNavigationGroups.flatMap((group) =>
+				group.items.filter((item) => item.showIf !== false).map((item) => item.id)
+			)
+		)
+	)
+	let isCurrentTabAvailable = $derived(
+		tab === 'users' || tab === 'ai' || availableInstanceSettingTabs.has(tab)
+	)
 
 	function handleNavigate(newTab: string) {
 		if (newTab === tab) return
@@ -275,7 +285,7 @@
 							class="flex items-center gap-2 px-2 py-1.5 text-xs text-secondary hover:text-primary transition-colors"
 						>
 							<ExternalLink size={14} />
-							Admins workspace
+							管理员工作区
 						</a>
 					</div>
 				{/if}
@@ -286,21 +296,26 @@
 		<div class="flex-1 min-w-0 h-full">
 			<div class="h-full overflow-auto bg-surface">
 				<div class="h-fit px-8 py-4">
-					{#if tab === 'ai' && !yamlMode}
+					{#if !isCurrentTabAvailable && !yamlMode}
+						<div class="h-full">
+							<SettingsPageHeader
+								title="当前功能未开放"
+								description="该实例设置项不适用于当前内部部署。"
+							/>
+							<Alert type="info" title="当前功能未开放">
+								请使用左侧导航中的可用设置项。
+							</Alert>
+						</div>
+					{:else if tab === 'ai' && !yamlMode}
 						<InstanceAISettings {disableChatOffset} />
 					{:else if tab === 'users' && !yamlMode}
 						<div class="h-full">
 							{#if !automateUsernameCreation && !isCloudHosted()}
 								<div class="mb-4">
-									<h3 class="mb-2"> Automatic username creation </h3>
+									<h3 class="mb-2">自动生成用户名</h3>
 									<div class="mb-2">
 										<span class="text-primary text-sm"
-											>Automatically create a username for new users based on their email, shared
-											across workspaces. <a
-												target="_blank"
-												href="https://www.windmill.dev/docs/advanced/instance_settings#automatic-username-creation"
-												>Learn more</a
-											></span
+											>根据新用户邮箱自动生成用户名，并在各工作空间中保持一致。</span
 										>
 									</div>
 									<Button
@@ -311,7 +326,7 @@
 											automateUsernameModalOpen = true
 										}}
 									>
-										Enable (recommended)
+										启用
 									</Button>
 									<ConfirmationModal
 										open={automateUsernameModalOpen}
@@ -320,12 +335,10 @@
 											enableAutomateUsernameCreationSetting()
 										}}
 										on:canceled={() => (automateUsernameModalOpen = false)}
-										title="Automatic username creation"
-										confirmationText="Enable"
+										title="自动生成用户名"
+										confirmationText="启用"
 									>
-										Once activated, it will not be possible to disable this feature. In case
-										existing users have different usernames in different workspaces, you will have
-										to manually confirm the username for each user.
+										启用后无法关闭。如果已有用户在不同工作空间使用了不同用户名，需要逐个确认用户名。
 									</ConfirmationModal>
 								</div>
 							{/if}
@@ -350,9 +363,9 @@
 									/><Toggle
 										bind:checked={activeOnly}
 										options={{
-											left: 'Recently active only',
+											left: '仅最近活跃',
 											leftTooltip:
-												'Show only users who have logged in or performed an action in the last 30 days'
+												'仅显示最近 30 天内登录或执行过操作的用户'
 										}}
 									/>
 
@@ -366,7 +379,7 @@
 												nonCaptureEvent
 												wrapperClasses="w-fit shrink-0"
 											>
-												Add new user
+												添加用户
 											</Button>
 										{/snippet}
 										{#snippet content()}
@@ -375,7 +388,7 @@
 									</Popover>
 								</div>
 								<p class="text-hint text-2xs mt-2">
-									{filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} found
+									找到 {filteredUsers.length} 个用户
 								</p>
 								<div class="mt-1">
 									<DataTable
@@ -387,18 +400,18 @@
 									>
 										<Head>
 											<tr>
-												<Cell head first>Email</Cell>
+												<Cell head first>邮箱</Cell>
 												{#if automateUsernameCreation}
-													<Cell head>Username</Cell>
+													<Cell head>用户名</Cell>
 												{/if}
-												<Cell head>Name</Cell>
-												<Cell head>Auth</Cell>
+												<Cell head>姓名</Cell>
+												<Cell head>认证方式</Cell>
 												{#if activeOnly}
-													<Cell head>Kind</Cell>
+													<Cell head>类型</Cell>
 												{/if}
-												<Cell head>Role</Cell>
+												<Cell head>角色</Cell>
 												<Cell head last>
-													<span class="sr-only">Actions</span>
+													<span class="sr-only">操作</span>
 												</Cell>
 											</tr>
 										</Head>
@@ -424,7 +437,7 @@
 																{#if workspace_id}
 																	<a
 																		href="{base}/?workspace={workspace_id}"
-																		title="Workspace: {workspace_id}"
+																		title="工作空间：{workspace_id}"
 																	>
 																		<Badge color="blue">{truncate(workspace_id, 20)}</Badge>
 																	</a>
@@ -432,7 +445,7 @@
 																{#if disabled}
 																	<span
 																		class="text-2xs px-1.5 py-0.5 rounded bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300 whitespace-nowrap"
-																		>Disabled</span
+																		>已禁用</span
 																	>
 																{/if}
 															</div>
@@ -467,11 +480,11 @@
 														{#if activeOnly}
 															<Cell>
 																{#if is_workspace_admin}
-																	Admin
+																	管理员
 																{:else if operator_only}
-																	Operator only
+																	仅操作者
 																{:else}
-																	Developer
+																	开发者
 																{/if}
 															</Cell>
 														{/if}
@@ -482,13 +495,13 @@
 																		class="rounded-md text-xs px-2 py-1 bg-surface shadow-md font-bold"
 																	>
 																		{is_workspace_admin
-																			? 'Admin'
+																			? '管理员'
 																			: operator_only
-																				? 'Operator'
-																				: 'Developer'}
+																				? '操作者'
+																				: '开发者'}
 																	</span>
 																	<Tooltip>
-																		Service-account role is managed in the workspace user settings.
+																		服务账号角色在工作空间用户设置中管理。
 																	</Tooltip>
 																</div>
 															{:else}
@@ -502,7 +515,7 @@
 																					: 'user'}
 																			on:selected={async (e) => {
 																				if (email == $userStore?.email) {
-																					sendUserToast('You cannot demote yourself', true)
+																					sendUserToast('不能降低自己的权限', true)
 																					listUsers(activeOnly)
 																					return
 																				}
@@ -536,7 +549,7 @@
 																						}
 																					})
 																				}
-																				sendUserToast('User updated')
+																				sendUserToast('用户已更新')
 																				listUsers(activeOnly)
 																			}}
 																		>
@@ -544,12 +557,12 @@
 																				<ToggleButton
 																					value={'user'}
 																					small
-																					label="User"
+																					label="用户"
 																					disabled={role_source === 'instance_group' &&
 																						(super_admin || devops)}
 																					tooltip={role_source === 'instance_group' &&
 																					(super_admin || devops)
-																						? 'Role is set by an instance group. Remove the user from the group to demote to "User".'
+																						? '角色由实例组设置。需要先从组中移除该用户，才能降级为普通用户。'
 																						: undefined}
 																					showTooltipIcon={role_source === 'instance_group' &&
 																						(super_admin || devops)}
@@ -559,13 +572,13 @@
 																					value={'devops'}
 																					small
 																					label="Devops"
-																					tooltip="Devops is a role that grants visibilty similar to that of a super admin, but without giving all rights. For example devops users can see service logs and crtical alerts. You can think of it as a 'readonly' super admin"
+																					tooltip="Devops 拥有接近超级管理员的可见性，但不具备全部管理权限，例如可以查看服务日志和关键告警。"
 																					{item}
 																				/>
 																				<ToggleButton
 																					value={'super_admin'}
 																					small
-																					label="Superadmin"
+																					label="超级管理员"
 																					{item}
 																				/>
 																			{/snippet}
@@ -575,10 +588,10 @@
 																		<a
 																			href="{base}/groups"
 																			class="text-2xs text-tertiary mt-0.5 ml-1 hover:underline"
-																			title="Role set by instance group. You can upgrade to a higher role manually, but demoting to &quot;User&quot; requires removing them from the group."
+																			title="角色由实例组设置。可以手动提升为更高角色；如需降级为普通用户，需要先从组中移除。"
 																			onclick={() => closeDrawer?.()}
 																		>
-																			Set by instance group
+																			由实例组设置
 																		</a>
 																	{/if}
 																</div>
@@ -591,7 +604,7 @@
 																		<a
 																			href="{base}/workspace_settings?tab=users&workspace={workspace_id}"
 																			class="text-xs text-secondary hover:text-primary hover:underline"
-																			title="Manage in workspace settings">Manage in workspace</a
+																			title="在工作空间设置中管理">在工作空间中管理</a
 																		>
 																	{/if}
 																{:else}
@@ -619,7 +632,7 @@
 																	<DropdownV2
 																		items={[
 																			{
-																				displayName: 'Edit',
+																				displayName: '编辑',
 																				icon: Pencil,
 																				action: () => {
 																					const btn = editWrappers[email]?.querySelector(
@@ -629,7 +642,7 @@
 																				}
 																			},
 																			{
-																				displayName: disabled ? 'Enable' : 'Disable',
+																				displayName: disabled ? '启用' : '禁用',
 																				icon: disabled ? CheckCircle2 : Ban,
 																				action: () => {
 																					if (!disabled) {
@@ -640,10 +653,10 @@
 																									email,
 																									requestBody: { disabled: true }
 																								})
-																								sendUserToast('User disabled')
+																								sendUserToast('用户已禁用')
 																								listUsers(activeOnly)
 																							} catch (e) {
-																								sendUserToast('Failed to disable user', true)
+																								sendUserToast('禁用用户失败', true)
 																							}
 																						}
 																					} else {
@@ -652,17 +665,17 @@
 																							requestBody: { disabled: false }
 																						})
 																							.then(() => {
-																								sendUserToast('User enabled')
+																								sendUserToast('用户已启用')
 																								listUsers(activeOnly)
 																							})
 																							.catch(() => {
-																								sendUserToast('Failed to enable user', true)
+																								sendUserToast('启用用户失败', true)
 																							})
 																					}
 																				}
 																			},
 																			{
-																				displayName: 'Reassign',
+																				displayName: '重新分配',
 																				icon: ArrowRightLeft,
 																				action: () => {
 																					offboardingEmail = email
@@ -670,7 +683,7 @@
 																				}
 																			},
 																			{
-																				displayName: 'Remove',
+																				displayName: '移除',
 																				icon: UserMinus,
 																				type: 'delete',
 																				action: () => {
@@ -743,8 +756,8 @@
 {/if}
 <ConfirmationModal
 	open={Boolean(disableConfirmedCallback)}
-	title="Disable user"
-	confirmationText="Disable"
+	title="禁用用户"
+	confirmationText="禁用"
 	on:canceled={() => {
 		disableConfirmedCallback = undefined
 		listUsers(activeOnly)
@@ -758,9 +771,7 @@
 >
 	<div class="flex flex-col w-full space-y-4">
 		<span
-			>Are you sure you want to disable <b>{disableUserEmail}</b>? All their active sessions and
-			tokens will be revoked immediately. They will be unable to log in until re-enabled. Their
-			workspace memberships and content will be preserved.</span
+			>确定要禁用 <b>{disableUserEmail}</b> 吗？该用户的所有活跃会话和令牌会立即失效，重新启用前无法登录。其工作空间成员关系和内容会保留。</span
 		>
 	</div>
 </ConfirmationModal>
