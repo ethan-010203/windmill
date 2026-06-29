@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: ${COMPOSE_PROJECT_NAME:-internal-windmill}-postgres
+    container_name: ${COMPOSE_PROJECT_NAME:-internal-platform}-postgres
     restart: unless-stopped
     shm_size: 1g
     environment:
@@ -20,7 +20,7 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
 
   windmill_server:
-    image: ${WINDMILL_IMAGE:-internal-windmill:local}
+    image: ${WINDMILL_IMAGE:-internal-platform:ce-source}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -42,7 +42,7 @@ services:
       - "${APP_PORT:-8000}:8000"
 
   windmill_worker:
-    image: ${WINDMILL_IMAGE:-internal-windmill:local}
+    image: ${WINDMILL_IMAGE:-internal-platform:ce-source}
     restart: unless-stopped
     privileged: true
     depends_on:
@@ -67,7 +67,7 @@ services:
       - worker_logs:/tmp/windmill/logs
 
   windmill_worker_native:
-    image: ${WINDMILL_IMAGE:-internal-windmill:local}
+    image: ${WINDMILL_IMAGE:-internal-platform:ce-source}
     restart: unless-stopped
     depends_on:
       postgres:

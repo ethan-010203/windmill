@@ -51,7 +51,7 @@ if ([string]::IsNullOrWhiteSpace($Image)) {
 }
 
 if ([string]::IsNullOrWhiteSpace($Image)) {
-    $Image = "internal-windmill:ce-source"
+    $Image = "internal-platform:ce-source"
 }
 
 $DockerArgs = @("build", "-t", $Image, "-f", (Join-Path $RepoRoot "Dockerfile"))
