@@ -186,13 +186,14 @@
 	<!-- Hub disabled, show nothing -->
 {:else if hubNotAvailable}
 	<div class="px-3 py-2 mt-2">
-		<Alert type="warning" title="Hub not available" size="xs">
-			Could not connect to the Windmill Hub. If you are in a closed environment, you can disable the
-			Hub in the <a href="/#superadmin-settings?tab=private_hub">instance settings</a>.
+		<Alert type="warning" title="资源中心不可用" size="xs">
+			无法连接资源中心。封闭环境中可以在 <a href="/#superadmin-settings?tab=private_hub">实例设置</a
+			>
+			中关闭外部资源同步。
 		</Alert>
 	</div>
 {:else if loading}
-	{#each Array(15).fill(0) as _}
+	{#each Array(15).fill(0) as _, index (index)}
 		<Skeleton layout={[0.1, [1.5]]} />
 	{/each}
 {:else if items.length > 0 && apps.length > 0}
@@ -248,7 +249,7 @@
 	</ul>
 	{#if items.length == 20}
 		<div class="text-2xs text-tercary font-extralight text-center py-2 px-3 items-center">
-			There are more items than being displayed. Refine your search.
+			结果数量较多，当前只显示部分内容。请缩小搜索范围。
 		</div>
 	{:else if customUi?.suggestScript != false}
 		<div class="px-2 py-1">
@@ -256,12 +257,12 @@
 				href={`${$hubBaseUrlStore}?suggest_script=true`}
 				target="_blank"
 				class="text-xs flex flex-row items-center gap-1 text-blue-500 hover:text-blue-600"
-				>Suggest script <ExternalLink class="size-3" />
+				>建议脚本 <ExternalLink class="size-3" />
 			</a>
 		</div>
 	{/if}
 {:else}
 	<div class="text-2xs text-primary font-light text-center py-2 px-3 items-center">
-		No scripts found.
+		没有找到脚本。
 	</div>
 {/if}

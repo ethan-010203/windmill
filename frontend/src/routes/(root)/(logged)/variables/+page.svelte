@@ -257,8 +257,8 @@
 
 {#if $userStore?.operator && $workspaceStore && !$userWorkspaces.find((_) => _.id === $workspaceStore)?.operator_settings?.variables}
 	<div class="bg-red-100 border-l-4 border-red-600 text-orange-700 p-4 m-4 mt-12" role="alert">
-		<p class="font-bold">Unauthorized</p>
-		<p>Page not available for operators</p>
+		<p class="font-bold">无权访问</p>
+		<p>操作员不能访问此页面</p>
 	</div>
 {:else}
 	<CenteredPage>
@@ -369,7 +369,9 @@
 												onclick={() => variableEditor?.editVariable(path)}
 												href="#{path}"
 											>
-												{path}{(getLocalDraftHint($workspaceStore, 'variable', path) ?? is_draft) ? '*' : ''}
+												{path}{(getLocalDraftHint($workspaceStore, 'variable', path) ?? is_draft)
+													? '*'
+													: ''}
 											</a>
 											{#if draft_only}
 												<DraftBadge draft_only is_draft={false} />

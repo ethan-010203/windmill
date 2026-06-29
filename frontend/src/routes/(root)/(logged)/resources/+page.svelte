@@ -855,8 +855,8 @@
 
 {#if $userStore?.operator && $workspaceStore && !$userWorkspaces.find((_) => _.id === $workspaceStore)?.operator_settings?.resources}
 	<div class="bg-red-100 border-l-4 border-red-600 text-orange-700 p-4 m-4 mt-12" role="alert">
-		<p class="font-bold">Unauthorized</p>
-		<p>Page not available for operators</p>
+		<p class="font-bold">无权访问</p>
+		<p>操作员不能访问此页面</p>
 	</div>
 {:else}
 	<CenteredPage>
@@ -1010,7 +1010,13 @@
 													class="break-all"
 													href="#/resource/{path}"
 													onclick={() => resourceEditor?.initEdit?.(path)}
-													>{#if marked}{@html marked}{:else}{path}{/if}{(getLocalDraftHint($workspaceStore, 'resource', path) ?? is_draft) ? '*' : ''}</a
+													>{#if marked}{@html marked}{:else}{path}{/if}{(getLocalDraftHint(
+														$workspaceStore,
+														'resource',
+														path
+													) ?? is_draft)
+														? '*'
+														: ''}</a
 												>
 												{#if draft_only}
 													<DraftBadge draft_only is_draft={false} />

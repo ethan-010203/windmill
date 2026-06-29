@@ -1247,11 +1247,11 @@
 					previewOpen={flowPreviewButtons?.getPreviewOpen() ?? false}
 				/>
 			{:else}
-				<CenteredPage>Loading...</CenteredPage>
+				<CenteredPage>正在加载...</CenteredPage>
 			{/if}
 		</div>
 	{:else}
-		Flow Builder not available to operators
+		操作员不能使用流程编辑器
 	{/if}
 {/key}
 

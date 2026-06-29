@@ -425,19 +425,18 @@
 						loading={hubSyncStatus === 'loading'}
 						onClick={syncFromHub}
 					>
-						Sync latest from hub
+						同步最新资源类型
 					</Button>
 					<p class="text-tertiary text-2xs">
-						Fetches the latest resource types directly from the Windmill Hub (requires internet
-						access).
+						从资源中心同步最新资源类型，需要当前部署环境可以访问外部网络。
 					</p>
 				</div>
 				{#if hubSyncStatus === 'success'}
-					<Alert type="success" title="Hub sync complete">
+					<Alert type="success" title="资源类型同步完成">
 						{hubSyncMessage}
 					</Alert>
 				{:else if hubSyncStatus === 'error'}
-					<Alert type="error" title="Hub sync failed">
+					<Alert type="error" title="资源类型同步失败">
 						{hubSyncMessage}
 					</Alert>
 				{/if}
@@ -446,9 +445,7 @@
 					options={{ right: 'Sync resource types every day' }}
 					size="xs"
 				/>
-				<p class="text-tertiary text-2xs">
-					The daily schedule synchronizes resource types from the Hub every day at midnight UTC.
-				</p>
+				<p class="text-tertiary text-2xs"> 每日计划会在 UTC 零点同步资源中心的资源类型。 </p>
 			</div>
 		</SettingCard>
 
@@ -691,9 +688,7 @@
 		}}
 	>
 		<div class="flex flex-col w-full space-y-4">
-			<span>
-				当前镜像需要授权密钥才能启用受限功能。尚未配置有效授权密钥，确定继续吗？
-			</span>
+			<span> 当前镜像需要授权密钥才能启用受限功能。尚未配置有效授权密钥，确定继续吗？ </span>
 		</div>
 	</ConfirmationModal>
 {/if}

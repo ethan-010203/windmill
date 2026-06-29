@@ -14,8 +14,5 @@
 <InitializeComponent {id} />
 
 <AlignWrapper {render} hFull {verticalAlignment}>
-	<div
-		>This version of the multiselect component is not supported anymore. Recreate the multiselect
-		component to use this new version.</div
-	>
+	<div>当前多选组件版本已不再支持。请重新创建多选组件以使用新版本。</div>
 </AlignWrapper>

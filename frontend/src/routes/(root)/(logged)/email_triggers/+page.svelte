@@ -81,11 +81,14 @@
 	}
 	getDeployUiSettings()
 	async function loadTriggers(): Promise<void> {
-		triggers = (await EmailTriggerService.listEmailTriggers({ workspace: $workspaceStore!, includeDraftOnly: true })).map(
-			(x) => {
-				return { canWrite: canWrite(x.path, x.extra_perms!, $userStore), ...x }
-			}
-		)
+		triggers = (
+			await EmailTriggerService.listEmailTriggers({
+				workspace: $workspaceStore!,
+				includeDraftOnly: true
+			})
+		).map((x) => {
+			return { canWrite: canWrite(x.path, x.extra_perms!, $userStore), ...x }
+		})
 		$usedTriggerKinds = removeTriggerKindIfUnused(triggers.length, 'emails', $usedTriggerKinds)
 		emailDomain = await getEmailDomain()
 		loading = false
@@ -269,8 +272,8 @@
 
 {#if $userStore?.operator && $workspaceStore && !$userWorkspaces.find((_) => _.id === $workspaceStore)?.operator_settings?.triggers}
 	<div class="bg-red-100 border-l-4 border-red-600 text-orange-700 p-4 m-4 mt-12" role="alert">
-		<p class="font-bold">Unauthorized</p>
-		<p>Page not available for operators</p>
+		<p class="font-bold">无权访问</p>
+		<p>操作员不能访问此页面</p>
 	</div>
 {:else}
 	<CenteredPage>
@@ -359,7 +362,9 @@
 											</span>
 										{:else}
 											{emailAddress}
-										{/if}{(getLocalDraftHint($workspaceStore, 'trigger_email', path) ?? is_draft) ? '*' : ''}
+										{/if}{(getLocalDraftHint($workspaceStore, 'trigger_email', path) ?? is_draft)
+											? '*'
+											: ''}
 									</div>
 									<div class="text-secondary text-xs truncate text-left font-light">
 										{path}

@@ -234,7 +234,7 @@
 						flow={{ ...hubFlowPreview, path: flowPath }}
 					/>
 				{:else if notFound}
-					<div class="p-4 text-red-400">Hub flow not found at {flowPath}</div>
+					<div class="p-4 text-red-400">未找到资源中心流程：{flowPath}</div>
 				{:else}
 					<div class="p-4">
 						<Skeleton layout={[[40]]} />
@@ -423,7 +423,7 @@
 			{#if notFound}
 				<div class="text-red-400">
 					{#if runnable.runType == 'flow' && isHubFlowPath(runnable.path)}
-						Hub flow not found at {runnable.path}
+						未找到资源中心流程：{runnable.path}
 					{:else}
 						{runnable.runType} not found at {runnable.path} in workspace {$workspaceStore}
 					{/if}

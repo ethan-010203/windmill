@@ -538,7 +538,7 @@
 	<DrawerContent title="Run details" on:close={runDrawer.closeDrawer}>
 		{#if selectedIds.length === 1}
 			{#if selectedIds[0] === '-'}
-				<div class="p-4">There is no information available for this job</div>
+				<div class="p-4">当前任务没有可显示的信息</div>
 			{:else}
 				<JobRunsPreview id={selectedIds[0]} workspace={selectedWorkspace} />
 			{/if}
@@ -554,8 +554,8 @@
 
 {#if $userStore?.operator && $workspaceStore && !$userWorkspaces.find((_) => _.id === $workspaceStore)?.operator_settings?.runs}
 	<div class="bg-red-100 border-l-4 border-red-600 text-orange-700 p-4 m-4 mt-12" role="alert">
-		<p class="font-bold">Unauthorized</p>
-		<p>Page not available for operators</p>
+		<p class="font-bold">无权访问</p>
+		<p>操作员不能访问此页面</p>
 	</div>
 {:else}
 	<div class="w-full h-screen flex flex-col" bind:clientWidth={innerWidth}>
@@ -568,14 +568,13 @@
 						$userStore?.operator ? 'pl-10' : ''
 					)}
 				>
-					Runs
+					运行记录
 				</h1>
 
 				<Tooltip
 					documentationLink="https://www.windmill.dev/docs/core_concepts/monitor_past_and_future_runs"
 				>
-					All past and schedule executions of scripts and flows, including previews. You only see
-					your own runs or runs of groups you belong to unless you are an admin.
+					查看脚本和流程的历史执行、计划执行以及预览执行。非管理员只能看到自己的运行记录，或所属组可访问的运行记录。
 				</Tooltip>
 
 				<!-- Queue -->
@@ -1012,7 +1011,7 @@
 							/>
 						{:else if selectedIds.length === 1}
 							{#if selectedIds[0] === '-'}
-								<div class="p-4">There is no information available for this job</div>
+								<div class="p-4">当前任务没有可显示的信息</div>
 							{:else}
 								<JobRunsPreview
 									id={selectedIds[0]}

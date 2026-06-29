@@ -57,7 +57,7 @@
 				})
 			).map((x) => x.name)
 		} catch (err) {
-			console.error('Hub is not available')
+			console.error('资源中心不可用')
 			allApps = []
 			hubNotAvailable = true
 		}
@@ -112,7 +112,7 @@
 			hubNotAvailable = false
 		} catch (err) {
 			hubNotAvailable = true
-			console.error('Hub not available')
+			console.error('资源中心不可用')
 			loading = false
 		}
 	}
@@ -144,72 +144,74 @@
 {#if $disableHubStore}
 	<!-- Hub disabled, show nothing -->
 {:else}
-<div class="w-full flex items-center gap-2">
-	{@render children?.()}
-	<div class="relative w-full">
-		<TextInput
-			inputProps={{
-				placeholder: 'Search Hub Scripts'
-			}}
-			bind:value={filter}
-			class="grow !pr-9"
-			{size}
-		/>
-		{#if loading}
-			<Loader2 class="animate-spin text-gray-400 absolute right-2 top-1" />
-		{/if}
-	</div>
-</div>
-
-{#if hubNotAvailable}
-	<Alert type="warning" title="Hub not available">
-		Could not connect to the Windmill Hub. If you are in a closed environment, you can disable the Hub in the <a href="/#superadmin-settings?tab=private_hub">instance settings</a>.
-	</Alert>
-{:else if (items.length > 0 && apps.length > 0) || !loading}
-	<ListFilters {syncQuery} filters={apps} bind:selectedFilter={appFilter} resourceType />
-	{#if items.length == 0}
-		<NoItemFound />
-	{:else}
-		<ul class="divide-y border rounded-md bg-surface-tertiary">
-			{#each items as item (item.path)}
-				<li class="flex flex-row w-full">
-					<button
-						class="p-4 gap-4 flex flex-row grow hover:bg-surface-hover transition-all items-center"
-						onclick={() => handlePick(item)}
-					>
-						<div class="flex items-center gap-4">
-							<div class="flex justify-center items-center">
-								{#if item['app'] in APP_TO_ICON_COMPONENT}
-									{@const SvelteComponent = APP_TO_ICON_COMPONENT[item['app']]}
-									<SvelteComponent height={18} width={18} />
-								{/if}
-							</div>
-
-							<div class="w-full text-left">
-								<div class="text-emphasis flex-wrap text-xs font-semibold mb-1">
-									{item.summary ?? ''}
-								</div>
-								<div class="text-secondary text-2xs font-normal">
-									{item.path}
-								</div>
-							</div>
-						</div>
-						{#if kind !== 'script'}
-							<Badge color="gray" baseClass="border">{capitalize(kind)}</Badge>
-						{/if}
-					</button>
-				</li>
-			{/each}
-		</ul>
-	{/if}
-	{#if items.length == 20}
-		<div class="text-primary text-xs font-normal py-4">
-			There are more items than being displayed. Refine your search.
+	<div class="w-full flex items-center gap-2">
+		{@render children?.()}
+		<div class="relative w-full">
+			<TextInput
+				inputProps={{
+					placeholder: '搜索资源中心脚本'
+				}}
+				bind:value={filter}
+				class="grow !pr-9"
+				{size}
+			/>
+			{#if loading}
+				<Loader2 class="animate-spin text-gray-400 absolute right-2 top-1" />
+			{/if}
 		</div>
+	</div>
+
+	{#if hubNotAvailable}
+		<Alert type="warning" title="资源中心不可用">
+			无法连接资源中心。封闭环境中可以在 <a href="/#superadmin-settings?tab=private_hub">实例设置</a
+			>
+			中关闭外部资源同步。
+		</Alert>
+	{:else if (items.length > 0 && apps.length > 0) || !loading}
+		<ListFilters {syncQuery} filters={apps} bind:selectedFilter={appFilter} resourceType />
+		{#if items.length == 0}
+			<NoItemFound />
+		{:else}
+			<ul class="divide-y border rounded-md bg-surface-tertiary">
+				{#each items as item (item.path)}
+					<li class="flex flex-row w-full">
+						<button
+							class="p-4 gap-4 flex flex-row grow hover:bg-surface-hover transition-all items-center"
+							onclick={() => handlePick(item)}
+						>
+							<div class="flex items-center gap-4">
+								<div class="flex justify-center items-center">
+									{#if item['app'] in APP_TO_ICON_COMPONENT}
+										{@const SvelteComponent = APP_TO_ICON_COMPONENT[item['app']]}
+										<SvelteComponent height={18} width={18} />
+									{/if}
+								</div>
+
+								<div class="w-full text-left">
+									<div class="text-emphasis flex-wrap text-xs font-semibold mb-1">
+										{item.summary ?? ''}
+									</div>
+									<div class="text-secondary text-2xs font-normal">
+										{item.path}
+									</div>
+								</div>
+							</div>
+							{#if kind !== 'script'}
+								<Badge color="gray" baseClass="border">{capitalize(kind)}</Badge>
+							{/if}
+						</button>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+		{#if items.length == 20}
+			<div class="text-primary text-xs font-normal py-4">
+				结果数量较多，当前只显示部分内容。请缩小搜索范围。
+			</div>
+		{/if}
+	{:else}
+		{#each Array(10).fill(0) as _, index (index)}
+			<Skeleton layout={[0.5, [4]]} />
+		{/each}
 	{/if}
-{:else}
-	{#each Array(10).fill(0) as _}
-		<Skeleton layout={[0.5, [4]]} />
-	{/each}
-{/if}
 {/if}

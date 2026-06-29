@@ -389,24 +389,24 @@
 							disabled={!isEditable}
 							target="_blank"
 						>
-							Create from template
+							从模板创建
 						</Button>
 					{/if}
 				</div>
 				{#if showScriptHelpText}
 					<div class="text-2xs text-secondary">
-						Example of error handler scripts can be found on <a
+						可以在资源中心查看错误处理脚本示例：<a
 							target="_blank"
 							href="{$hubBaseUrlStore}/failures"
 						>
-							Windmill Hub</a
+							打开示例</a
 						>
 					</div>
 				{/if}
 			</div>
 			{#if handlerPath}
 				<div>
-					<p class="font-semibold text-xs mb-1">Extra arguments</p>
+					<p class="font-semibold text-xs mb-1">额外参数</p>
 					{#await import('$lib/components/SchemaForm.svelte')}
 						<Loader2 class="animate-spin" />
 					{:then Module}
@@ -598,7 +598,7 @@
 			{/if}
 		{:else if handlerSelected === 'email'}
 			{#if isCloudHosted()}
-				<Alert type="info" title="Email notifications are not available in Cloud">
+				<Alert type="info" title="当前环境不支持邮件通知">
 					Email notifications for trigger failures are only available in self-hosted Windmill
 					instances.
 				</Alert>

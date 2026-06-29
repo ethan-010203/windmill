@@ -734,8 +734,8 @@
 
 {#if $userStore?.operator && $workspaceStore && !$userWorkspaces.find((_) => _.id === $workspaceStore)?.operator_settings?.workers}
 	<div class="bg-red-100 border-l-4 border-red-600 text-orange-700 p-4 m-4 mt-12" role="alert">
-		<p class="font-bold">Unauthorized</p>
-		<p>Page not available for operators</p>
+		<p class="font-bold">无权访问</p>
+		<p>操作员不能访问此页面</p>
 	</div>
 {:else}
 	<CenteredPage>
@@ -870,8 +870,9 @@
 				</Alert>
 			{:else if worstVersionWarning === 'warning'}
 				<Alert type="warning" title="Worker 版本明显落后" class="my-4">
-					一个或多个 Worker 落后服务器版本（{serverVersion}）超过 50 个小版本。虽然它们通常仍可运行，但问题风险会升高。
-					后续服务器升级可能让这些 Worker 进入严重不兼容状态，建议尽快升级。
+					一个或多个 Worker 落后服务器版本（{serverVersion}）超过 50
+					个小版本。虽然它们通常仍可运行，但问题风险会升高。 后续服务器升级可能让这些 Worker
+					进入严重不兼容状态，建议尽快升级。
 				</Alert>
 			{:else if worstVersionWarning === 'newer'}
 				<Alert type="warning" title="Workers ahead of server" class="my-4">
@@ -1164,22 +1165,23 @@
 																			{#if versionWarning === 'critical'}
 																				<strong>严重：</strong>此{isAgent
 																					? '代理 Worker'
-																					: 'Worker'}低于最低支持版本
-																				({isAgent
+																					: 'Worker'}低于最低支持版本 ({isAgent
 																					? agentMinKeepAliveVersion
 																					: minKeepAliveVersion})，可能导致行为异常和集群不稳定。请立即升级此{isAgent
 																					? '代理 Worker'
 																					: 'Worker'}；继续运行过旧版本存在较高风险。
 																			{:else if versionWarning === 'warning'}
 																				<strong>警告：</strong>此 Worker 落后服务器版本（{serverVersion}）超过
-																				50 个小版本。虽然它通常仍可运行，但问题风险会升高。后续服务器升级可能让此
+																				50
+																				个小版本。虽然它通常仍可运行，但问题风险会升高。后续服务器升级可能让此
 																				Worker 进入严重不兼容状态，建议尽快升级。
 																			{:else if versionWarning === 'newer'}
 																				<strong>警告：</strong>此 Worker 版本高于服务器版本（{serverVersion}）。Worker
 																				版本应不高于服务器版本，否则可能导致行为异常。
 																			{:else}
-																				<strong>提示：</strong>此 Worker 版本低于服务器版本。通常这不会立即导致问题，但保持
-																				Worker 与服务器版本一致可以获得更好的稳定性。
+																				<strong>提示：</strong>此 Worker
+																				版本低于服务器版本。通常这不会立即导致问题，但保持 Worker
+																				与服务器版本一致可以获得更好的稳定性。
 																			{/if}
 																		</div>
 																	{/snippet}

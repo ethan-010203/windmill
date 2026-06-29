@@ -48,66 +48,68 @@
 {#if $disableHubStore}
 	<!-- Hub disabled, show nothing -->
 {:else}
-<SearchItems
-	{filter}
-	items={prefilteredItems}
-	bind:filteredItems
-	f={(x) => x.summary + ' (' + x.apps.join(', ') + ')'}
-/>
-<div class="w-full flex items-center gap-2">
-	{@render children?.()}
-	<TextInput
-		inputProps={{
-			placeholder: 'Search Hub Apps'
-		}}
-		bind:value={filter}
-		class="grow !pr-9"
-		{size}
+	<SearchItems
+		{filter}
+		items={prefilteredItems}
+		bind:filteredItems
+		f={(x) => x.summary + ' (' + x.apps.join(', ') + ')'}
 	/>
-</div>
-<ListFilters {syncQuery} filters={apps} bind:selectedFilter={appFilter} resourceType />
+	<div class="w-full flex items-center gap-2">
+		{@render children?.()}
+		<TextInput
+			inputProps={{
+				placeholder: '搜索资源中心应用'
+			}}
+			bind:value={filter}
+			class="grow !pr-9"
+			{size}
+		/>
+	</div>
+	<ListFilters {syncQuery} filters={apps} bind:selectedFilter={appFilter} resourceType />
 
-{#if hubNotAvailable}
-	<Alert type="warning" title="Hub not available">
-		Could not connect to the Windmill Hub. If you are in a closed environment, you can disable the Hub in the <a href="/#superadmin-settings?tab=private_hub">instance settings</a>.
-	</Alert>
-{:else if hubApps}
-	{#if filteredItems.length == 0}
-		<NoItemFound />
-	{:else}
-		<ul class="divide-y border rounded-md bg-surface-tertiary">
-			{#each filteredItems as item (item)}
-				<li class="flex flex-row w-full">
-					<button
-						class="p-4 gap-4 flex flex-row grow justify-between hover:bg-surface-hover transition-all items-center"
-						onclick={() => dispatch('pick', item)}
-					>
-						<div class="flex items-center gap-4">
-							<RowIcon kind="app" />
+	{#if hubNotAvailable}
+		<Alert type="warning" title="资源中心不可用">
+			无法连接资源中心。封闭环境中可以在 <a href="/#superadmin-settings?tab=private_hub">实例设置</a
+			>
+			中关闭外部资源同步。
+		</Alert>
+	{:else if hubApps}
+		{#if filteredItems.length == 0}
+			<NoItemFound />
+		{:else}
+			<ul class="divide-y border rounded-md bg-surface-tertiary">
+				{#each filteredItems as item (item)}
+					<li class="flex flex-row w-full">
+						<button
+							class="p-4 gap-4 flex flex-row grow justify-between hover:bg-surface-hover transition-all items-center"
+							onclick={() => dispatch('pick', item)}
+						>
+							<div class="flex items-center gap-4">
+								<RowIcon kind="app" />
 
-							<div class="w-full text-left">
-								<div class="text-emphasis flex-wrap text-xs font-semibold">
-									{#if item.marked}
-										{@html item.marked ?? ''}
-									{:else}
-										{item.summary ?? ''}
-									{/if}
+								<div class="w-full text-left">
+									<div class="text-emphasis flex-wrap text-xs font-semibold">
+										{#if item.marked}
+											{@html item.marked ?? ''}
+										{:else}
+											{item.summary ?? ''}
+										{/if}
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="min-w-1/3 gap-2 flex flex-wrap justify-end">
-							{#each item.apps as app}
-								<Badge color="gray" baseClass="border">{app}</Badge>
-							{/each}
-						</div>
-					</button>
-				</li>
-			{/each}
-		</ul>
+							<div class="min-w-1/3 gap-2 flex flex-wrap justify-end">
+								{#each item.apps as app}
+									<Badge color="gray" baseClass="border">{app}</Badge>
+								{/each}
+							</div>
+						</button>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	{:else}
+		{#each Array(10).fill(0) as _, index (index)}
+			<Skeleton layout={[[4], 0.5]} />
+		{/each}
 	{/if}
-{:else}
-	{#each Array(10).fill(0) as _}
-		<Skeleton layout={[[4], 0.5]} />
-	{/each}
-{/if}
 {/if}

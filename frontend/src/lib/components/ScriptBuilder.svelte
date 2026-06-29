@@ -1578,8 +1578,7 @@
 												必须通过同步端点触发才会生效。
 												<br />
 												<br />
-												任务完成并返回结果后，日志、参数和结果会在指定延迟后被完全删除。设置为 0
-												表示立即删除。
+												任务完成并返回结果后，日志、参数和结果会在指定延迟后被完全删除。设置为 0 表示立即删除。
 												<br />
 												<br />
 												删除不可恢复。
@@ -2028,7 +2027,7 @@
 		/>
 	</div>
 {:else}
-	Script Builder not available to operators
+	操作员不能使用脚本编辑器
 {/if}
 
 <WacExportDrawer bind:this={wacExportDrawer} />

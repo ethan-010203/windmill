@@ -291,8 +291,8 @@
 
 {#if $userStore?.operator && $workspaceStore && !$userWorkspaces.find((_) => _.id === $workspaceStore)?.operator_settings?.triggers}
 	<div class="bg-red-100 border-l-4 border-red-600 text-orange-700 p-4 m-4 mt-12" role="alert">
-		<p class="font-bold">Unauthorized</p>
-		<p>Page not available for operators</p>
+		<p class="font-bold">无权访问</p>
+		<p>操作员不能访问此页面</p>
 	</div>
 {:else}
 	<CenteredPage>
@@ -395,7 +395,9 @@
 											/{isCloudHosted() || workspaced_route || globalHttpWorkspacedRoute
 												? workspace_id + '/' + route_path
 												: route_path}
-										{/if}{(getLocalDraftHint($workspaceStore, 'trigger_http', path) ?? is_draft) ? '*' : ''}
+										{/if}{(getLocalDraftHint($workspaceStore, 'trigger_http', path) ?? is_draft)
+											? '*'
+											: ''}
 									</div>
 									<div class="text-secondary text-xs truncate text-left font-normal">
 										{path}

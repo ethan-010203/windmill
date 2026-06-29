@@ -1287,10 +1287,10 @@
 			</SplitPanesWrapper>
 		{/if}
 	{:else}
-		App is null
+		应用未加载
 	{/if}
 {:else}
-	App editor not available to operators
+	操作员不能使用应用编辑器
 {/if}
 
 <ItemPicker

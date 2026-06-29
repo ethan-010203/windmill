@@ -259,7 +259,7 @@
 					</Label>
 
 					<!--
-				EE only
+					当前版本不开放
 
 				<Label label="Aggregation function">
 					<SimpleEditor autoHeight lang="javascript" bind:code={value.aggFunc} />
