@@ -65,7 +65,7 @@ use windmill_common::{
     workspaces::{
         check_deploy_rules, check_user_against_rule, ProtectionRuleKind, RuleCheckResult,
     },
-    INTERNAL_HUB_DISABLED_MESSAGE,
+    INTERNAL_HUB_DISABLED_MESSAGE, INTERNAL_PUBLIC_APP_DISABLED_MESSAGE,
 };
 #[cfg(feature = "parquet")]
 use windmill_object_store::object_store_reexports::{Attribute, Attributes};
@@ -917,54 +917,8 @@ async fn get_public_app_by_secret(
     Extension(db): Extension<DB>,
     Path((w_id, secret)): Path<(String, String)>,
 ) -> JsonResult<AppWithLastVersion> {
-    let id = get_id_from_secret(&db, &w_id, secret, None).await?;
-
-    let app_o = sqlx::query_as::<_, AppWithLastVersion>(
-        "SELECT app.id, app.path, app.summary, app.versions, app.policy, app.custom_path,
-        null as extra_perms, coalesce(app_version_lite.value::json, app_version.value::json) as value,
-        app_version.created_at, app_version.created_by, app_version.raw_app, app.labels
-        FROM app, app_version
-        LEFT JOIN app_version_lite ON app_version_lite.id = app_version.id
-        WHERE app.id = $1 AND app.workspace_id = $2 AND app_version.id = app.versions[array_upper(app.versions, 1)]")
-        .bind(&id)
-        .bind(&w_id)
-    .fetch_optional(&db)
-    .await?;
-
-    let mut app = not_found_if_none(app_o, "App", id.to_string())?;
-
-    let policy = serde_json::from_str::<Policy>(app.policy.0.get()).map_err(to_anyhow)?;
-
-    if !matches!(policy.execution_mode, ExecutionMode::Anonymous) {
-        if opt_authed.is_none() {
-            return Err(Error::NotAuthorized(
-                "App visibility does not allow public access and you are not logged in".to_string(),
-            ));
-        } else {
-            let authed = opt_authed.unwrap();
-            let mut tx = user_db.begin(&authed).await?;
-            let is_visible = sqlx::query_scalar!(
-                "SELECT EXISTS(SELECT 1 FROM app WHERE id = $1 AND workspace_id = $2)",
-                id,
-                &w_id
-            )
-            .fetch_one(&mut *tx)
-            .await?;
-            tx.commit().await?;
-            if !is_visible.unwrap_or(false) {
-                return Err(Error::NotAuthorized(
-                    "App visibility does not allow public access and you are logged in but you have no read-access to that app".to_string(),
-                ));
-            }
-        }
-    }
-
-    // Compute bundle_secret for raw apps
-    if app.raw_app {
-        app.bundle_secret = Some(compute_bundle_secret(&db, &w_id, &app.versions).await?);
-    }
-
-    Ok(Json(app))
+    let _ = (opt_authed, user_db, db, w_id, secret);
+    Err(Error::BadRequest(INTERNAL_PUBLIC_APP_DISABLED_MESSAGE.to_string()))
 }
 
 async fn get_id_from_secret(
@@ -992,31 +946,8 @@ async fn get_public_resource(
     Extension(db): Extension<DB>,
     Path((w_id, path)): Path<(String, StripPath)>,
 ) -> JsonResult<Option<serde_json::Value>> {
-    let path = path.to_path();
-
-    // This endpoint is unauthenticated (anonymous public apps must fetch their
-    // theme and form schemas). Both branches MUST stay tightly constrained to
-    // the non-sensitive resource types they serve, otherwise an unauthenticated
-    // caller could read the raw value of any resource at the given path.
-    let res = if path.starts_with("f/app_themes/") {
-        sqlx::query_scalar!(
-            "SELECT value from resource WHERE path = $1 AND workspace_id = $2 AND resource_type = 'app_theme'",
-            path.to_owned(),
-            &w_id
-        )
-        .fetch_optional(&db)
-        .await?
-    } else {
-        sqlx::query_scalar!(
-            "SELECT value from resource WHERE path = $1 AND workspace_id = $2 AND resource_type = 'json_schema'",
-            path.to_owned(),
-            &w_id
-        )
-        .fetch_optional(&db)
-        .await?
-    };
-
-    Ok(Json(res.flatten()))
+    let _ = (db, w_id, path);
+    Err(Error::BadRequest(INTERNAL_PUBLIC_APP_DISABLED_MESSAGE.to_string()))
 }
 
 async fn get_secret_id(
@@ -2453,11 +2384,9 @@ async fn execute_component(
 
     // Check rate limit for anonymous (public) executions
     if matches!(policy.execution_mode, ExecutionMode::Anonymous) && opt_authed.is_none() {
-        if let Some(limit) = crate::workspaces::get_public_app_rate_limit(&db, &w_id).await? {
-            if limit > 0 {
-                crate::public_app_rate_limit::check_and_increment(&w_id, limit)?;
-            }
-        }
+        return Err(Error::BadRequest(
+            INTERNAL_PUBLIC_APP_DISABLED_MESSAGE.to_string(),
+        ));
     }
 
     // Execution is publisher and an user is authenticated: check if the user is authorized to
@@ -2786,6 +2715,15 @@ async fn upload_s3_file_from_app(
             .map(|p| serde_json::from_value::<Policy>(p).map_err(to_anyhow))
             .transpose()?
     };
+    if policy
+        .as_ref()
+        .is_some_and(|p| matches!(p.execution_mode, ExecutionMode::Anonymous))
+        && opt_authed.is_none()
+    {
+        return Err(Error::BadRequest(
+            INTERNAL_PUBLIC_APP_DISABLED_MESSAGE.to_string(),
+        ));
+    }
 
     let user_db = UserDB::new(db.clone());
 
@@ -3158,6 +3096,11 @@ async fn get_on_behalf_authed_from_app(
 
     let (username, permissioned_as, email) =
         get_on_behalf_details_from_policy_and_authed(&policy, &opt_authed).await?;
+    if matches!(policy.execution_mode, ExecutionMode::Anonymous) && opt_authed.is_none() {
+        return Err(Error::BadRequest(
+            INTERNAL_PUBLIC_APP_DISABLED_MESSAGE.to_string(),
+        ));
+    }
 
     let on_behalf_authed =
         fetch_api_authed_from_permissioned_as(permissioned_as, email, &w_id, &db, Some(username))

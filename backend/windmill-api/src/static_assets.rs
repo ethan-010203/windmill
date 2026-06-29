@@ -79,6 +79,9 @@ fn serve_path(path: &str, original_path: &str, query: Option<&str>) -> Response<
     if path.starts_with("api/") {
         return Response::builder().status(404).body(Body::empty()).unwrap();
     }
+    if path.starts_with("public/") || path.starts_with("a/") {
+        return Response::builder().status(404).body(Body::empty()).unwrap();
+    }
 
     #[cfg(feature = "static_frontend")]
     match Asset::get(path) {

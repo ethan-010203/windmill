@@ -5945,33 +5945,9 @@ async fn edit_public_app_rate_limit(
     authed: ApiAuthed,
     Json(req): Json<EditPublicAppRateLimitRequest>,
 ) -> Result<String> {
-    require_admin(authed.is_admin, &authed.username)?;
-
-    sqlx::query!(
-        "UPDATE workspace_settings SET public_app_execution_limit_per_minute = $1 WHERE workspace_id = $2",
-        req.public_app_execution_limit_per_minute,
-        &w_id
-    )
-    .execute(&db)
-    .await?;
-
-    // Cache is invalidated via DB trigger -> notify_event -> polling in main.rs
-
-    handle_deployment_metadata(
-        &authed.email,
-        &authed.username,
-        &db,
-        &w_id,
-        DeployedObject::Settings { setting_type: "public_app_rate_limit".to_string() },
-        None,
-        false,
-        None,
-    )
-    .await?;
-
-    Ok(format!(
-        "Updated public app rate limit for workspace: {}",
-        &w_id
+    let _ = (db, w_id, authed, req);
+    Err(Error::BadRequest(
+        windmill_common::INTERNAL_PUBLIC_APP_DISABLED_MESSAGE.to_string(),
     ))
 }
 
