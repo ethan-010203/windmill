@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { type Snippet } from 'svelte'
 	import Select from './select/Select.svelte'
-	import { fetchAvailableModels, AI_PROVIDERS } from './copilot/lib'
+	import {
+		fetchAvailableModels,
+		AI_PROVIDERS,
+		VISIBLE_AI_PROVIDERS,
+		isVisibleAIProvider
+	} from './copilot/lib'
 	import type { AIProvider, ProviderConfig } from '$lib/gen'
 	import { workspaceStore } from '$lib/stores'
 	import { get } from 'svelte/store'
@@ -31,13 +36,23 @@
 
 	let modelsCache = new Map<AIProvider, string[]>()
 
-	if (!_uncheckedValue) {
+	function resetProviderConfig(provider: AIProvider = 'openai') {
 		_uncheckedValue = {
-			kind: 'openai',
+			kind: provider,
 			resource: '',
 			model: ''
 		}
 	}
+
+	if (!_uncheckedValue) {
+		resetProviderConfig()
+	}
+
+	$effect(() => {
+		if (value?.kind && !isVisibleAIProvider(value.kind)) {
+			resetProviderConfig()
+		}
+	})
 
 	let useAsDefault = $derived(isSameAsStoredConfig(value))
 
@@ -57,7 +72,7 @@
 	})
 
 	// Provider options for the toggle button group
-	const providerOptions = Object.entries(AI_PROVIDERS).map(([key, details]) => ({
+	const providerOptions = Object.entries(VISIBLE_AI_PROVIDERS).map(([key, details]) => ({
 		value: key as AIProvider,
 		label: details.label
 	}))
@@ -103,9 +118,7 @@
 	// Handle provider selection
 	function onProviderChange(selectedProvider: AIProvider) {
 		if (value) {
-			value.kind = selectedProvider
-			value.resource = ''
-			value.model = ''
+			resetProviderConfig(selectedProvider)
 		}
 	}
 
@@ -172,7 +185,7 @@
 		tabListClass="w-full"
 	>
 		{#snippet children({ item })}
-			{#each providerOptions.slice(0, 3) as option}
+			{#each providerOptions.slice(0, 3) as option (option.value)}
 				<ToggleButton value={option.value} label={option.label} {item} />
 			{/each}
 			<ToggleButtonMore
@@ -220,7 +233,7 @@
 				createText="Press enter to use custom model"
 				{loading}
 				clearable={false}
-				noItemsMsg={'No models available'}
+				noItemsMsg="No models available"
 				bind:filterText
 			/>
 		</div>

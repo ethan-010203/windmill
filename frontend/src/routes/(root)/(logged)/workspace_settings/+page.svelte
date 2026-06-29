@@ -306,6 +306,18 @@
 		return selectedTab || 'users'
 	})
 
+	const hiddenInternalTabs = new Set([
+		'git_sync',
+		'error_handler',
+		'success_handler',
+		'deploy_to',
+		'rulesets',
+		'premium',
+		'critical_alerts',
+		'default_app'
+	])
+	let isHiddenInternalTab = $derived(hiddenInternalTabs.has(tab))
+
 	let slack_tabs: 'slack_commands' | 'teams_commands' = $derived(
 		$page.url.searchParams.get('tab') === 'teams' ? 'teams_commands' : 'slack_commands'
 	)
@@ -1060,9 +1072,9 @@
 				},
 				{
 					id: 'ai',
-					label: 'Windmill AI',
+					label: '平台 AI',
 					aiId: 'workspace-settings-ai',
-					aiDescription: 'Windmill AI workspace settings'
+					aiDescription: 'AI workspace settings'
 				}
 			]
 		},
@@ -1074,7 +1086,8 @@
 					label: 'Git sync',
 					aiId: 'workspace-settings-git-sync',
 					aiDescription: 'Git sync workspace settings',
-					isEE: true
+					isEE: true,
+					showIf: false
 				}
 			]
 		},
@@ -1104,7 +1117,8 @@
 					label: 'Error / success handler',
 					aiId: 'workspace-settings-error-handler',
 					aiDescription: 'Error and success handler workspace settings',
-					isEE: true
+					isEE: true,
+					showIf: false
 				}
 			]
 		},
@@ -1193,6 +1207,14 @@
 					<div class="h-fit px-6" style="scrollbar-gutter: stable both-edges;">
 						{#if !loadedSettings}
 							<Skeleton layout={[1, [40]]} />
+						{:else if isHiddenInternalTab}
+							<SettingsPageHeader
+								title="当前功能未开放"
+								description="当前内部部署暂未开放该工作区设置入口。"
+							/>
+							<Alert type="info" title="功能已隐藏">
+								该功能在当前社区版部署中不可用，已从设置入口中隐藏。
+							</Alert>
 						{:else if tab == 'users'}
 							<WorkspaceUserSettings />
 						{:else if tab == 'deploy_to'}

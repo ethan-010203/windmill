@@ -8,7 +8,6 @@
 		UserService,
 		VariableService,
 		WorkspaceService,
-		type AIProvider,
 		type CompletedJob
 	} from '$lib/gen'
 	import { validateUsername } from '$lib/utils'
@@ -25,7 +24,11 @@
 	import { isCloudHosted } from '$lib/cloud'
 	import ToggleButtonGroup from '$lib/components/common/toggleButton-v2/ToggleButtonGroup.svelte'
 	import ToggleButton from '$lib/components/common/toggleButton-v2/ToggleButton.svelte'
-	import { AI_PROVIDERS } from '$lib/components/copilot/lib'
+	import {
+		AI_PROVIDERS,
+		VISIBLE_AI_PROVIDERS,
+		type VisibleAIProvider
+	} from '$lib/components/copilot/lib'
 	import { LoaderCircle, Trash2 } from 'lucide-svelte'
 	import PrefixedInput from '../PrefixedInput.svelte'
 	import ConfirmationModal from '../common/confirmationModal/ConfirmationModal.svelte'
@@ -174,7 +177,7 @@
 
 			await completeFork(prefixed_id)
 		} else {
-				sendUserToast('未选择工作区，无法从不存在的工作区创建副本', true)
+			sendUserToast('未选择工作区，无法从不存在的工作区创建副本', true)
 		}
 	}
 
@@ -197,7 +200,7 @@
 						timeoutMessage: `部署副本任务 60 秒后超时`,
 						onProgress: (status) => {
 							if (status.status === 'failure') {
-									errorMsgs.push(status.error ?? '部署副本任务失败')
+								errorMsgs.push(status.error ?? '部署副本任务失败')
 								failedSyncJobs.push(jobId)
 							}
 						}
@@ -207,18 +210,15 @@
 		} catch (error) {
 			forkCreationLoading = false
 			sendUserToast(
-					`无法复制工作区 ${$workspaceStore}，因为分支创建失败：${errorMsgs} - ${error}`,
+				`无法复制工作区 ${$workspaceStore}，因为分支创建失败：${errorMsgs} - ${error}`,
 				true
 			)
 			return
 		}
 		if (errorMsgs.length != 0) {
-				forkCreationError = '无法在 Git 同步仓库中为此副本创建分支'
+			forkCreationError = '无法在 Git 同步仓库中为此副本创建分支'
 			forkCreationLoading = false
-			sendUserToast(
-					`无法复制工作区 ${$workspaceStore}，因为分支创建失败：${errorMsgs}`,
-				true
-			)
+			sendUserToast(`无法复制工作区 ${$workspaceStore}，因为分支创建失败：${errorMsgs}`, true)
 			return
 		}
 
@@ -241,15 +241,15 @@
 				}
 			})
 		} catch (e) {
-				forkCreationError = `无法创建副本 '${prefixed_id}'`
-				errorMsgs.push(e?.body ?? e ?? '未知错误')
+			forkCreationError = `无法创建副本 '${prefixed_id}'`
+			errorMsgs.push(e?.body ?? e ?? '未知错误')
 			forkCreationLoading = false
-				sendUserToast(`无法创建副本 '${prefixed_id}' ${e}`, true)
+			sendUserToast(`无法创建副本 '${prefixed_id}' ${e}`, true)
 			return
 		}
 
 		forkCreationLoading = false
-			sendUserToast(`已将工作区 ${$workspaceStore} 复制为：wm-fork-${id}`)
+		sendUserToast(`已将工作区 ${$workspaceStore} 复制为：wm-fork-${id}`)
 
 		usersWorkspaceStore.set(await WorkspaceService.listUserWorkspaces())
 		switchWorkspace(prefixed_id)
@@ -325,7 +325,7 @@
 			switchWorkspace(id)
 		}
 
-			sendUserToast(`已创建工作区 ID：${id}`)
+		sendUserToast(`已创建工作区 ID：${id}`)
 
 		usersWorkspaceStore.set(await WorkspaceService.listUserWorkspaces())
 		switchWorkspace(id)
@@ -386,7 +386,19 @@
 	let auto_invite = $state(false)
 	let operatorOnly = $state(false)
 	let autoAdd = $state(true)
-	let selected: Exclude<AIProvider, 'customai'> = $state('openai')
+	type QuickWorkspaceAIProvider = Exclude<VisibleAIProvider, 'customai'>
+	const QUICK_WORKSPACE_AI_PROVIDER_KEYS = [
+		'openai',
+		'anthropic',
+		'deepseek',
+		'googleai'
+	] as const satisfies readonly QuickWorkspaceAIProvider[]
+
+	let selected: QuickWorkspaceAIProvider = $state('openai')
+	const quickWorkspaceAIProviders = QUICK_WORKSPACE_AI_PROVIDER_KEYS.map((provider) => ({
+		value: provider,
+		label: VISIBLE_AI_PROVIDERS[provider].label
+	}))
 	run(() => {
 		id = name.toLowerCase().replace(/\s/gi, '-')
 	})
@@ -413,7 +425,7 @@
 						{/each}
 					</ul>
 					{#if failedSyncJobs.length != 0}
-							失败任务详情：
+						失败任务详情：
 						{#await fetchFailedSyncJobs(failedSyncJobs)}
 							<LoaderCircle class="animate-spin" />
 						{:then failedJobs}
@@ -432,13 +444,14 @@
 									<!-- This 28073 is the version where git sync on fork was introduced -->
 									{#if isPathVersionLessThan(job.script_path, 28073)}
 										<div class="font-bold">
-											此任务未运行最新的 Git 同步脚本版本。可进入“工作区设置” -> “Git 同步”更新脚本后重试。
+											此任务未运行最新的 Git 同步脚本版本。可进入“工作区设置” -> “Git
+											同步”更新脚本后重试。
 										</div>
 									{/if}
 								{/each}
 							</ul>
 						{:catch error}
-								尝试获取任务详情失败：{error}。以下是失败任务 ID：
+							尝试获取任务详情失败：{error}。以下是失败任务 ID：
 							<ul class="pl-2 pr-4 break-words">
 								{#each failedSyncJobs as jobId}
 									<li>
@@ -458,24 +471,22 @@
 				</Alert>
 			{/if}
 			<label class="flex flex-col gap-1">
-					{#if isFork}
-						<span class="text-xs font-semibold text-emphasis">副本名称</span>
-						<span class="text-xs text-secondary">副本工作区的显示名称</span>
-					{:else}
-						<span class="text-xs font-semibold text-emphasis">工作区名称</span>
-						<span class="text-xs text-secondary">显示名称</span>
-					{/if}
+				{#if isFork}
+					<span class="text-xs font-semibold text-emphasis">副本名称</span>
+					<span class="text-xs text-secondary">副本工作区的显示名称</span>
+				{:else}
+					<span class="text-xs font-semibold text-emphasis">工作区名称</span>
+					<span class="text-xs text-secondary">显示名称</span>
+				{/if}
 				<!-- svelte-ignore a11y_autofocus -->
 				<TextInput inputProps={{ autofocus: true }} bind:value={name} />
 			</label>
 			<label class="flex flex-col gap-1">
-					<span class="text-xs font-semibold text-emphasis">工作区 ID</span>
-					{#if isFork}
-						<span class="text-xs text-secondary"
-							>用于唯一标识副本的路径标识，同时会作为分支名称</span
-						>
-					{:else}
-						<span class="text-xs text-secondary">用于唯一标识工作区的路径标识</span>
+				<span class="text-xs font-semibold text-emphasis">工作区 ID</span>
+				{#if isFork}
+					<span class="text-xs text-secondary">用于唯一标识副本的路径标识，同时会作为分支名称</span>
+				{:else}
+					<span class="text-xs text-secondary">用于唯一标识工作区的路径标识</span>
 				{/if}
 
 				{#if isFork}
@@ -500,21 +511,19 @@
 								disabled={deletingExistingFork}
 								on:click={() => (deleteExistingForkOpen = true)}
 							>
-									永久删除现有副本
+								永久删除现有副本
 							</Button>
 							<span class="text-2xs text-secondary">
-									释放该 ID 以便重新使用（仅副本所有者或超级管理员）
+								释放该 ID 以便重新使用（仅副本所有者或超级管理员）
 							</span>
 						</div>
 					{/if}
 				{/if}
 			</label>
-				<Label label="工作区颜色">
-					<span class="text-xs text-secondary">
-						用于在工作区列表中识别当前工作区的颜色
-					</span>
+			<Label label="工作区颜色">
+				<span class="text-xs text-secondary"> 用于在工作区列表中识别当前工作区的颜色 </span>
 				<div class="flex items-center gap-4">
-						<Toggle bind:checked={colorEnabled} options={{ right: '启用' }} />
+					<Toggle bind:checked={colorEnabled} options={{ right: '启用' }} />
 					{#if colorEnabled}
 						<div class="flex items-center gap-1 grow">
 							<input
@@ -533,7 +542,7 @@
 								on:click={generateRandomColor}
 								size="xs"
 								variant="default"
-									disabled={!colorEnabled}>随机</Button
+								disabled={!colorEnabled}>随机</Button
 							>
 						</div>
 					{/if}
@@ -551,7 +560,7 @@
 				/>
 			{/if}
 			{#if !automateUsernameCreation}
-					<Label label="你在该工作区中的用户名">
+				<Label label="你在该工作区中的用户名">
 					<TextInput
 						bind:value={username}
 						inputProps={{ onkeyup: handleKeyUp }}
@@ -568,19 +577,16 @@
 						<label for="ai-key" class="flex flex-row gap-2">
 							<span class="text-xs font-semibold text-emphasis">
 								平台 AI 密钥
-								<Tooltip>
-									配置后可在脚本、流程和应用编辑中使用 AI 辅助能力。
-								</Tooltip>
+								<Tooltip>配置后可在脚本、流程和应用编辑中使用 AI 辅助能力。</Tooltip>
 							</span>
-								<span class="text-2xs text-secondary">（可选，建议填写）</span>
+							<span class="text-2xs text-secondary">（可选，建议填写）</span>
 						</label>
 
 						<ToggleButtonGroup bind:selected>
 							{#snippet children({ item })}
-								<ToggleButton value="openai" label="OpenAI" {item} />
-								<ToggleButton value="anthropic" label="Anthropic" {item} />
-								<ToggleButton value="mistral" label="Mistral" {item} />
-								<ToggleButton value="deepseek" label="DeepSeek" {item} />
+								{#each quickWorkspaceAIProviders as provider (provider.value)}
+									<ToggleButton value={provider.value} label={provider.label} {item} />
+								{/each}
 							{/snippet}
 						</ToggleButtonGroup>
 						<div class="flex flex-row gap-1">
@@ -605,24 +611,24 @@
 							<Toggle
 								disabled={!aiKey}
 								bind:checked={codeCompletionEnabled}
-									options={{ right: '启用代码补全' }}
+								options={{ right: '启用代码补全' }}
 							/>
 						</div>
 					{/if}
 				</div>
 				<div class="flex flex-col gap-1">
 					<label for="auto-invite" class="text-xs font-semibold text-emphasis"
-							>{isCloudHosted()
-								? `自动${autoAdd ? '添加' : '邀请'}来自 ${domain} 的用户`
-								: `自动${autoAdd ? '添加' : '邀请'}加入实例的用户`}</label
-						>
+						>{isCloudHosted()
+							? `自动${autoAdd ? '添加' : '邀请'}来自 ${domain} 的用户`
+							: `自动${autoAdd ? '添加' : '邀请'}加入实例的用户`}</label
+					>
 					<Toggle
 						id="auto-invite"
 						disabled={isCloudHosted() && !isDomainAllowed}
 						bind:checked={auto_invite}
 					/>
 					{#if isCloudHosted() && isDomainAllowed == false}
-							<div class="text-secondary text-2xs">{domain} 域名不允许自动邀请</div>
+						<div class="text-secondary text-2xs">{domain} 域名不允许自动邀请</div>
 					{/if}
 
 					{#if auto_invite}
@@ -630,10 +636,10 @@
 							<!-- svelte-ignore a11y_label_has_associated_control -->
 							{#if isCloudHosted()}
 								<label class="flex flex-col gap-1">
-										<span class="text-xs font-semibold text-emphasis">模式</span>
-										<span class="text-xs text-secondary font-normal"
-											>选择邀请用户，还是直接将用户加入工作区。</span
-										>
+									<span class="text-xs font-semibold text-emphasis">模式</span>
+									<span class="text-xs text-secondary font-normal"
+										>选择邀请用户，还是直接将用户加入工作区。</span
+									>
 									<ToggleButtonGroup
 										selected={autoAdd ? 'add' : 'invite'}
 										on:selected={async (e) => {
@@ -641,18 +647,16 @@
 										}}
 									>
 										{#snippet children({ item })}
-												<ToggleButton value="invite" label="自动邀请" {item} />
-												<ToggleButton value="add" label="自动添加" {item} />
+											<ToggleButton value="invite" label="自动邀请" {item} />
+											<ToggleButton value="add" label="自动添加" {item} />
 										{/snippet}
 									</ToggleButtonGroup>
 								</label>
 							{/if}
 
 							<label class="font-semibold flex flex-col gap-1">
-									<span class="text-xs font-semibold text-emphasis">角色</span>
-									<span class="text-xs text-secondary font-normal"
-										>自动邀请用户的角色</span
-									>
+								<span class="text-xs font-semibold text-emphasis">角色</span>
+								<span class="text-xs text-secondary font-normal">自动邀请用户的角色</span>
 								<ToggleButtonGroup
 									selected={operatorOnly ? 'operator' : 'developer'}
 									on:selected={(e) => {
@@ -660,8 +664,8 @@
 									}}
 								>
 									{#snippet children({ item })}
-											<ToggleButton value="operator" label="操作员" {item} />
-											<ToggleButton value="developer" label="开发者" {item} />
+										<ToggleButton value="operator" label="操作员" {item} />
+										<ToggleButton value="developer" label="开发者" {item} />
 									{/snippet}
 								</ToggleButtonGroup>
 							</label>
@@ -672,8 +676,8 @@
 		</div>
 	</div>
 	<div class="flex flex-wrap flex-row justify-between gap-4 pt-4">
-			<Button disabled={forkCreationLoading} variant="default" size="sm" href="{base}/user/workspaces"
-				>&leftarrow; 返回工作区</Button
+		<Button disabled={forkCreationLoading} variant="default" size="sm" href="{base}/user/workspaces"
+			>&leftarrow; 返回工作区</Button
 		>
 		{#if !forkCreationLoading}
 			<Button
@@ -686,14 +690,14 @@
 				on:click={createOrForkWorkspace}
 			>
 				{#if isFork}
-						复制工作区
-					{:else}
-						创建工作区
+					复制工作区
+				{:else}
+					创建工作区
 				{/if}
 			</Button>
 		{:else}
 			<Button variant="accent" disabled={true}>
-					<LoaderCircle class="animate-spin" /> 正在创建分支
+				<LoaderCircle class="animate-spin" /> 正在创建分支
 			</Button>
 		{/if}
 	</div>
@@ -713,8 +717,9 @@
 >
 	<div class="flex flex-col w-full space-y-4">
 		<span>
-				这将永久删除工作区 '{WM_FORK_PREFIX}{id}' 及其全部内容（脚本、流程、应用、变量、资源、运行记录）。此操作无法撤销。与归档不同，此操作会释放工作区
-				ID，以便创建新的副本。
+			这将永久删除工作区 '{WM_FORK_PREFIX}{id}'
+			及其全部内容（脚本、流程、应用、变量、资源、运行记录）。此操作无法撤销。与归档不同，此操作会释放工作区
+			ID，以便创建新的副本。
 		</span>
 	</div>
 </ConfirmationModal>

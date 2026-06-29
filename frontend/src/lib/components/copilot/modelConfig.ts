@@ -10,6 +10,12 @@ export function requiresMaxCompletionTokens(model: string) {
 	return baseModel.startsWith('gpt-5') || /^o\d/.test(baseModel)
 }
 
+export function shouldUseMaxCompletionTokens(provider: string, model: string) {
+	return (
+		['openai', 'azure_openai', 'customai'].includes(provider) && requiresMaxCompletionTokens(model)
+	)
+}
+
 // Context windows of the models we know, most specific entry first — the first
 // name included in the model id wins, so provider-prefixed and date-suffixed
 // ids (anthropic.claude-sonnet-4-6-...-v1:0, gpt-5.2-2026-01-01) still resolve.

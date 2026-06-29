@@ -14,7 +14,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { get, type Writable } from 'svelte/store'
 import { OpenAPI, ResourceService, type Script } from '../../gen'
 import { EDIT_CONFIG, FIX_CONFIG, GEN_CONFIG } from './prompts'
-import { requiresMaxCompletionTokens } from './modelConfig'
+import { shouldUseMaxCompletionTokens } from './modelConfig'
 import { applyReasoningToConfig } from './reasoningRegistry'
 import { formatResourceTypes } from './utils'
 import { processToolCall, type Tool, type ToolCallbacks } from './chat/shared'
@@ -110,6 +110,24 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderDetails> = {
 		defaultModels: []
 	}
 }
+
+export const VISIBLE_AI_PROVIDER_KEYS = [
+	'openai',
+	'anthropic',
+	'deepseek',
+	'googleai',
+	'customai'
+] as const satisfies readonly AIProvider[]
+
+export type VisibleAIProvider = (typeof VISIBLE_AI_PROVIDER_KEYS)[number]
+
+export function isVisibleAIProvider(provider: string | undefined): provider is VisibleAIProvider {
+	return VISIBLE_AI_PROVIDER_KEYS.includes(provider as VisibleAIProvider)
+}
+
+export const VISIBLE_AI_PROVIDERS = Object.fromEntries(
+	VISIBLE_AI_PROVIDER_KEYS.map((provider) => [provider, AI_PROVIDERS[provider]])
+) as Pick<typeof AI_PROVIDERS, VisibleAIProvider>
 
 export interface ModelResponse {
 	id: string
@@ -287,7 +305,6 @@ export function getModelMaxTokens(provider: AIProvider, model: string) {
 	return 8192
 }
 
-
 function getModelSpecificConfig(
 	modelProvider: AIProviderModel,
 	tools?: OpenAI.Chat.Completions.ChatCompletionTool[]
@@ -301,10 +318,7 @@ function getModelSpecificConfig(
 		// copilotInfo store may not be initialized in vitest
 	}
 	const maxTokens = customMaxTokensStore?.[modelKey] ?? defaultMaxTokens
-	if (
-		(modelProvider.provider === 'openai' || modelProvider.provider === 'azure_openai') &&
-		requiresMaxCompletionTokens(modelProvider.model)
-	) {
+	if (shouldUseMaxCompletionTokens(modelProvider.provider, modelProvider.model)) {
 		return {
 			model: modelProvider.model,
 			...(tools && tools.length > 0 ? { tools } : {}),

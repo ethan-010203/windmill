@@ -9,7 +9,13 @@
 	} from '$lib/gen'
 	import { workspaceStore } from '$lib/stores'
 	import { sendUserToast } from '$lib/toast'
-	import { AI_PROVIDERS, fetchAvailableModels, providerSupportsWebSearch } from '../copilot/lib'
+	import {
+		AI_PROVIDERS,
+		VISIBLE_AI_PROVIDERS,
+		fetchAvailableModels,
+		isVisibleAIProvider,
+		providerSupportsWebSearch
+	} from '../copilot/lib'
 	import { supportsAutocomplete } from '../copilot/utils'
 	import TestAiKey from '../copilot/TestAIKey.svelte'
 	import Label from '../Label.svelte'
@@ -92,20 +98,33 @@
 		providers: Exclude<AIConfig['providers'], undefined>
 	): Exclude<AIConfig['providers'], undefined> {
 		return Object.fromEntries(
-			Object.entries(providers).map(([provider, config]) => [
-				provider,
-				providerSupportsWebSearch(provider as AIProvider)
-					? { ...config, web_search_enabled: config.web_search_enabled ?? true }
-					: config
-			])
+			Object.entries(providers)
+				.filter(([provider]) => isVisibleAIProvider(provider))
+				.map(([provider, config]) => [
+					provider,
+					providerSupportsWebSearch(provider as AIProvider)
+						? { ...config, web_search_enabled: config.web_search_enabled ?? true }
+						: config
+				])
 		)
 	}
 
 	function applyConfig(config: AIConfig | undefined) {
-		aiProviders = normalizeProviderSettings(clone(config?.providers ?? {}))
-		defaultModel = config?.default_model?.model
-		metadataModel = config?.metadata_model?.model
-		codeCompletionModel = config?.code_completion_model?.model
+		const visibleProviders = normalizeProviderSettings(clone(config?.providers ?? {}))
+		const configuredModels = new Set(Object.values(visibleProviders).flatMap((p) => p.models))
+		aiProviders = visibleProviders
+		defaultModel =
+			config?.default_model && configuredModels.has(config.default_model.model)
+				? config.default_model.model
+				: undefined
+		metadataModel =
+			config?.metadata_model && configuredModels.has(config.metadata_model.model)
+				? config.metadata_model.model
+				: undefined
+		codeCompletionModel =
+			config?.code_completion_model && configuredModels.has(config.code_completion_model.model)
+				? config.code_completion_model.model
+				: undefined
 		customPrompts = clone(config?.custom_prompts ?? {})
 		maxTokensPerModel = clone(config?.max_tokens_per_model ?? {})
 		for (const mode of ['edit', 'fix', 'gen']) {
@@ -181,7 +200,10 @@
 	let fetchedAiModels = $state(false)
 	let availableAiModels = $state(
 		Object.fromEntries(
-			Object.keys(AI_PROVIDERS).map((provider) => [provider, AI_PROVIDERS[provider].defaultModels])
+			Object.keys(VISIBLE_AI_PROVIDERS).map((provider) => [
+				provider,
+				AI_PROVIDERS[provider].defaultModels
+			])
 		) as Record<AIProvider, string[]>
 	)
 
@@ -255,7 +277,7 @@
 
 	function resetPrompts() {
 		customPrompts = { ...initialPrompts }
-			sendUserToast('已恢复到上次保存的状态')
+		sendUserToast('已恢复到上次保存的状态')
 	}
 
 	function buildConfig(): AIConfig {
@@ -384,7 +406,7 @@
 	{#if showWorkspaceOverrideEditor}
 		<SettingCard label="AI 提供商">
 			<div class="flex flex-col gap-4 p-4 rounded-md border bg-surface-tertiary">
-				{#each Object.entries(AI_PROVIDERS) as [provider, details] (provider)}
+				{#each Object.entries(VISIBLE_AI_PROVIDERS) as [provider, details] (provider)}
 					<div class="flex flex-col">
 						<div class="flex flex-row gap-2">
 							<Toggle
@@ -430,7 +452,7 @@
 								class="mb-4 flex flex-col gap-6 border p-4 rounded-md mt-2"
 								transition:slide|local={{ duration: 150 }}
 							>
-							<Label label="资源">
+								<Label label="资源">
 									<div class="flex flex-row gap-1">
 										<ResourcePicker
 											selectFirst
@@ -457,7 +479,7 @@
 									</div>
 								</Label>
 
-							<Label label="启用的模型">
+								<Label label="启用的模型">
 									<MultiSelect
 										items={safeSelectItems([
 											...availableAiModels[provider],
@@ -469,17 +491,16 @@
 											(aiProviders[provider].models = [...aiProviders[provider].models, item])}
 									/>
 									<p class="text-2xs text-hint">
-									如果没有看到需要的模型，可以在选择器中手动输入。
+										如果没有看到需要的模型，可以在选择器中手动输入。
 									</p>
 								</Label>
 
 								{#if providerSupportsWebSearch(provider as AIProvider)}
-								<Label label="联网搜索">
+									<Label label="联网搜索">
 										<Toggle
 											options={{
-										right: '启用原生联网搜索',
-										rightTooltip:
-											'在对话中自动使用提供商原生的联网搜索工具。'
+												right: '启用原生联网搜索',
+												rightTooltip: '在对话中自动使用提供商原生的联网搜索工具。'
 											}}
 											checked={aiProviders[provider].web_search_enabled !== false}
 											on:change={(e) => {
@@ -541,20 +562,19 @@
 					disabled={autocompleteModels.length == 0}
 					options={{
 						right: '启用代码补全',
-						rightTooltip:
-							'当前支持使用 Mistral Codestral 和 DeepSeek FIM 模型进行代码补全。'
+						rightTooltip: '当前支持使用 Mistral Codestral 和 DeepSeek FIM 模型进行代码补全。'
 					}}
 				/>
 			</SettingCard>
 
 			{#if codeCompletionModel != undefined}
 				<div transition:slide|local={{ duration: 150 }} class="mt-6">
-				<SettingCard label="代码补全模型">
+					<SettingCard label="代码补全模型">
 						<Select
 							items={safeSelectItems(autocompleteModels)}
 							bind:value={codeCompletionModel}
 							disabled={false}
-						placeholder="选择代码补全模型"
+							placeholder="选择代码补全模型"
 							size="sm"
 						/>
 					</SettingCard>
@@ -576,10 +596,10 @@
 					配置 AI 提示词
 				</Button>
 				{#if promptCount > 0}
-				<span class="text-xs text-secondary">（已配置 {promptCount} 项）</span>
+					<span class="text-xs text-secondary">（已配置 {promptCount} 项）</span>
 				{/if}
 				{#if hasPromptsChanges}
-				<Badge color="yellow">未保存的更改</Badge>
+					<Badge color="yellow">未保存的更改</Badge>
 				{/if}
 			</div>
 		</SettingCard>

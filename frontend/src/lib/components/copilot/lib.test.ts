@@ -14,7 +14,8 @@ import { parseFimCompletionChoice } from './fim'
 import {
 	getKnownModelContextWindow,
 	getModelContextWindow,
-	requiresMaxCompletionTokens
+	requiresMaxCompletionTokens,
+	shouldUseMaxCompletionTokens
 } from './modelConfig'
 import { supportsAutocomplete } from './utils'
 
@@ -52,6 +53,14 @@ describe('modelConfig', () => {
 		expect(requiresMaxCompletionTokens('open-mistral-nemo-2407')).toBe(false)
 		expect(requiresMaxCompletionTokens('optimus-alpha')).toBe(false)
 		expect(requiresMaxCompletionTokens('openchat/openchat-7b')).toBe(false)
+	})
+})
+
+describe('completion config', () => {
+	it('uses max_completion_tokens for GPT-5-compatible Custom AI chat completions', () => {
+		expect(shouldUseMaxCompletionTokens('customai', 'gpt-5.5')).toBe(true)
+		expect(shouldUseMaxCompletionTokens('openai', 'gpt-5.5')).toBe(true)
+		expect(shouldUseMaxCompletionTokens('azure_openai', 'gpt-5.5')).toBe(true)
 	})
 })
 

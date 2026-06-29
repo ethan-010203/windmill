@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type AIProvider, type InstanceAISummary } from '$lib/gen'
-	import { AI_PROVIDERS } from '../copilot/lib'
+	import { AI_PROVIDERS, isVisibleAIProvider } from '../copilot/lib'
 	import Badge from '../common/badge/Badge.svelte'
 	import Button from '../common/button/Button.svelte'
 	import SettingCard from '../instanceSettings/SettingCard.svelte'
@@ -18,9 +18,33 @@
 	}: Props = $props()
 
 	let sortedInstanceProviders = $derived(
-		[...(instanceAiSummary?.providers ?? [])].sort((left, right) =>
-			left.provider.localeCompare(right.provider)
-		)
+		[...(instanceAiSummary?.providers ?? [])]
+			.filter((providerSummary) => isVisibleAIProvider(providerSummary.provider))
+			.sort((left, right) => left.provider.localeCompare(right.provider))
+	)
+	let visibleDefaultModel = $derived(
+		instanceAiSummary?.default_model &&
+			isVisibleAIProvider(instanceAiSummary.default_model.provider)
+			? instanceAiSummary.default_model
+			: undefined
+	)
+	let visibleMetadataModel = $derived(
+		instanceAiSummary?.metadata_model &&
+			isVisibleAIProvider(instanceAiSummary.metadata_model.provider)
+			? instanceAiSummary.metadata_model
+			: undefined
+	)
+	let visibleCodeCompletionModel = $derived(
+		instanceAiSummary?.code_completion_model &&
+			isVisibleAIProvider(instanceAiSummary.code_completion_model.provider)
+			? instanceAiSummary.code_completion_model
+			: undefined
+	)
+	let hasVisibleInstanceAi = $derived(
+		sortedInstanceProviders.length > 0 ||
+			visibleDefaultModel ||
+			visibleMetadataModel ||
+			visibleCodeCompletionModel
 	)
 
 	function getProviderLabel(provider: AIProvider): string {
@@ -28,12 +52,10 @@
 	}
 </script>
 
-{#if instanceAiSummary}
+{#if instanceAiSummary && hasVisibleInstanceAi}
 	<SettingCard label="当前实例 AI">
 		<div class="flex flex-col gap-4 p-4 rounded-md border bg-surface-tertiary">
-			<p class="text-xs text-secondary">
-				此工作区当前正在使用下方实例 AI 默认设置。
-			</p>
+			<p class="text-xs text-secondary"> 此工作区当前正在使用下方实例 AI 默认设置。 </p>
 
 			<div class="flex flex-col gap-3">
 				{#each sortedInstanceProviders as providerSummary (providerSummary.provider)}
@@ -53,36 +75,36 @@
 				{/each}
 			</div>
 
-			{#if instanceAiSummary.default_model}
+			{#if visibleDefaultModel}
 				<div class="text-xs text-secondary">
 					默认对话模型：
-					<span class="text-primary font-medium">{instanceAiSummary.default_model.model}</span>
+					<span class="text-primary font-medium">{visibleDefaultModel.model}</span>
 					<span class="text-tertiary">
-						({getProviderLabel(instanceAiSummary.default_model.provider)})
+						({getProviderLabel(visibleDefaultModel.provider)})
 					</span>
 				</div>
 			{/if}
 
-			{#if instanceAiSummary.metadata_model}
+			{#if visibleMetadataModel}
 				<div class="text-xs text-secondary">
 					元数据生成模型：
 					<span class="text-primary font-medium">
-						{instanceAiSummary.metadata_model.model}
+						{visibleMetadataModel.model}
 					</span>
 					<span class="text-tertiary">
-						({getProviderLabel(instanceAiSummary.metadata_model.provider)})
+						({getProviderLabel(visibleMetadataModel.provider)})
 					</span>
 				</div>
 			{/if}
 
-			{#if instanceAiSummary.code_completion_model}
+			{#if visibleCodeCompletionModel}
 				<div class="text-xs text-secondary">
 					代码补全模型：
 					<span class="text-primary font-medium">
-						{instanceAiSummary.code_completion_model.model}
+						{visibleCodeCompletionModel.model}
 					</span>
 					<span class="text-tertiary">
-						({getProviderLabel(instanceAiSummary.code_completion_model.provider)})
+						({getProviderLabel(visibleCodeCompletionModel.provider)})
 					</span>
 				</div>
 			{/if}
