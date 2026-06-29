@@ -22,7 +22,6 @@ use windmill_api_auth::{
 use windmill_common::workspaces::{check_deploy_rules, RuleCheckResult};
 use windmill_common::{
     user_drafts::{overlay_or_draft_only, DraftUserRef, UserDraftItemKind, WithDraftOverlay},
-    utils::HTTP_CLIENT,
     webhook::{WebhookMessage, WebhookShared},
     DB,
 };
@@ -41,16 +40,15 @@ use windmill_common::min_version::{
     MIN_VERSION_SUPPORTS_NODE_DEBOUNCING,
 };
 use windmill_common::runnable_settings::RunnableSettingsTrait;
-use windmill_common::utils::query_elems_from_hub;
 use windmill_common::worker::{to_raw_value, CLOUD_HOSTED};
-use windmill_common::HUB_BASE_URL;
+use windmill_common::INTERNAL_HUB_DISABLED_MESSAGE;
 use windmill_common::{
     db::UserDB,
     error::{self, to_anyhow, Error, JsonResult, Result},
     flows::{Flow, FlowWithStarred, ListFlowQuery, ListableFlow, NewFlow},
     jobs::JobPayload,
     schedule::Schedule,
-    utils::{http_get_from_hub, not_found_if_none, paginate, Pagination, RunnableKind, StripPath},
+    utils::{not_found_if_none, paginate, Pagination, RunnableKind, StripPath},
 };
 use windmill_dep_map::scoped_dependency_map::ScopedDependencyMap;
 use windmill_git_sync::{handle_deployment_metadata, DeployedObject};
@@ -314,14 +312,10 @@ async fn list_flows(
 }
 
 async fn list_hub_flows(Extension(db): Extension<DB>) -> impl IntoResponse {
-    let (status_code, headers, response) = query_elems_from_hub(
-        &HTTP_CLIENT,
-        &format!("{}/searchFlowData?approved=true", **HUB_BASE_URL.load()),
-        None,
-        &db,
-    )
-    .await?;
-    Ok::<_, Error>((status_code, headers, response))
+    let _ = db;
+    Err::<axum::response::Response, Error>(Error::BadRequest(
+        INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+    ))
 }
 
 async fn list_paths(
@@ -346,18 +340,10 @@ pub async fn get_hub_flow_by_id(
     Path(id): Path<i32>,
     Extension(db): Extension<DB>,
 ) -> JsonResult<Box<serde_json::value::RawValue>> {
-    let value = http_get_from_hub(
-        &HTTP_CLIENT,
-        &format!("{}/flows/{}/json", **HUB_BASE_URL.load(), id),
-        false,
-        None,
-        Some(&db),
-    )
-    .await?
-    .json()
-    .await
-    .map_err(to_anyhow)?;
-    Ok(Json(value))
+    let _ = (id, db);
+    Err(Error::BadRequest(
+        INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+    ))
 }
 
 #[derive(Deserialize)]

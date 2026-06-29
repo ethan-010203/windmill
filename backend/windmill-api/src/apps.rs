@@ -14,7 +14,6 @@ use crate::{
     users::{require_owner_of_path, require_path_read_access_for_preview, OptAuthed},
     utils::{build_scope_path_predicate, check_scopes},
     webhook_util::{WebhookMessage, WebhookShared},
-    HTTP_CLIENT,
 };
 #[cfg(feature = "parquet")]
 use crate::{
@@ -60,16 +59,13 @@ use windmill_common::{
     },
     user_drafts::{overlay_or_draft_only, DraftUserRef, UserDraftItemKind, WithDraftOverlay},
     users::username_to_permissioned_as,
-    utils::{
-        http_get_from_hub, not_found_if_none, paginate, query_elems_from_hub, require_admin,
-        Pagination, RunnableKind, StripPath,
-    },
+    utils::{not_found_if_none, paginate, require_admin, Pagination, RunnableKind, StripPath},
     variables::{build_crypt, build_crypt_with_key_suffix, encrypt},
     worker::{to_raw_value, CLOUD_HOSTED},
     workspaces::{
         check_deploy_rules, check_user_against_rule, ProtectionRuleKind, RuleCheckResult,
     },
-    HUB_BASE_URL,
+    INTERNAL_HUB_DISABLED_MESSAGE,
 };
 #[cfg(feature = "parquet")]
 use windmill_object_store::object_store_reexports::{Attribute, Attributes};
@@ -1569,50 +1565,30 @@ async fn create_app_internal<'a>(
 }
 
 async fn list_hub_apps(Extension(db): Extension<DB>) -> impl IntoResponse {
-    let (status_code, headers, body) = query_elems_from_hub(
-        &HTTP_CLIENT,
-        &format!("{}/searchUiData?approved=true", **HUB_BASE_URL.load()),
-        None,
-        &db,
-    )
-    .await?;
-    Ok::<_, Error>((status_code, headers, body))
+    let _ = db;
+    Err::<Response, Error>(Error::BadRequest(
+        INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+    ))
 }
 
 pub async fn get_hub_app_by_id(
     Path(id): Path<i32>,
     Extension(db): Extension<DB>,
 ) -> JsonResult<Box<serde_json::value::RawValue>> {
-    let value = http_get_from_hub(
-        &HTTP_CLIENT,
-        &format!("{}/apps/{}/json", **HUB_BASE_URL.load(), id),
-        false,
-        None,
-        Some(&db),
-    )
-    .await?
-    .json()
-    .await
-    .map_err(to_anyhow)?;
-    Ok(Json(value))
+    let _ = (id, db);
+    Err(Error::BadRequest(
+        INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+    ))
 }
 
 pub async fn get_hub_raw_app_by_id(
     Path(id): Path<i32>,
     Extension(db): Extension<DB>,
 ) -> JsonResult<Box<serde_json::value::RawValue>> {
-    let value = http_get_from_hub(
-        &HTTP_CLIENT,
-        &format!("{}/raw_apps/{}/json", **HUB_BASE_URL.load(), id),
-        false,
-        None,
-        Some(&db),
-    )
-    .await?
-    .json()
-    .await
-    .map_err(to_anyhow)?;
-    Ok(Json(value))
+    let _ = (id, db);
+    Err(Error::BadRequest(
+        INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+    ))
 }
 
 async fn delete_app(

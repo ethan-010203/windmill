@@ -1570,57 +1570,10 @@ struct CachedResourceType {
     description: Option<String>,
 }
 
-#[derive(serde::Deserialize)]
-struct HubResourceTypeRaw {
-    id: i64,
-    name: String,
-    schema: Option<String>,
-    app: String,
-    description: Option<String>,
-}
-
 async fn fetch_resource_types_from_hub() -> error::Result<Vec<CachedResourceType>> {
-    let response = HTTP_CLIENT
-        .get(format!(
-            "{}/resource_types/list",
-            windmill_common::DEFAULT_HUB_BASE_URL
-        ))
-        .header("Accept", "application/json")
-        .send()
-        .await
-        .map_err(|e| error::Error::InternalErr(format!("Failed to fetch from hub: {}", e)))?;
-
-    if !response.status().is_success() {
-        return Err(error::Error::InternalErr(format!(
-            "Hub returned status {}",
-            response.status()
-        )));
-    }
-
-    let raw_types: Vec<HubResourceTypeRaw> = response
-        .json()
-        .await
-        .map_err(|e| error::Error::InternalErr(format!("Failed to parse hub response: {}", e)))?;
-
-    Ok(raw_types
-        .into_iter()
-        .filter_map(|rt| {
-            let schema = match rt.schema {
-                Some(s) => match serde_json::from_str(&s) {
-                    Ok(v) => Some(v),
-                    Err(_) => return None,
-                },
-                None => None,
-            };
-            Some(CachedResourceType {
-                id: rt.id,
-                name: rt.name,
-                schema,
-                app: rt.app,
-                description: rt.description,
-            })
-        })
-        .collect())
+    Err(error::Error::BadRequest(
+        windmill_common::INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+    ))
 }
 
 async fn sync_cached_resource_types(

@@ -11,12 +11,11 @@ use serde_json::Value;
 use sql_builder::prelude::*;
 use windmill_common::auth::create_jwt_token;
 use windmill_common::db::{Authed, UserDB};
-use windmill_common::scripts::{get_full_hub_script_by_path, Schema};
-use windmill_common::utils::{query_elems_from_hub, StripPath};
+use windmill_common::scripts::Schema;
 use windmill_common::worker::to_raw_value;
-use windmill_common::{DB, HUB_BASE_URL};
+use windmill_common::{DB, INTERNAL_HUB_DISABLED_MESSAGE};
 use windmill_mcp::server::{BackendResult, ErrorData};
-use windmill_mcp::{HubResponse, HubScriptInfo, ItemSchema, ResourceInfo, ResourceType};
+use windmill_mcp::{HubScriptInfo, ItemSchema, ResourceInfo, ResourceType};
 
 use crate::db::ApiAuthed;
 use crate::HTTP_CLIENT;
@@ -196,53 +195,20 @@ pub async fn get_scripts_from_hub(
     db: &DB,
     scope_integrations: Option<&str>,
 ) -> Result<Vec<HubScriptInfo>, ErrorData> {
-    let query_params = Some(vec![
-        ("limit", ITEMS_FETCH_MAX_LIMIT.to_string()),
-        ("with_schema", "true".to_string()),
-        ("apps", scope_integrations.unwrap_or("").to_string()),
-    ]);
-    let url = format!("{}/scripts/top", **HUB_BASE_URL.load());
-    let (_status_code, _headers, response) =
-        query_elems_from_hub(&HTTP_CLIENT, &url, query_params, &db)
-            .await
-            .map_err(|e| {
-                tracing::error!("Failed to get items from hub: {}", e);
-                ErrorData::internal_error(format!("Failed to get items from hub: {}", e), None)
-            })?;
-
-    use axum::body::to_bytes;
-    let body_bytes = to_bytes(response, usize::MAX).await.map_err(|e| {
-        tracing::error!("Failed to read response body: {}", e);
-        ErrorData::internal_error(format!("Failed to read response body: {}", e), None)
-    })?;
-    let body_str = String::from_utf8(body_bytes.to_vec()).map_err(|e| {
-        tracing::error!("Failed to decode response body: {}", e);
-        ErrorData::internal_error(format!("Failed to decode response body: {}", e), None)
-    })?;
-    let hub_response: HubResponse = serde_json::from_str(&body_str).map_err(|e| {
-        tracing::error!("Failed to parse hub response: {}", e);
-        ErrorData::internal_error(format!("Failed to parse hub response: {}", e), None)
-    })?;
-
-    Ok(hub_response.asks)
+    let _ = (db, scope_integrations);
+    Err(ErrorData::internal_error(
+        INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+        None,
+    ))
 }
 
 /// Get the schema for a Hub script
 pub async fn get_hub_script_schema(path: &str, db: &DB) -> Result<Option<Schema>, ErrorData> {
-    let strip_path = StripPath(path.to_string());
-    let res = get_full_hub_script_by_path(strip_path, &HTTP_CLIENT, Some(db))
-        .await
-        .map_err(|e| {
-            tracing::error!("Failed to get hub script: {}", e);
-            ErrorData::internal_error(format!("Failed to get hub script: {}", e), None)
-        })?;
-    match serde_json::from_str::<Schema>(res.schema.get()) {
-        Ok(schema) => Ok(Some(schema)),
-        Err(e) => {
-            tracing::warn!("Failed to convert schema: {}", e);
-            Ok(None)
-        }
-    }
+    let _ = (path, db);
+    Err(ErrorData::internal_error(
+        INTERNAL_HUB_DISABLED_MESSAGE.to_string(),
+        None,
+    ))
 }
 
 // ============================================================================

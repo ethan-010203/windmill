@@ -133,6 +133,7 @@ pub const DEFAULT_MAX_CONNECTIONS_WORKER: u32 = 5;
 pub const DEFAULT_MAX_CONNECTIONS_INDEXER: u32 = 5;
 
 pub const DEFAULT_HUB_BASE_URL: &str = "https://hub.windmill.dev";
+pub const INTERNAL_HUB_DISABLED_MESSAGE: &str = "当前内部部署未开放模板库功能";
 pub const PRIVATE_HUB_MIN_VERSION: i32 = 10_000_000;
 pub const SERVICE_LOG_RETENTION_SECS: i64 = 60 * 60 * 24 * 14; // 2 weeks retention period for logs
 pub const WM_DEPLOYERS_GROUP: &str = "wm_deployers";
