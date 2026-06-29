@@ -930,13 +930,11 @@
 						</Cell>
 						<Cell>
 							<div class="flex gap-1">
-								{#if user.is_service_account && $userStore?.is_admin}
+								{#if user.is_service_account && $userStore?.is_admin && $enterpriseLicense}
 									<Button
 										unifiedSize="sm"
 										variant="default"
 										startIcon={{ icon: LogIn }}
-										disabled={!$enterpriseLicense}
-										title={!$enterpriseLicense ? '当前部署未开放此功能' : undefined}
 										onClick={async () => {
 											try {
 												// Backend sets the impersonation cookie and returns the old token

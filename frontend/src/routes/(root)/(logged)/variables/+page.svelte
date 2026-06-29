@@ -263,9 +263,8 @@
 {:else}
 	<CenteredPage>
 		<PageHeader
-			title="Variables"
-			tooltip="Save and permission strings to be reused in Scripts and Flows."
-			documentationLink="https://www.windmill.dev/docs/core_concepts/variables_and_secrets"
+			title="变量"
+			tooltip="保存可在脚本和流程中复用的字符串、变量和密钥。"
 		>
 			{#if showCreateButtons}
 				<div class="flex flex-row justify-end">
@@ -276,7 +275,7 @@
 							startIcon={{ icon: Plus }}
 							on:click={() => contextualVariableEditor?.initNew()}
 						>
-							New&nbsp;contextual&nbsp;variable
+							新建上下文变量
 						</Button>
 					{:else}
 						<Button
@@ -285,7 +284,7 @@
 							startIcon={{ icon: Plus }}
 							on:click={() => variableEditor?.initNew()}
 						>
-							New&nbsp;variable
+							新建变量
 						</Button>
 					{/if}
 				</div>
@@ -307,14 +306,11 @@
 
 		<div class="flex gap-2 justify-between items-center">
 			<Tabs bind:selected={tab}>
-				<Tab value="workspace" label="Workspace" icon={Building} />
-				<Tab value="contextual" label="Contextual" icon={DollarSign}>
+				<Tab value="workspace" label="工作空间" icon={Building} />
+				<Tab value="contextual" label="上下文" icon={DollarSign}>
 					{#snippet extra()}
-						<Tooltip
-							documentationLink="https://www.windmill.dev/docs/core_concepts/variables_and_secrets#contextual-variables"
-						>
-							Contextual variables are passed as environment variables when running a script and
-							depends on the execution context.
+						<Tooltip>
+							上下文变量会在脚本运行时作为环境变量传入，具体值取决于执行上下文。
 						</Tooltip>
 					{/snippet}
 				</Tab>
@@ -507,13 +503,13 @@
 												let owner = isOwner(path, $userStore, $workspaceStore)
 												return [
 													{
-														displayName: 'Edit',
+														displayName: '编辑',
 														icon: Pen,
 														action: () => variableEditor?.editVariable(path),
 														disabled: !canWrite || !showCreateButtons
 													},
 													{
-														displayName: 'Delete',
+														displayName: '删除',
 														icon: Trash,
 														type: 'delete',
 														action: (event) => {
@@ -532,7 +528,7 @@
 													isDeployable(is_secret ? 'secret' : 'variable', path, deployUiSettings)
 														? [
 																{
-																	displayName: 'Deploy to prod/staging',
+																		displayName: '部署到生产/预发',
 																	icon: FileUp,
 																	action: () => {
 																		deploymentDrawer?.openDrawer(path, 'variable')
@@ -541,7 +537,7 @@
 															]
 														: []),
 													{
-														displayName: 'Permissions',
+														displayName: '权限',
 														action: () => {
 															shareModal?.openDrawer(path, 'variable')
 														},
@@ -550,7 +546,7 @@
 													...(account != undefined
 														? [
 																{
-																	displayName: 'Refresh token',
+																	displayName: '刷新令牌',
 																	icon: RefreshCw,
 																	action: async () => {
 																		await OauthService.refreshToken({
@@ -560,7 +556,7 @@
 																				path
 																			}
 																		})
-																		sendUserToast('Token refreshed')
+																			sendUserToast('令牌已刷新')
 																		loadVariables()
 																	}
 																}
@@ -584,27 +580,27 @@
 						<Skeleton layout={[[2.8], 0.5]} />
 					{/each}
 				{:else}
-					<PageHeader title="Custom contextual variables" primary={false} />
+					<PageHeader title="自定义上下文变量" primary={false} />
 					{#if contextualVariables.filter((x) => x.is_custom).length === 0}
 						<div class="flex flex-col items-center justify-center h-full">
 							<div class="text-xs text-primary font-normal"
-								>No custom contextual variables found</div
+								>未找到自定义上下文变量</div
 							>
 						</div>
 					{:else}
 						<TableSimple
-							headers={['Name', 'Value']}
+							headers={['名称', '值']}
 							data={contextualVariables.filter((x) => x.is_custom)}
 							keys={['name', 'value']}
 							getRowActions={$userStore?.is_admin || $userStore?.is_super_admin
 								? (row) => {
 										return [
 											{
-												displayName: 'Edit',
+												displayName: '编辑',
 												action: () => contextualVariableEditor?.editVariable(row.name, row.value)
 											},
 											{
-												displayName: 'Delete',
+												displayName: '删除',
 												type: 'delete',
 												action: () => {
 													deleteContextualVariable(row)
@@ -615,9 +611,9 @@
 								: undefined}
 						/>
 					{/if}
-					<PageHeader title="Contextual variables" primary={false} />
+					<PageHeader title="上下文变量" primary={false} />
 					<TableSimple
-						headers={['Name', 'Example of value', 'Description']}
+						headers={['名称', '示例值', '描述']}
 						data={contextualVariables.filter((x) => !x.is_custom)}
 						keys={['name', 'value', 'description']}
 					/>
@@ -627,10 +623,10 @@
 	</CenteredPage>
 {/if}
 
-<ConfirmationModal
-	{open}
-	title="Remove variable"
-	confirmationText="Remove"
+	<ConfirmationModal
+		{open}
+		title="删除变量"
+		confirmationText="删除"
 	trashbin
 	on:canceled={() => {
 		deleteConfirmedCallback = undefined
@@ -643,19 +639,18 @@
 	}}
 >
 	<div class="flex flex-col w-full space-y-4">
-		<span>Are you sure you want to remove this variable?</span>
-		{#if deleteIsLinked}
-			<Alert type="warning" title="Linked resource">
-				This variable is linked with a resource of the same path. The linked resource will also be
-				deleted.
+			<span>确定要删除这个变量吗？</span>
+			{#if deleteIsLinked}
+				<Alert type="warning" title="关联资源">
+					该变量与同路径资源关联。删除变量时，关联资源也会被删除。
+				</Alert>
+			{/if}
+			<Alert type="info" title="跳过确认">
+				<div>
+					删除变量时按住
+					<Badge color="dark-gray">SHIFT</Badge>
+					可以跳过确认。
+				</div>
 			</Alert>
-		{/if}
-		<Alert type="info" title="Bypass confirmation">
-			<div>
-				You can press
-				<Badge color="dark-gray">SHIFT</Badge>
-				while removing a variable to bypass confirmation.
-			</div>
-		</Alert>
 	</div>
 </ConfirmationModal>

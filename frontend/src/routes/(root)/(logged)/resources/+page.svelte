@@ -861,9 +861,8 @@
 {:else}
 	<CenteredPage>
 		<PageHeader
-			title="Resources"
-			tooltip="Save and permission rich objects (JSON) including credentials obtained through OAuth."
-			documentationLink="https://www.windmill.dev/docs/core_concepts/resources_and_types"
+			title="资源"
+			tooltip="保存可在脚本和流程中复用的结构化对象，包括通过 OAuth 获取的凭据。"
 		>
 			{#if showCreateButtons}
 				<div class="flex flex-row justify-end gap-4">
@@ -873,9 +872,9 @@
 						startIcon={{ icon: Plus }}
 						on:click={startNewType}
 						aiId="resources-add-resource-type"
-						aiDescription="Add resource type"
-					>
-						Add resource type
+							aiDescription="添加资源类型"
+						>
+							添加资源类型
 					</Button>
 					<Button
 						unifiedSize="md"
@@ -883,9 +882,9 @@
 						startIcon={{ icon: Boxes }}
 						on:click={() => appConnect?.open?.()}
 						aiId="resources-add-resource"
-						aiDescription="Add resource"
-					>
-						Add resource
+							aiDescription="添加资源"
+						>
+							添加资源
 					</Button>
 				</div>
 			{/if}
@@ -905,40 +904,32 @@
 					}
 				}}
 			>
-				<Tab value="workspace" label="Workspace" icon={Building} />
-				<Tab value="types" label="Resource Types">
+				<Tab value="workspace" label="工作空间" icon={Building} />
+				<Tab value="types" label="资源类型">
 					{#snippet extra()}
-						<Tooltip
-							documentationLink="https://www.windmill.dev/docs/core_concepts/resources_and_types"
-						>
-							Every resource has a Resource Type attached to it which contains its schema and make
-							it easy in scripts and flows to accept only resources of a specific resource type.
+						<Tooltip>
+							每个资源都有对应的资源类型。资源类型包含 schema，便于脚本和流程只接收特定类型的资源。
 						</Tooltip>
 					{/snippet}
 				</Tab>
-				<Tab value="states" label="States">
+				<Tab value="states" label="状态">
 					{#snippet extra()}
 						<Tooltip>
-							States are actually resources (but excluded from the Workspace tab for clarity).
-							States are used by scripts to keep data persistent between runs of the same script by
-							the same trigger (schedule or user)
+							状态本质上也是资源，但为了清晰不会显示在工作空间资源列表中。脚本可使用状态在同一触发器的多次运行之间保存数据。
 						</Tooltip>
 					{/snippet}
 				</Tab>
-				<Tab value="cache" label="Cache">
+				<Tab value="cache" label="缓存">
 					{#snippet extra()}
 						<Tooltip>
-							Cached results are actually resources (but excluded from the Workspace tab for
-							clarity). Cache are used by flows's step to cache result to avoid recomputing
-							unnecessarily
+							缓存结果本质上也是资源，但为了清晰不会显示在工作空间资源列表中。流程步骤可使用缓存避免重复计算。
 						</Tooltip>
 					{/snippet}
 				</Tab>
-				<Tab value="theme" label="Theme">
+				<Tab value="theme" label="主题">
 					{#snippet extra()}
 						<Tooltip>
-							Theme are actually resources (but excluded from the Workspace tab for clarity). Theme
-							are used by the apps to customize their look and feel.
+							主题本质上也是资源，但为了清晰不会显示在工作空间资源列表中。应用可使用主题自定义外观。
 						</Tooltip>
 					{/snippet}
 				</Tab>
@@ -980,9 +971,9 @@
 					{/each}
 				{:else if filteredItems?.length == 0}
 					<div class="flex flex-col items-center justify-center h-full">
-						<div class="text-xs text-emphasis font-semibold">No resources found</div>
+						<div class="text-xs text-emphasis font-semibold">未找到资源</div>
 						<div class="text-2xs text-secondary font-normal">
-							Try changing the filters or creating a new resource
+							请调整筛选条件或创建新的资源
 						</div>
 					</div>
 				{:else}
@@ -990,9 +981,9 @@
 						<Head>
 							<Row>
 								<Cell head first />
-								<Cell head>Path</Cell>
-								<Cell head>Resource type</Cell>
-								<Cell head>Description</Cell>
+									<Cell head>路径</Cell>
+									<Cell head>资源类型</Cell>
+									<Cell head>描述</Cell>
 								<Cell head />
 								<Cell head last />
 							</Row>
@@ -1104,8 +1095,7 @@
 															<RotateCw />
 															{#snippet text()}
 																<div>
-																	The OAuth token will be kept up-to-date in the background by
-																	Windmill using its refresh token
+																		OAuth 令牌会在后台通过刷新令牌保持最新。
 																</div>
 															{/snippet}
 														</Popover>
@@ -1122,7 +1112,7 @@
 																/>
 																{#snippet text()}
 																	<div>
-																		Latest exchange of the refresh token did not succeed. Error: {refresh_error}
+																		最近一次刷新令牌交换失败。错误：{refresh_error}
 																	</div>
 																{/snippet}
 															</Popover>
@@ -1135,9 +1125,7 @@
 
 																{#snippet text()}
 																	<div>
-																		The access_token is expired, it will get renewed the next time
-																		this variable is fetched or you can request is to be refreshed
-																		in the dropdown on the right.
+																		access_token 已过期，下次读取该资源时会自动刷新，也可以在右侧菜单中手动刷新。
 																	</div>
 																{/snippet}
 															</Popover>
@@ -1149,8 +1137,7 @@
 																/>
 																{#snippet text()}
 																	<div>
-																		The resource was connected through OAuth and the token is not
-																		expired.
+																		该资源通过 OAuth 连接，令牌未过期。
 																	</div>
 																{/snippet}
 															</Popover>
@@ -1171,14 +1158,14 @@
 												class="w-fit"
 												items={[
 													{
-														displayName: 'Permissions',
+															displayName: '权限',
 														icon: Shield,
 														action: () => {
 															shareModal?.openDrawer?.(path, 'resource')
 														}
 													},
 													{
-														displayName: 'Edit',
+															displayName: '编辑',
 														icon: Pen,
 														disabled: !canWrite || !showCreateButtons,
 														action: () => {
@@ -1188,7 +1175,7 @@
 													...(!ws_specific && isDeployable('resource', path, deployUiSettings)
 														? [
 																{
-																	displayName: 'Deploy to prod/staging',
+																	displayName: '部署到生产/预发',
 																	icon: FileUp,
 																	action: () => {
 																		deploymentDrawer?.openDrawer(path, 'resource')
@@ -1197,7 +1184,7 @@
 															]
 														: []),
 													{
-														displayName: 'Delete',
+															displayName: '删除',
 														disabled: !canWrite || !showCreateButtons,
 														icon: Trash,
 														type: 'delete',
@@ -1217,7 +1204,7 @@
 													...(account != undefined
 														? [
 																{
-																	displayName: 'Refresh token',
+																		displayName: '刷新令牌',
 																	icon: RotateCw,
 																	action: async () => {
 																		await OauthService.refreshToken({
@@ -1227,7 +1214,7 @@
 																				path
 																			}
 																		})
-																		sendUserToast('Token refreshed')
+																			sendUserToast('令牌已刷新')
 																		loadResources()
 																	}
 																}
@@ -1251,9 +1238,9 @@
 				{/each}
 			{:else if filteredResourceTypes?.length == 0}
 				<div class="flex flex-col items-center justify-center h-full mt-4">
-					<div class="text-xs text-emphasis font-semibold">No resource types found</div>
-					<div class="text-2xs text-secondary font-normal">
-						Try changing the filters or creating a new resource type
+						<div class="text-xs text-emphasis font-semibold">未找到资源类型</div>
+						<div class="text-2xs text-secondary font-normal">
+							请调整筛选条件或创建新的资源类型
 					</div>
 				</div>
 			{:else}
@@ -1261,8 +1248,8 @@
 					<DataTable>
 						<Head>
 							<Row>
-								<Cell head first>Name</Cell>
-								<Cell head>Description</Cell>
+									<Cell head first>名称</Cell>
+									<Cell head>描述</Cell>
 								<Cell head last />
 							</Row>
 						</Head>
@@ -1302,10 +1289,9 @@
 										<Cell last>
 											{#if !canWrite}
 												<Badge>
-													Shared globally
-													<Tooltip>
-														This resource type is from the 'admins' workspace shared with all
-														workspaces
+														全局共享
+														<Tooltip>
+															该资源类型来自 admins 工作空间，并共享给所有工作空间。
 													</Tooltip>
 												</Badge>
 											{:else if $userStore?.is_admin || $userStore?.is_super_admin}
@@ -1319,7 +1305,7 @@
 														on:click={() => handleDeleteResourceType(name)}
 														destructive
 													>
-														Delete
+															删除
 													</Button>
 													<Button
 														size="xs"
@@ -1328,15 +1314,14 @@
 														startIcon={{ icon: Pen }}
 														on:click={() => startEditResourceType(name)}
 													>
-														Edit
+															编辑
 													</Button>
 												</div>
 											{:else}
 												<Badge>
-													Non Editable
-													<Tooltip>
-														Since resource types are shared with the whole workspace, only admins
-														can edit/delete them
+														不可编辑
+														<Tooltip>
+															资源类型会共享给整个工作空间，只有管理员可以编辑或删除。
 													</Tooltip>
 												</Badge>
 											{/if}

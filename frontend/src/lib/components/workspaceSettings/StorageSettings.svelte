@@ -59,13 +59,13 @@
 			}
 		})
 		console.log('Large file storage settings changed', large_file_storage)
-		sendUserToast(`Large file storage settings changed`)
+			sendUserToast('对象存储设置已保存')
 		onSave?.()
 	}
-	let tableHeadNames = ['Name', 'Storage resource', '', ''] as const
+	let tableHeadNames = ['名称', '存储资源', '', ''] as const
 	let tableHeadTooltips: Partial<Record<(typeof tableHeadNames)[number], string | undefined>> = {
-		'Storage resource':
-			'Which resource the workspace storage will point to. Note that all users of the workspace will be able to access the workspace storage regardless of the resource visibility.'
+		存储资源:
+			'工作区对象存储指向的资源。请注意，工作空间内所有用户都可以访问该对象存储，不受资源可见性限制。'
 	}
 
 	// Primary storage exists once it has been saved with a resource. Until then the row is
@@ -169,12 +169,12 @@
 			{#each tableRows as tableRow}
 				<Row>
 					<Cell first class="w-48 relative">
-						{#if tableRow[0] === null}
-							<TextInput inputProps={{ placeholder: 'Primary storage', disabled: true }} />
-						{:else}
-							<TextInput
-								bind:value={tableRow[0]}
-								inputProps={{ placeholder: 'Name' }}
+							{#if tableRow[0] === null}
+								<TextInput inputProps={{ placeholder: '主存储', disabled: true }} />
+							{:else}
+								<TextInput
+									bind:value={tableRow[0]}
+									inputProps={{ placeholder: '名称' }}
 								class="secondary-storage-name-input"
 							/>
 						{/if}
@@ -226,19 +226,21 @@
 
 					<Cell class="w-12">
 						<div class="flex gap-2">
-							<Button
-								variant="default"
-								btnClasses="px-2.5 relative"
-								size="sm"
-								onClick={() =>
-									(advancedPermissionModalState = { open: true, storage: tableRow[1] })}
-							>
-								<Shield size={16} /> Permissions <ChevronDown size={14} />
-								{#if isPermissionsNonDefault(tableRow[1])}
-									<span class="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-accent"
-									></span>
-								{/if}
-							</Button>
+							{#if $enterpriseLicense}
+								<Button
+									variant="default"
+									btnClasses="px-2.5 relative"
+									size="sm"
+									onClick={() =>
+										(advancedPermissionModalState = { open: true, storage: tableRow[1] })}
+								>
+									<Shield size={16} /> 权限 <ChevronDown size={14} />
+									{#if isPermissionsNonDefault(tableRow[1])}
+										<span class="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-accent"
+										></span>
+									{/if}
+								</Button>
+							{/if}
 							{#if emptyString(tableRow[1].resourcePath) || isDirty(tableRow[0])}
 								<Popover
 									openOnHover
@@ -250,9 +252,9 @@
 									{/snippet}
 									{#snippet content()}
 										{#if emptyString(tableRow[1].resourcePath)}
-											Please select a storage resource
+											请选择存储资源
 										{:else if isDirty(tableRow[0])}
-											Please save your changes
+											请先保存变更
 										{/if}
 									{/snippet}
 								</Popover>
@@ -310,12 +312,10 @@
 								s3ResourceSettings.secondaryStorage = s3ResourceSettings.secondaryStorage
 							}}
 						>
-							<Plus /> Add secondary storage
+							<Plus /> 添加辅助存储
 							{#if s3ResourceSettings.resourcePath}
 								<Tooltip>
-									Secondary storage is a feature that allows you to read and write from storage that
-									isn't your main storage by specifying it in the s3 object as "secondary_storage"
-									with the name of it
+									辅助存储允许通过 S3 对象中的 secondary_storage 名称读写非主存储。
 								</Tooltip>
 							{/if}
 						</Button>
@@ -328,7 +328,7 @@
 								variant="default"
 								on:click={() => (showPrimaryRow = true)}
 							>
-								<Plus /> Add primary storage
+								<Plus /> 添加主存储
 							</Button>
 						{:else if !s3ResourceSettings.resourcePath}
 							<Popover
@@ -340,7 +340,7 @@
 									{@render addSecondaryStorageBtn()}
 								{/snippet}
 								{#snippet content()}
-									Setup a primary storage to use secondary storages
+									请先配置主存储，再使用辅助存储。
 								{/snippet}
 							</Popover>
 						{:else}
@@ -359,13 +359,13 @@
 		disabled={hasMissingResource}
 		onSave={editWindmillLFSSettings}
 		onDiscard={() => onDiscard?.()}
-		saveLabel="Save storage settings"
+		saveLabel="保存对象存储设置"
 	/>
 {/if}
 
 <Modal2
 	target="#content"
-	title={'Permission settings'}
+		title={'权限设置'}
 	contentClasses="flex flex-col gap-3"
 	fixedWidth="md"
 	fixedHeight="lg"
@@ -373,58 +373,44 @@
 >
 	{#if advancedPermissionModalState.open}
 		{@const storage = advancedPermissionModalState.storage}
-		{#if !$enterpriseLicense}
-			<Alert
-				type={storage.advancedPermissions ? 'error' : 'info'}
-				title="当前部署未开放高级权限规则"
-			>
-				高级权限规则用于更细粒度地控制对象存储访问权限，当前部署未开放。</Alert
-			>
-		{/if}
-		<Toggle
-			bind:checked={
-				() => !!storage.advancedPermissions,
-				(v) => {
-					storage.advancedPermissions = v
-						? defaultS3AdvancedPermissions(!!$enterpriseLicense)
-						: undefined
-					if (v) storage.publicResource = false
+		{#if $enterpriseLicense}
+			<Toggle
+				bind:checked={
+					() => !!storage.advancedPermissions,
+					(v) => {
+						storage.advancedPermissions = v
+							? defaultS3AdvancedPermissions(!!$enterpriseLicense)
+							: undefined
+						if (v) storage.publicResource = false
+					}
 				}
-			}
-			options={{
-				right: 'Enable advanced permission rules',
-				rightTooltip: 'Control precisely which paths are allowed to your users.'
-			}}
-			disabled={!storage.advancedPermissions && !$enterpriseLicense}
-		/>
+				options={{
+					right: '启用高级权限规则',
+					rightTooltip: '精确控制用户可访问的对象存储路径。'
+				}}
+			/>
+		{/if}
 		{#if storage.advancedPermissions}
 			{@render advancedPermissionsEditor(storage.advancedPermissions)}
 		{/if}
 		{#if !storage.advancedPermissions}
 			{#if storage.resourceType == 's3'}
 				<div class="flex flex-col mt-2 mb-1 gap-1">
-					<Toggle
-						disabled={emptyString(storage.resourcePath)}
-						bind:checked={storage.publicResource}
-						options={{
-							right:
-								'S3 resource details and content can be accessed by all users of this workspace',
-							rightTooltip:
-								'If set, all users of this workspace will have access the to entire content of the S3 bucket, as well as the resource details and the "open preview" button. This effectively by-pass the permissions set on the resource and makes it public to everyone.'
-						}}
-					/>
+						<Toggle
+							disabled={emptyString(storage.resourcePath)}
+							bind:checked={storage.publicResource}
+							options={{
+								right: '当前工作空间所有用户都可以访问 S3 资源详情和内容',
+								rightTooltip:
+									'开启后，当前工作空间所有用户都可以访问整个 S3 bucket 内容、资源详情和打开预览按钮。'
+							}}
+						/>
 					{#if storage.publicResource === true}
 						<div class="pt-2"></div>
 
-						<Alert
-							type="warning"
-							title="(Legacy) S3 bucket content and resource details are shared"
-						>
-							S3 resource public access is ON, which means that the entire content of the S3 bucket
-							will be accessible to all the users of this workspace regardless of whether they have
-							access the resource or not. Similarly, certain Windmill SDK endpoints can be used in
-							scripts to access the resource details, including public and private keys.
-						</Alert>
+							<Alert type="warning" title="（旧版）S3 bucket 内容和资源详情已共享">
+								S3 资源公开访问已开启，这意味着当前工作空间所有用户都可以访问整个 S3 bucket 内容，即使这些用户原本没有此资源的访问权限。
+							</Alert>
 					{/if}
 				</div>
 			{:else}
@@ -433,16 +419,16 @@
 						disabled={emptyString(storage.resourcePath)}
 						bind:checked={storage.publicResource}
 						options={{
-							right: 'object storage content can be accessed by all users of this workspace',
+							right: '当前工作空间所有用户都可以访问对象存储内容',
 							rightTooltip:
-								'If set, all users of this workspace will have access the to entire content of the object storage.'
+								'开启后，当前工作空间所有用户都可以访问该对象存储中的全部内容。'
 						}}
 					/>
 					{#if storage.publicResource === true}
 						<div class="pt-2"></div>
-							<Alert type="warning" title="（旧版）对象存储内容和资源详情已共享">
-								对象公开访问已开启，这意味着该对象存储中的全部内容都会对当前工作区所有用户可见，即使这些用户原本没有此资源的访问权限。
-							</Alert>
+						<Alert type="warning" title="（旧版）对象存储内容和资源详情已共享">
+							对象公开访问已开启，这意味着该对象存储中的全部内容都会对当前工作区所有用户可见，即使这些用户原本没有此资源的访问权限。
+						</Alert>
 					{/if}
 				</div>
 			{/if}
