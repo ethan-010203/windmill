@@ -19,7 +19,7 @@ pub async fn edit_auto_invite(
     _ea: EditAutoInvite,
 ) -> windmill_common::error::Result<String> {
     Err(windmill_common::error::Error::internal_err(
-        "Not implemented on OSS".to_string(),
+        "当前内部部署未开放自动邀请功能".to_string(),
     ))
 }
 
@@ -31,6 +31,6 @@ pub async fn create_service_account(
     _nu: NewServiceAccount,
 ) -> windmill_common::error::Result<(StatusCode, String)> {
     Err(windmill_common::error::Error::BadRequest(
-        "Service accounts require Windmill Enterprise Edition".to_string(),
+        "当前内部部署未开放服务账号功能".to_string(),
     ))
 }

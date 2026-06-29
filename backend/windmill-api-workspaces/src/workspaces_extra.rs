@@ -46,7 +46,7 @@ pub(crate) async fn change_workspace_id(
 ) -> Result<String> {
     if *CLOUD_HOSTED && !is_super_admin_email(&db, &authed.email).await? {
         return Err(Error::BadRequest(
-            "This feature is not available on the cloud".to_string(),
+            "当前部署环境未开放该功能".to_string(),
         ));
     }
 

@@ -56,14 +56,14 @@ pub fn workspaced_service() -> Router {
 #[cfg(not(feature = "private"))]
 pub async fn workspace_connect_slack() -> Result<http::status::StatusCode, error::Error> {
     Err(error::Error::BadRequest(
-        "Slack only available on enterprise".to_string(),
+        "当前内部部署未开放 Slack 连接功能".to_string(),
     ))
 }
 
 #[cfg(not(feature = "private"))]
 pub async fn connect_slack_instance() -> Result<http::status::StatusCode, error::Error> {
     Err(error::Error::BadRequest(
-        "Slack only available on enterprise".to_string(),
+        "当前内部部署未开放 Slack 连接功能".to_string(),
     ))
 }
 
@@ -142,7 +142,7 @@ pub async fn _refresh_token<'c>(
 ) -> error::Result<String> {
     // Implementation is not open source
     Err(error::Error::BadRequest(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放 OAuth 令牌刷新功能".to_string(),
     ))
 }
 
@@ -154,7 +154,7 @@ pub async fn check_nb_of_user(db: &DB) -> error::Result<()> {
             .await?;
     if nb_users_sso.unwrap_or(0) >= 10 {
         return Err(error::Error::BadRequest(
-            "You have reached the maximum number of oauth users accounts (10) without an enterprise license"
+            "当前内部部署已达到 OAuth 用户账号数量上限"
                 .to_string(),
         ));
     }
@@ -164,7 +164,7 @@ pub async fn check_nb_of_user(db: &DB) -> error::Result<()> {
         .await?;
     if nb_users.unwrap_or(0) >= 50 {
         return Err(error::Error::BadRequest(
-            "You have reached the maximum number of accounts (50) without an enterprise license"
+            "当前内部部署已达到账号数量上限"
                 .to_string(),
         ));
     }

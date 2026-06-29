@@ -230,15 +230,15 @@ pub async fn test_email(
 
     let client_timeout = Duration::from_secs(3);
     send_email_plain_text(
-        "Test email from Windmill",
-        "Test email content",
+        "内部系统测试邮件",
+        "这是一封内部系统测试邮件",
         vec![to],
         smtp,
         Some(client_timeout),
     )
     .await?;
 
-    Ok("Sent test email".to_string())
+    Ok("测试邮件已发送".to_string())
 }
 
 #[cfg(feature = "parquet")]
@@ -519,7 +519,7 @@ pub async fn set_global_setting_internal(
         && !workspace_fairness_settings_allowed().await
     {
         return Err(error::Error::BadRequest(format!(
-            "{} requires an Enterprise license",
+            "当前内部部署未开放该实例设置：{}",
             key
         )));
     }
@@ -806,7 +806,7 @@ async fn set_instance_config(
         });
         if upserts_touch_fairness_non_disable && !workspace_fairness_settings_allowed().await {
             return Err(error::Error::BadRequest(
-                "Workspace fairness settings require an Enterprise license".to_string(),
+                "当前内部部署未开放工作区公平调度设置".to_string(),
             ));
         }
 
@@ -905,7 +905,7 @@ async fn list_global_settings(
 #[cfg(not(feature = "enterprise"))]
 async fn list_global_settings() -> JsonResult<String> {
     return Err(error::Error::BadRequest(
-        "Listing global settings not available on community edition".to_string(),
+        "当前内部部署未开放全局设置列表".to_string(),
     ));
 }
 
@@ -919,7 +919,7 @@ pub async fn send_stats(Extension(db): Extension<DB>, authed: ApiAuthed) -> Resu
     )
     .await?;
 
-    Ok("Sent stats".to_string())
+    Ok("统计信息已发送".to_string())
 }
 
 async fn restart_worker_group(
@@ -968,7 +968,7 @@ pub async fn get_stats(
 #[cfg(not(feature = "enterprise"))]
 pub async fn get_stats() -> error::JsonResult<StatsDownload> {
     Err(error::Error::BadRequest(
-        "Downloading telemetry is only available on enterprise edition".to_string(),
+        "当前内部部署未开放遥测数据下载".to_string(),
     ))
 }
 
@@ -1015,7 +1015,7 @@ pub struct LicenseQuery {
 #[cfg(not(feature = "enterprise"))]
 pub async fn renew_license_key() -> Result<String> {
     return Err(error::Error::BadRequest(
-        "License key renewal not available on community edition".to_string(),
+        "当前内部部署未开放授权续期功能".to_string(),
     ));
 }
 
@@ -1051,7 +1051,7 @@ pub async fn renew_license_key(
 #[cfg(not(feature = "enterprise"))]
 pub async fn create_customer_portal_session() -> Result<String> {
     return Err(error::Error::BadRequest(
-        "Customer portal is not available on community edition".to_string(),
+        "当前内部部署未开放客户门户功能".to_string(),
     ));
 }
 
@@ -1086,7 +1086,7 @@ pub async fn test_critical_channels(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn test_critical_channels() -> Result<String> {
-    Ok("Critical channels require EE".to_string())
+    Ok("当前内部部署未开放关键告警通道".to_string())
 }
 
 #[cfg(feature = "enterprise")]
@@ -1102,7 +1102,7 @@ pub async fn get_critical_alerts(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn get_critical_alerts() -> error::Error {
-    error::Error::NotFound("Critical Alerts require EE".to_string())
+    error::Error::NotFound("当前内部部署未开放关键告警功能".to_string())
 }
 
 #[cfg(feature = "enterprise")]
@@ -1117,7 +1117,7 @@ pub async fn acknowledge_critical_alert(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn acknowledge_critical_alert() -> error::Error {
-    error::Error::NotFound("Critical Alerts require EE".to_string())
+    error::Error::NotFound("当前内部部署未开放关键告警功能".to_string())
 }
 
 #[cfg(feature = "enterprise")]
@@ -1132,7 +1132,7 @@ pub async fn acknowledge_all_critical_alerts(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn acknowledge_all_critical_alerts() -> error::Error {
-    error::Error::NotFound("Critical Alerts require EE".to_string())
+    error::Error::NotFound("当前内部部署未开放关键告警功能".to_string())
 }
 
 #[derive(Deserialize, Debug, Serialize)]

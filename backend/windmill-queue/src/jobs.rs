@@ -1434,17 +1434,17 @@ async fn check_result_size<T: ValidableJson>(
                 result_size,
                 *MAX_RESULT_SIZE_MB
             );
-            return Some(Err(Error::ResultTooLarge(format!("Result of job {} is too large: {}MB > MAX_RESULT_SIZE_MB={}MB.\nUse external storages such as the Windmill Object Storage to store large results: https://www.windmill.dev/docs/core_concepts/object_storage_in_windmill", queued_job.id, result_size, *MAX_RESULT_SIZE_MB))));
+            return Some(Err(Error::ResultTooLarge(format!("任务 {} 的结果过大：{}MB > MAX_RESULT_SIZE_MB={}MB。\n请使用对象存储或其他外部存储保存大结果。", queued_job.id, result_size, *MAX_RESULT_SIZE_MB))));
         }
         append_logs(
             &queued_job.id,
             &queued_job.workspace_id,
-            format!("Warning: Result of job {} is large: {}MB.\nRecommended max size is 2MB.\nPrefer using external storages such as the Windmill Object Storage to store large results: https://www.windmill.dev/docs/core_concepts/object_storage_in_windmill", queued_job.id, result_size),
+            format!("警告：任务 {} 的结果较大：{}MB。\n建议结果大小不超过 2MB。请优先使用对象存储或其他外部存储保存大结果。", queued_job.id, result_size),
             &db.into(),
         )
         .await;
         if *CLOUD_HOSTED {
-            return Some(Err(Error::ResultTooLarge(format!("Result of job {} is too large for multi-tenant cloud: {}MB (max 2MB).\nUse external storages such as the Windmill Object Storage to store large results: https://www.windmill.dev/docs/core_concepts/object_storage_in_windmill", queued_job.id, result_size))));
+            return Some(Err(Error::ResultTooLarge(format!("任务 {} 的结果超过当前部署环境限制：{}MB（最大 2MB）。\n请使用对象存储或其他外部存储保存大结果。", queued_job.id, result_size))));
         } else {
             tracing::warn!(
                 "Result of job {} is larger than 2MB: {}MB. Not recommended.",

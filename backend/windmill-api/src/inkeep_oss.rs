@@ -17,7 +17,6 @@ pub fn global_service() -> Router {
 async fn inkeep_not_available() -> windmill_common::error::Result<()> {
     Err(Error::Generic(
         http::StatusCode::FORBIDDEN,
-        "Inkeep AI documentation assistant is only available in Windmill Enterprise Edition"
-            .to_string(),
+        "当前内部部署未开放 AI 文档助手功能".to_string(),
     ))
 }

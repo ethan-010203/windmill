@@ -1209,7 +1209,7 @@ async fn edit_deploy_to(
 #[cfg(not(feature = "enterprise"))]
 async fn edit_deploy_to() -> Result<String> {
     return Err(Error::BadRequest(
-        "Deploy to is only available on enterprise".to_string(),
+        "当前内部部署未开放部署目标功能".to_string(),
     ));
 }
 
@@ -1248,7 +1248,7 @@ async fn edit_instance_groups(
     Json(_config): Json<serde_json::Value>,
 ) -> Result<String> {
     Err(Error::BadRequest(
-        "Instance groups are only available on Windmill Enterprise Edition".to_string(),
+        "当前内部部署未开放实例分组功能".to_string(),
     ))
 }
 
@@ -1263,7 +1263,7 @@ async fn edit_webhook(
 
     if *CLOUD_HOSTED {
         return Err(Error::BadRequest(
-            "Workspace webhooks are not available on cloud-hosted instances".to_string(),
+            "当前部署环境未开放工作区 Webhook 配置".to_string(),
         ));
     }
 
@@ -2496,8 +2496,7 @@ async fn check_git_sync_access(db: &DB, w_id: &str) -> Result<()> {
 
     if user_count > CE_GIT_SYNC_MAX_USERS {
         return Err(Error::BadRequest(format!(
-            "Git sync is available for workspaces with up to {} members. \
-             Upgrade to Windmill Enterprise Edition for unlimited workspace members.",
+            "当前内部部署中，Git 同步仅支持最多 {} 个工作区成员。",
             CE_GIT_SYNC_MAX_USERS
         )));
     }
@@ -2625,7 +2624,7 @@ async fn edit_git_sync_repository(
     #[cfg(not(feature = "enterprise"))]
     if new_config.repository.use_individual_branch.unwrap_or(false) {
         return Err(Error::BadRequest(
-            "Promotion mode is an Enterprise Edition feature".to_string(),
+            "当前内部部署未开放发布分支模式".to_string(),
         ));
     }
 
@@ -2659,7 +2658,7 @@ async fn edit_git_sync_repository(
             .any(|r| r.git_repo_resource_path == new_config.git_repo_resource_path);
         if is_new && !git_sync_settings.repositories.is_empty() {
             return Err(Error::BadRequest(
-                "Multiple git sync repositories is an Enterprise Edition feature".to_string(),
+                "当前内部部署未开放多个 Git 同步仓库".to_string(),
             ));
         }
     }
@@ -2861,7 +2860,7 @@ async fn edit_deploy_ui_config(
     Path(_w_id): Path<String>,
 ) -> Result<String> {
     return Err(Error::BadRequest(
-        "Deployment UI is only available on Windmill Enterprise Edition".to_string(),
+        "当前内部部署未开放部署页面配置".to_string(),
     ));
 }
 
@@ -2927,8 +2926,7 @@ async fn edit_default_app(
     Json(_new_config): Json<EditDefaultApp>,
 ) -> Result<String> {
     return Err(Error::BadRequest(
-        "Setting a workspace default app is only available on Windmill Enterprise Edition"
-            .to_string(),
+        "当前内部部署未开放工作区默认应用设置".to_string(),
     ));
 }
 
@@ -3016,8 +3014,7 @@ async fn edit_default_app(
     #[cfg(not(feature = "enterprise"))]
     {
         return Err(Error::BadRequest(
-            "Setting a workspace default app is only available on Windmill Enterprise Edition"
-                .to_string(),
+            "当前内部部署未开放工作区默认应用设置".to_string(),
         ));
     }
 
@@ -3717,7 +3714,7 @@ async fn _check_nb_of_workspaces(db: &DB) -> Result<()> {
     .await?;
     if nb_workspaces.unwrap_or(0) >= 2 {
         return Err(Error::BadRequest(
-            "You have reached the maximum number of workspaces (2 outside of default workspace 'admins') without an enterprise license. Archive/delete another workspace to create a new one"
+            "当前内部部署最多支持 2 个非 admins 工作区。请归档或删除其他工作区后再创建。"
                 .to_string(),
         ));
     }
@@ -3745,7 +3742,7 @@ async fn create_workspace(
         .await?;
         if nb_workspaces.unwrap_or(0) >= 10 {
             return Err(Error::BadRequest(
-                "You have reached the maximum number of workspaces (10) on cloud. Contact support@windmill.dev to increase the limit"
+                "当前部署环境已达到工作区数量上限。请联系内部管理员处理。"
                     .to_string(),
             ));
         }
@@ -4853,7 +4850,7 @@ async fn clone_workspace_dependencies(
 }
 
 async fn deprecated_create_workspace_fork(_authed: ApiAuthed) -> Result<String> {
-    return Err(Error::BadRequest("This API endpoint has been relocated. Your Windmill CLI version is outdated and needs to be updated.".to_string()));
+    return Err(Error::BadRequest("该接口已迁移，请更新内部 CLI 后重试。".to_string()));
 }
 
 /// Return the uuids of the git sync jobs to create the branch before creating the fork
@@ -4865,7 +4862,7 @@ async fn create_workspace_fork_branch(
 ) -> JsonResult<Vec<Uuid>> {
     if *CLOUD_HOSTED {
         return Err(Error::BadRequest(format!(
-            "Forking workspaces is not available on app.windmill.dev"
+            "当前部署环境未开放工作区复制功能"
         )));
     }
 
@@ -5026,7 +5023,7 @@ async fn create_workspace_fork(
 ) -> Result<String> {
     if *CLOUD_HOSTED {
         return Err(Error::BadRequest(format!(
-            "Forking workspaces is not available on app.windmill.dev"
+            "当前部署环境未开放工作区复制功能"
         )));
     }
 
@@ -5382,7 +5379,7 @@ async fn invite_user(
     #[cfg(not(feature = "enterprise"))]
     if w_id == "admins" {
         return Err(Error::BadRequest(
-            "The admins workspace is reserved for superadmins. Members cannot be added to it without an enterprise license.".to_string(),
+            "admins 工作区仅供超级管理员使用，当前内部部署不允许向其中添加普通成员。".to_string(),
         ));
     }
 
@@ -5430,11 +5427,11 @@ async fn invite_user(
 
     if !workspace_invite_emails_disabled(&db).await? {
         send_email_if_possible(
-            &format!("Invited to Windmill's workspace: {w_id}"),
+            &format!("已邀请你加入内部系统工作区：{w_id}"),
             &format!(
-                "You have been granted access to Windmill's workspace {w_id}
+                "你已获得内部系统工作区 {w_id} 的访问权限。
 
-If you do not have an account on {}, login with SSO or ask an admin to create an account for you.",
+如果你还没有账号，请使用 SSO 登录或联系管理员创建账号：{}",
                 (**BASE_URL.load()).clone()
             ),
             &nu.email,
@@ -5464,7 +5461,7 @@ async fn add_user(
     #[cfg(not(feature = "enterprise"))]
     if w_id == "admins" {
         return Err(Error::BadRequest(
-            "The admins workspace is reserved for superadmins. Members cannot be added to it without an enterprise license.".to_string(),
+            "admins 工作区仅供超级管理员使用，当前内部部署不允许向其中添加普通成员。".to_string(),
         ));
     }
 
@@ -5584,11 +5581,11 @@ async fn add_user(
 
     if !workspace_invite_emails_disabled(&db).await? {
         send_email_if_possible(
-            &format!("Added to Windmill's workspace: {w_id}"),
+            &format!("已加入内部系统工作区：{w_id}"),
             &format!(
-                "You have been granted access to Windmill's workspace {w_id} by {}
+                "你已由 {} 添加到内部系统工作区 {w_id}。
 
-If you do not have an account on {}, login with SSO or ask an admin to create an account for you.",
+如果你还没有账号，请使用 SSO 登录或联系管理员创建账号：{}",
                 authed.email,
                 (**BASE_URL.load()).clone()
             ),
@@ -7508,7 +7505,7 @@ async fn get_cloud_quotas(
 
     if !*CLOUD_HOSTED {
         return Err(Error::BadRequest(
-            "Cloud quotas are only available on cloud-hosted instances".to_string(),
+            "当前内部部署未开放云配额功能".to_string(),
         ));
     }
 
@@ -7606,7 +7603,7 @@ async fn prune_versions(
 
     if !*CLOUD_HOSTED {
         return Err(Error::BadRequest(
-            "Version pruning is only available on cloud-hosted instances".to_string(),
+            "当前内部部署未开放版本清理功能".to_string(),
         ));
     }
 

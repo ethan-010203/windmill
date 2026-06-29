@@ -7,10 +7,10 @@ use crate::error::Error;
 
 pub fn freshness_enforcement_todo() -> Error {
     Error::internal_err(
-        "Pipeline freshness/SLA enforcement requires the enterprise edition".to_string(),
+        "当前内部部署未开放管道新鲜度和 SLA 检查功能".to_string(),
     )
 }
 
 pub fn backfill_todo() -> Error {
-    Error::internal_err("Pipeline partition backfill requires the enterprise edition".to_string())
+    Error::internal_err("当前内部部署未开放管道分区回填功能".to_string())
 }

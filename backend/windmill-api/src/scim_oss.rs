@@ -20,7 +20,7 @@ pub fn global_service() -> Router {
 
 #[cfg(not(feature = "private"))]
 pub async fn ee() -> String {
-    return "Enterprise Edition".to_string();
+    return "当前内部部署未开放 SCIM 功能".to_string();
 }
 
 #[cfg(not(feature = "private"))]

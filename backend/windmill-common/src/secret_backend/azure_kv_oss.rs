@@ -23,19 +23,19 @@ impl AzureKeyVaultBackend {
 impl SecretBackend for AzureKeyVaultBackend {
     async fn get_secret(&self, _workspace_id: &str, _path: &str) -> Result<String> {
         Err(Error::internal_err(
-            "Azure Key Vault integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 Azure Key Vault 集成功能".to_string(),
         ))
     }
 
     async fn set_secret(&self, _workspace_id: &str, _path: &str, _value: &str) -> Result<()> {
         Err(Error::internal_err(
-            "Azure Key Vault integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 Azure Key Vault 集成功能".to_string(),
         ))
     }
 
     async fn delete_secret(&self, _workspace_id: &str, _path: &str) -> Result<()> {
         Err(Error::internal_err(
-            "Azure Key Vault integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 Azure Key Vault 集成功能".to_string(),
         ))
     }
 
@@ -46,7 +46,7 @@ impl SecretBackend for AzureKeyVaultBackend {
 
 pub async fn test_azure_kv_connection(_settings: &AzureKeyVaultSettings) -> Result<()> {
     Err(Error::internal_err(
-        "Azure Key Vault integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 Azure Key Vault 集成功能".to_string(),
     ))
 }
 
@@ -55,7 +55,7 @@ pub async fn migrate_secrets_to_azure_kv(
     _settings: &AzureKeyVaultSettings,
 ) -> Result<SecretMigrationReport> {
     Err(Error::internal_err(
-        "Azure Key Vault integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 Azure Key Vault 集成功能".to_string(),
     ))
 }
 
@@ -64,6 +64,6 @@ pub async fn migrate_secrets_from_azure_kv(
     _settings: &AzureKeyVaultSettings,
 ) -> Result<SecretMigrationReport> {
     Err(Error::internal_err(
-        "Azure Key Vault integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 Azure Key Vault 集成功能".to_string(),
     ))
 }

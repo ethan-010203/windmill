@@ -221,7 +221,7 @@ pub async fn get_critical_alerts(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn get_critical_alerts() -> Error {
-    Error::NotFound("Critical Alerts require EE".to_string())
+    Error::NotFound("当前内部部署未开放关键告警功能".to_string())
 }
 
 #[cfg(feature = "enterprise")]
@@ -236,7 +236,7 @@ pub async fn acknowledge_critical_alert(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn acknowledge_critical_alert() -> Error {
-    Error::NotFound("Critical Alerts require EE".to_string())
+    Error::NotFound("当前内部部署未开放关键告警功能".to_string())
 }
 
 #[cfg(feature = "enterprise")]
@@ -251,7 +251,7 @@ pub async fn acknowledge_all_critical_alerts(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn acknowledge_all_critical_alerts() -> Error {
-    Error::NotFound("Critical Alerts require EE".to_string())
+    Error::NotFound("当前内部部署未开放关键告警功能".to_string())
 }
 
 #[cfg(feature = "enterprise")]
@@ -308,5 +308,5 @@ async fn mute_critical_alerts(
 
 #[cfg(not(feature = "enterprise"))]
 pub async fn mute_critical_alerts() -> Error {
-    Error::NotFound("Critical Alerts require EE".to_string())
+    Error::NotFound("当前内部部署未开放关键告警功能".to_string())
 }

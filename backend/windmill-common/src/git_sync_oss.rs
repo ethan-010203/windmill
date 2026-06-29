@@ -11,7 +11,7 @@ pub async fn get_github_app_token_internal(
     _job_token: &str,
 ) -> crate::error::Result<String> {
     return Err(crate::error::Error::BadRequest(
-        "Github app authentication is not available on the open source build".to_string(),
+        "当前内部部署未开放 GitHub App 认证功能".to_string(),
     ));
 }
 

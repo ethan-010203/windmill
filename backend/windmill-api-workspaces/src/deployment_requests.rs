@@ -340,10 +340,7 @@ async fn create_deployment_request(
 
     // Send a deployment-request email to each assignee.
     let base_url = (**BASE_URL.load()).clone();
-    let subject = format!(
-        "[Windmill] @{} requested a deployment on fork {w_id}",
-        authed.username
-    );
+    let subject = format!("[内部系统] @{} 请求部署分支工作区 {w_id}", authed.username);
     let body_text = format!(
         "@{} asked you to deploy the fork {w_id} → {parent}.\n\nOpen the compare view: {base_url}/?workspace={w_id}",
         authed.username
@@ -432,7 +429,7 @@ async fn cancel_deployment_request(
     )
     .fetch_all(&db)
     .await?;
-    let subject = format!("[Windmill] Deployment request on fork {w_id} cancelled");
+    let subject = format!("[内部系统] 分支工作区 {w_id} 的部署请求已取消");
     let body_text = format!(
         "@{} cancelled the open deployment request on fork {w_id}.",
         authed.username
@@ -541,7 +538,7 @@ async fn close_deployment_request_merged(
     let mut recipients: BTreeSet<String> = assignee_emails.into_iter().collect();
     recipients.insert(row.requested_by_email);
     recipients.remove(&authed.email);
-    let subject = format!("[Windmill] Deployment request on fork {w_id} merged");
+    let subject = format!("[内部系统] 分支工作区 {w_id} 的部署请求已合并");
     let base_url = (**BASE_URL.load()).clone();
     let body_text = format!(
         "@{} merged the deployment request from @{} on fork {w_id}.\n\n{base_url}/?workspace={w_id}",
@@ -688,10 +685,7 @@ async fn create_deployment_request_comment(
     }
     recipients.remove(&authed.email);
 
-    let subject = format!(
-        "[Windmill] New comment on deployment request for fork {w_id} by @{}",
-        authed.username
-    );
+    let subject = format!("[内部系统] @{} 评论了分支工作区 {w_id} 的部署请求", authed.username);
     let base_url = (**BASE_URL.load()).clone();
     let body_text = format!(
         "@{} commented on the deployment request for fork {w_id}:\n\n{}\n\n{base_url}/?workspace={w_id}",

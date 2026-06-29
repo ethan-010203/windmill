@@ -1284,7 +1284,7 @@ async fn create_app_internal<'a>(
                 .await?;
         if nb_apps.unwrap_or(0) >= 1000 {
             return Err(Error::BadRequest(
-                    "You have reached the maximum number of apps (1000) on cloud. Check your usage in Workspace Settings > General > Cloud Quotas. Contact support@windmill.dev to increase the limit"
+                    "当前部署环境已达到应用数量上限。请联系内部管理员处理。"
                         .to_string(),
                 ));
         }

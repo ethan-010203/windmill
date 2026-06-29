@@ -13,6 +13,6 @@ pub async fn validate_license_key(
     bool,
     Option<windmill_common::ee_oss::OfflineMetadata>,
 )> {
-    // Implementation is not open source
-    Err(anyhow!("License can't be validated in Windmill CE"))
+    // Internal builds do not expose commercial license validation.
+    Err(anyhow!("当前内部部署未开放授权校验功能"))
 }

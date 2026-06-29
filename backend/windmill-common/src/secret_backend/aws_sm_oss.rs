@@ -23,19 +23,19 @@ impl AwsSecretsManagerBackend {
 impl SecretBackend for AwsSecretsManagerBackend {
     async fn get_secret(&self, _workspace_id: &str, _path: &str) -> Result<String> {
         Err(Error::internal_err(
-            "AWS Secrets Manager integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 AWS Secrets Manager 集成功能".to_string(),
         ))
     }
 
     async fn set_secret(&self, _workspace_id: &str, _path: &str, _value: &str) -> Result<()> {
         Err(Error::internal_err(
-            "AWS Secrets Manager integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 AWS Secrets Manager 集成功能".to_string(),
         ))
     }
 
     async fn delete_secret(&self, _workspace_id: &str, _path: &str) -> Result<()> {
         Err(Error::internal_err(
-            "AWS Secrets Manager integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 AWS Secrets Manager 集成功能".to_string(),
         ))
     }
 
@@ -46,7 +46,7 @@ impl SecretBackend for AwsSecretsManagerBackend {
 
 pub async fn test_aws_sm_connection(_settings: &AwsSecretsManagerSettings) -> Result<()> {
     Err(Error::internal_err(
-        "AWS Secrets Manager integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 AWS Secrets Manager 集成功能".to_string(),
     ))
 }
 
@@ -55,7 +55,7 @@ pub async fn migrate_secrets_to_aws_sm(
     _settings: &AwsSecretsManagerSettings,
 ) -> Result<SecretMigrationReport> {
     Err(Error::internal_err(
-        "AWS Secrets Manager integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 AWS Secrets Manager 集成功能".to_string(),
     ))
 }
 
@@ -64,6 +64,6 @@ pub async fn migrate_secrets_from_aws_sm(
     _settings: &AwsSecretsManagerSettings,
 ) -> Result<SecretMigrationReport> {
     Err(Error::internal_err(
-        "AWS Secrets Manager integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 AWS Secrets Manager 集成功能".to_string(),
     ))
 }

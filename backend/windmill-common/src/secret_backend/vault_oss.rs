@@ -34,19 +34,19 @@ impl VaultBackend {
 impl SecretBackend for VaultBackend {
     async fn get_secret(&self, _workspace_id: &str, _path: &str) -> Result<String> {
         Err(Error::internal_err(
-            "HashiCorp Vault integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 HashiCorp Vault 集成功能".to_string(),
         ))
     }
 
     async fn set_secret(&self, _workspace_id: &str, _path: &str, _value: &str) -> Result<()> {
         Err(Error::internal_err(
-            "HashiCorp Vault integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 HashiCorp Vault 集成功能".to_string(),
         ))
     }
 
     async fn delete_secret(&self, _workspace_id: &str, _path: &str) -> Result<()> {
         Err(Error::internal_err(
-            "HashiCorp Vault integration requires Enterprise Edition".to_string(),
+            "当前内部部署未开放 HashiCorp Vault 集成功能".to_string(),
         ))
     }
 
@@ -67,22 +67,19 @@ pub async fn create_secret_backend(
         SecretBackendConfig::Database => Ok(Arc::new(DatabaseBackend::new(db))),
         SecretBackendConfig::HashiCorpVault(_) => {
             tracing::warn!(
-                "HashiCorp Vault is configured but requires Enterprise Edition. \
-                 Falling back to database backend."
+                "HashiCorp Vault 已配置但当前内部部署未开放，已回退到数据库密钥存储。"
             );
             Ok(Arc::new(DatabaseBackend::new(db)))
         }
         SecretBackendConfig::AzureKeyVault(_) => {
             tracing::warn!(
-                "Azure Key Vault is configured but requires Enterprise Edition. \
-                 Falling back to database backend."
+                "Azure Key Vault 已配置但当前内部部署未开放，已回退到数据库密钥存储。"
             );
             Ok(Arc::new(DatabaseBackend::new(db)))
         }
         SecretBackendConfig::AwsSecretsManager(_) => {
             tracing::warn!(
-                "AWS Secrets Manager is configured but requires Enterprise Edition. \
-                 Falling back to database backend."
+                "AWS Secrets Manager 已配置但当前内部部署未开放，已回退到数据库密钥存储。"
             );
             Ok(Arc::new(DatabaseBackend::new(db)))
         }
@@ -92,7 +89,7 @@ pub async fn create_secret_backend(
 /// Test connection to Vault (OSS stub)
 pub async fn test_vault_connection(_settings: &VaultSettings, _db: Option<&DB>) -> Result<()> {
     Err(Error::internal_err(
-        "HashiCorp Vault integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 HashiCorp Vault 集成功能".to_string(),
     ))
 }
 
@@ -102,7 +99,7 @@ pub async fn migrate_secrets_to_vault(
     _settings: &VaultSettings,
 ) -> Result<SecretMigrationReport> {
     Err(Error::internal_err(
-        "HashiCorp Vault integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 HashiCorp Vault 集成功能".to_string(),
     ))
 }
 
@@ -112,13 +109,13 @@ pub async fn migrate_secrets_to_database(
     _settings: &VaultSettings,
 ) -> Result<SecretMigrationReport> {
     Err(Error::internal_err(
-        "HashiCorp Vault integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 HashiCorp Vault 集成功能".to_string(),
     ))
 }
 
 /// Generate a JWT for Vault authentication (OSS stub)
 pub async fn generate_vault_jwt(_db: &DB, _vault_address: &str) -> Result<String> {
     Err(Error::internal_err(
-        "HashiCorp Vault integration requires Enterprise Edition".to_string(),
+        "当前内部部署未开放 HashiCorp Vault 集成功能".to_string(),
     ))
 }

@@ -78,7 +78,7 @@ pub async fn generate_id_token<T: AdditionalClaims>(
     _email: Option<String>,
 ) -> Result<WindmillIdToken> {
     Err(Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放 OIDC 令牌生成功能".to_string(),
     ))
 }
 
@@ -89,6 +89,6 @@ pub async fn generate_id_token<T: AdditionalClaims>(
 ))]
 pub async fn get_private_key(_db: Option<&DB>) -> anyhow::Result<String> {
     Err(anyhow::anyhow!(
-        "Not implemented in Windmill's Open Source repository"
+        "当前内部部署未开放 OIDC 私钥读取功能"
     ))
 }

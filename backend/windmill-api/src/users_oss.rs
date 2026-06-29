@@ -38,7 +38,7 @@ pub async fn create_user(
     mut _nu: NewUser,
 ) -> Result<(StatusCode, String)> {
     Err(Error::internal_err(
-        "User creation is not implemented in the open-source version.".to_string(),
+        "当前内部部署未开放该用户创建入口".to_string(),
     ))
 }
 
@@ -51,14 +51,14 @@ pub async fn set_password(
     _ep: EditPassword,
 ) -> Result<String> {
     Err(Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放该密码设置入口".to_string(),
     ))
 }
 
 #[cfg(not(feature = "private"))]
 pub fn hash_password(_argon2: Arc<Argon2<'_>>, _password: String) -> Result<String> {
     Err(Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放该密码处理入口".to_string(),
     ))
 }
 
@@ -77,6 +77,6 @@ pub async fn submit_onboarding_data(
     Json(_data): Json<OnboardingData>,
 ) -> Result<String> {
     Err(Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放新手引导数据提交".to_string(),
     ))
 }

@@ -62,7 +62,7 @@ pub async fn get_workspace_s3_resource<'c>(
 
 #[cfg(not(feature = "private"))]
 pub fn get_random_file_name(_file_extension: Option<String>) -> String {
-    unimplemented!("Not implemented in Windmill's Open Source repository")
+    unimplemented!("当前内部部署未开放对象存储文件名生成入口")
 }
 
 #[cfg(not(feature = "private"))]
@@ -77,7 +77,7 @@ pub async fn get_s3_resource<'c>(
     _job_id: Option<Uuid>,
 ) -> error::Result<ObjectStoreResource> {
     Err(error::Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放对象存储资源读取入口".to_string(),
     ))
 }
 
@@ -89,7 +89,7 @@ pub async fn upload_file_from_req(
     _options: PutMultipartOpts,
 ) -> error::Result<PutResult> {
     Err(error::Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放对象存储上传入口".to_string(),
     ))
 }
 
@@ -101,7 +101,7 @@ pub async fn upload_file_internal(
     _options: PutMultipartOpts,
 ) -> error::Result<()> {
     Err(error::Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放对象存储上传入口".to_string(),
     ))
 }
 
@@ -114,7 +114,7 @@ pub async fn download_s3_file_internal(
     _query: DownloadFileQuery,
 ) -> error::Result<Response> {
     Err(error::Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放对象存储下载入口".to_string(),
     ))
 }
 
@@ -125,7 +125,7 @@ pub async fn read_object_streamable(
     _file_key: &str,
 ) -> error::Result<Response> {
     Err(error::Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放对象存储读取入口".to_string(),
     ))
 }
 
@@ -139,7 +139,7 @@ pub async fn delete_s3_file_internal(
     _query: DeleteS3FileQuery,
 ) -> error::Result<()> {
     Err(error::Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放对象存储删除入口".to_string(),
     ))
 }
 
@@ -164,6 +164,6 @@ pub async fn get_workspace_s3_resource_and_check_paths<'c>(
     Option<windmill_types::s3::ObjectStoreResource>,
 )> {
     Err(windmill_common::error::Error::internal_err(
-        "Not implemented in Windmill's Open Source repository".to_string(),
+        "当前内部部署未开放对象存储权限检查入口".to_string(),
     ))
 }

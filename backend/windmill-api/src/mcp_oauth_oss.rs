@@ -61,7 +61,7 @@ mod oss_impl {
         Json(_req): Json<DiscoverRequest>,
     ) -> JsonResult<DiscoverResponse> {
         Err(error::Error::BadRequest(
-            "Not implemented in Windmill's Open Source repository".to_string(),
+            "当前内部部署未开放 MCP OAuth 发现功能".to_string(),
         ))
     }
 
@@ -77,7 +77,7 @@ mod oss_impl {
         Query(_params): Query<StartPopupParams>,
     ) -> Result<Redirect, error::Error> {
         Err(error::Error::BadRequest(
-            "Not implemented in Windmill's Open Source repository".to_string(),
+            "当前内部部署未开放 MCP OAuth 授权功能".to_string(),
         ))
     }
 
@@ -99,12 +99,12 @@ mod oss_impl {
         if (window.opener) {
             window.opener.postMessage({
                 type: 'MCP_ERROR',
-                error: "Not implemented in Windmill's Open Source repository"
+                error: "当前内部部署未开放 MCP OAuth 回调功能"
             }, window.location.origin);
         }
         window.close();
     </script>
-    <p>Not implemented in Windmill's Open Source repository</p>
+    <p>当前内部部署未开放 MCP OAuth 回调功能</p>
 </body>
 </html>"#;
         Ok(Html(html.to_string()))

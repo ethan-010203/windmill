@@ -88,9 +88,7 @@ pub enum Error {
     Generic(StatusCode, String),
     #[error("{feature} is unavailable due to some workers being behind. Do not use the feature or make sure all workers run at least {min_version}")]
     WorkersAreBehind { feature: String, min_version: String },
-    #[error(
-        "Breaking change was introduced in v{version} ({feature}). Follow this migration guide: {guide_url}"
-    )]
+    #[error("当前功能需要 v{version} 或以上版本支持：{feature}。请联系内部管理员处理版本迁移。")]
     MigrationNeeded { version: String, feature: String, guide_url: url::Url },
     #[error("{0} is unavailable. It is possible for this worker to be behind.")]
     FeatureUnavailable(String),
