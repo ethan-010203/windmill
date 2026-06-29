@@ -1,17 +1,12 @@
 <script lang="ts">
 	import { Button } from '$lib/components/common'
-	import { Webhook, Route, Unplug, Mail, Plus, Database } from 'lucide-svelte'
-	import KafkaIcon from '$lib/components/icons/KafkaIcon.svelte'
-	import { enterpriseLicense } from '$lib/stores'
+	import { Webhook, Route, Unplug, Plus, Database } from 'lucide-svelte'
 	import { type CaptureTriggerKind } from '$lib/gen'
 	import { createEventDispatcher } from 'svelte'
 	import { captureTriggerKindToTriggerKind } from '../triggers'
 	import CaptureIcon from './CaptureIcon.svelte'
-	import NatsIcon from '../icons/NatsIcon.svelte'
-	import AwsIcon from '../icons/AwsIcon.svelte'
 	import DropdownV2 from '$lib/components/DropdownV2.svelte'
 	import MqttIcon from '../icons/MqttIcon.svelte'
-	import GoogleCloudIcon from '../icons/GoogleCloudIcon.svelte'
 
 	interface Props {
 		small?: boolean
@@ -45,18 +40,6 @@
 			action: () => handleClick('websocket')
 		},
 		{
-			icon: AwsIcon,
-			displayName: 'SQS',
-			action: () => handleClick('sqs'),
-			disabled: !$enterpriseLicense
-		},
-		{
-			icon: GoogleCloudIcon,
-			displayName: 'GCP Pub/Sub',
-			action: () => handleClick('gcp'),
-			disabled: !$enterpriseLicense
-		},
-		{
 			icon: MqttIcon,
 			displayName: 'MQTT',
 			action: () => handleClick('mqtt')
@@ -65,23 +48,6 @@
 			icon: Database,
 			displayName: 'Postgres',
 			action: () => handleClick('postgres')
-		},
-		{
-			icon: Mail,
-			displayName: 'Email',
-			action: () => handleClick('email')
-		},
-		{
-			icon: KafkaIcon,
-			displayName: 'Kafka',
-			action: () => handleClick('kafka'),
-			disabled: !$enterpriseLicense
-		},
-		{
-			icon: NatsIcon,
-			displayName: 'Nats',
-			action: () => handleClick('nats'),
-			disabled: !$enterpriseLicense
 		}
 	])
 </script>

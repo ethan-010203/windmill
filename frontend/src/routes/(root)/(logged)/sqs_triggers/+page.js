@@ -1,5 +1,5 @@
+import { redirect } from '@sveltejs/kit'
+
 export function load() {
-	return {
-		stuff: { title: 'SQS triggers' }
-	}
+	redirect(307, '/schedules')
 }

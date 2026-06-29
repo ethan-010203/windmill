@@ -1,5 +1,5 @@
+import { redirect } from '@sveltejs/kit'
+
 export function load() {
-	return {
-		stuff: { title: 'Kafka triggers' }
-	}
+	redirect(307, '/schedules')
 }

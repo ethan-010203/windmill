@@ -142,23 +142,7 @@
 					href: `${base}/postgres_triggers`,
 					kind: 'postgres'
 				},
-				{ label: 'Kafka triggers', id: 'triggers', href: `${base}/kafka_triggers`, kind: 'kafka' },
-				{ label: 'NATS triggers', id: 'triggers', href: `${base}/nats_triggers`, kind: 'nats' },
-				{ label: 'SQS triggers', id: 'triggers', href: `${base}/sqs_triggers`, kind: 'sqs' },
-				{
-					label: 'GCP Pub/Sub triggers',
-					id: 'triggers',
-					href: `${base}/gcp_triggers`,
-					kind: 'gcp'
-				},
-				{
-					label: 'Azure Event Grid triggers',
-					id: 'triggers',
-					href: `${base}/azure_triggers`,
-					kind: 'azure'
-				},
-				{ label: 'MQTT triggers', id: 'triggers', href: `${base}/mqtt_triggers`, kind: 'mqtt' },
-				{ label: 'Email triggers', id: 'triggers', href: `${base}/email_triggers`, kind: 'email' }
+				{ label: 'MQTT triggers', id: 'triggers', href: `${base}/mqtt_triggers`, kind: 'mqtt' }
 			] as TriggerMenuLink[]
 		).filter(filterLink)
 	)
@@ -168,6 +152,17 @@
 	let extraTriggerLinks = $derived(
 		allTriggerLinks.filter((link) => !$usedTriggerKinds.includes(link.kind))
 	)
+
+	function toggleExtraTriggers() {
+		showExtraTriggers = !showExtraTriggers
+	}
+
+	function handleExtraTriggersKeydown(event: KeyboardEvent) {
+		if (event.key !== 'Enter' && event.key !== ' ') return
+		event.preventDefault()
+		event.stopPropagation()
+		toggleExtraTriggers()
+	}
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -336,15 +331,15 @@
 											>{@render renderSecondMenuLinks(secondMenuTriggerLinks)}</div
 										>{/if}
 									{#if extraTriggerLinks.length}<div>
-											<!-- svelte-ignore a11y_no_static_element_interactions -->
 											<div
 												class="flex flex-row gap-3.5 items-center px-2 py-2 w-full text-secondary text-2xs hover:bg-surface-hover hover:text-primary cursor-pointer"
 												role="button"
 												tabindex="0"
 												onclick={(e) => {
 													e.stopPropagation()
-													showExtraTriggers = !showExtraTriggers
+													toggleExtraTriggers()
 												}}
+												onkeydown={handleExtraTriggersKeydown}
 											>
 												<Plus size={12} />
 												<span class="text-2xs">更多触发器</span>

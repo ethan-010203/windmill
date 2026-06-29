@@ -1,5 +1,5 @@
+import { redirect } from '@sveltejs/kit'
+
 export function load() {
-	return {
-		stuff: { title: 'GCP Pub/Sub triggers' }
-	}
+	redirect(307, '/schedules')
 }
