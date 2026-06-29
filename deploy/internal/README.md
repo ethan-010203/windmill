@@ -1,6 +1,6 @@
 # 内部 Docker 部署包
 
-这个目录用于在公司 Windows 电脑或 Windows Server 上从源码本地构建并启动系统。
+这个目录用于在公司 Windows 电脑或 Windows Server 上启动内部系统。`start.ps1` 依赖已经存在的本地镜像，或 `.env` 中配置的可拉取远程镜像；从源码构建本地镜像请使用 `build-image.ps1`。
 
 ## 前置要求
 
@@ -8,8 +8,8 @@
 - 已安装 Git
 - 已安装 Docker Desktop
 - Docker Desktop 使用 Linux containers
-- 机器至少 8GB 内存，首次本地构建建议 16GB 以上
-- 首次构建需要联网下载 Docker 基础镜像、Rust/Node 依赖和系统依赖
+- 机器至少 8GB 内存；如果要本地构建镜像，建议 16GB 以上
+- 首次构建镜像需要联网下载 Docker 基础镜像、Rust/Node 依赖和系统依赖
 
 ## 快速启动
 
@@ -18,6 +18,7 @@ git clone https://github.com/你的账号/你的仓库.git
 cd 仓库\deploy\internal
 copy .env.example .env
 notepad .env
+.\build-image.ps1
 .\start.ps1
 ```
 
@@ -39,6 +40,7 @@ http://127.0.0.1:8000
 - `SECRET_KEY`：应用密钥，建议使用 32 位以上随机字符串
 - `SUPERADMIN_SECRET`：虚拟超级管理员 token，建议使用长随机字符串
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD`：首次初始化管理员账号时使用的记录值
+- `WINDMILL_IMAGE`：运行镜像。使用本地构建时默认是 `internal-windmill:ce-source`
 
 如果要改端口，修改：
 
@@ -50,13 +52,19 @@ WM_BASE_URL=http://127.0.0.1:8000
 
 ## 常用命令
 
-启动并构建：
+从当前源码构建本地运行镜像：
+
+```powershell
+.\build-image.ps1
+```
+
+启动：
 
 ```powershell
 .\start.ps1
 ```
 
-只启动，不重新构建：
+跳过镜像检查或远程镜像拉取，直接启动：
 
 ```powershell
 .\start.ps1 -NoBuild
@@ -114,12 +122,13 @@ deploy\internal\backups\
 
 ## 升级
 
-在源码目录拉取最新内部分支后重新构建：
+在源码目录拉取最新内部分支后，先备份，再重新构建镜像并启动：
 
 ```powershell
 git pull origin custom/product-main
 cd deploy\internal
 .\backup.ps1
+.\build-image.ps1
 .\start.ps1
 ```
 
@@ -164,9 +173,19 @@ WM_BASE_URL=http://127.0.0.1:8080
 .\restart.ps1
 ```
 
-### 首次构建很慢
+### 首次构建镜像很慢
 
 这是正常现象。首次构建会下载依赖并编译后端，耗时可能较长。后续构建会复用 Docker 缓存。
+
+### start.ps1 提示找不到镜像
+
+如果 `.env` 中的 `WINDMILL_IMAGE` 是 `internal-windmill:ce-source`，请先运行：
+
+```powershell
+.\build-image.ps1
+```
+
+如果你使用远程镜像，请把 `WINDMILL_IMAGE` 改成完整镜像地址，例如 `registry.example.com/internal-windmill:版本号`。
 
 ### 登录账号是什么
 

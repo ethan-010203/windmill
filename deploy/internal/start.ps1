@@ -14,16 +14,16 @@ function Invoke-Checked {
 
     & $Command
     if ($LASTEXITCODE -ne 0) {
-        throw "Command failed with exit code $LASTEXITCODE"
+        throw "命令执行失败，退出码：$LASTEXITCODE"
     }
 }
 
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-    throw "docker command was not found. Please install Docker Desktop and use Linux containers."
+    throw "未找到 docker 命令。请先安装 Docker Desktop，并确认正在使用 Linux containers。"
 }
 
 if (-not (Test-Path ".env")) {
-    throw ".env was not found. Copy .env.example to .env and update passwords/secrets first."
+    throw "未找到 .env。请先复制 .env.example 为 .env，并修改密码和密钥。"
 }
 
 Invoke-Checked { docker compose version | Out-Null }
@@ -57,10 +57,10 @@ if (-not $NoBuild) {
     if ($WindmillImage -and (Test-LocalImageReference $WindmillImage)) {
         docker image inspect $WindmillImage | Out-Null
         if ($LASTEXITCODE -ne 0) {
-            throw "Local image '$WindmillImage' was not found. Build it first, or set WINDMILL_IMAGE to a pullable registry image."
+            throw "未找到本地镜像 '$WindmillImage'。请先运行 .\build-image.ps1，或把 WINDMILL_IMAGE 改成可拉取的远程镜像。"
         }
 
-        Write-Host "Using local Windmill image: $WindmillImage"
+        Write-Host "使用本地运行镜像：$WindmillImage"
     } else {
         Invoke-Checked { docker compose pull }
     }
@@ -69,6 +69,6 @@ if (-not $NoBuild) {
 Invoke-Checked { docker compose up -d }
 
 Write-Host ""
-Write-Host "System started." -ForegroundColor Green
-Write-Host "Open the BASE_URL from .env, default: http://127.0.0.1:8000"
-Write-Host "On first visit, follow the page prompts to create the admin account."
+Write-Host "系统已启动。" -ForegroundColor Green
+Write-Host "请打开 .env 中的 BASE_URL，默认地址：http://127.0.0.1:8000"
+Write-Host "首次访问时，按页面提示创建管理员账号。"

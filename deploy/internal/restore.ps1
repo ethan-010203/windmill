@@ -10,15 +10,15 @@ $DeployDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $DeployDir
 
 if (-not (Test-Path $BackupFile)) {
-    throw "Backup file does not exist: $BackupFile"
+    throw "备份文件不存在：$BackupFile"
 }
 
-Write-Host "About to restore database from: $BackupFile" -ForegroundColor Yellow
-Write-Host "Restore will overwrite the current database. Confirm that current data is backed up."
+Write-Host "准备从备份恢复数据库：$BackupFile" -ForegroundColor Yellow
+Write-Host "恢复操作会覆盖当前数据库。请确认当前数据已经备份。"
 if (-not $Force) {
-    $Confirm = Read-Host "Type RESTORE to continue"
+    $Confirm = Read-Host "输入 RESTORE 继续"
     if ($Confirm -ne "RESTORE") {
-        Write-Host "Restore cancelled."
+        Write-Host "已取消恢复。"
         exit 0
     }
 }
@@ -33,4 +33,4 @@ docker compose exec -T postgres pg_restore -U postgres -d windmill --clean --if-
 docker compose exec -T postgres rm -f /tmp/windmill-restore.dump
 
 docker compose up -d
-Write-Host "Restore completed; services restarted." -ForegroundColor Green
+Write-Host "恢复完成，服务已重新启动。" -ForegroundColor Green
