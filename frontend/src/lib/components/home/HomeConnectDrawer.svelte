@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { workspaceStore } from '$lib/stores'
-	import { Button, Drawer, DrawerContent, Tab, TabContent, Tabs } from '$lib/components/common'
+	import { Drawer, DrawerContent, Tab, TabContent, Tabs } from '$lib/components/common'
 	import CreateToken from '$lib/components/settings/CreateToken.svelte'
 	import CopyableCodeBlock from '$lib/components/details/CopyableCodeBlock.svelte'
-	import { Bot, ExternalLink, Terminal } from 'lucide-svelte'
+	import { Bot, Terminal } from 'lucide-svelte'
 	import { shell } from 'svelte-highlight/languages'
 
 	type ConnectTab = 'cli' | 'mcp'
@@ -33,7 +33,7 @@ wmill sync pull`)
 </script>
 
 <Drawer bind:this={drawer} size="720px">
-	<DrawerContent title="Connect this workspace" on:close={closeDrawer}>
+	<DrawerContent title="连接当前工作区" on:close={closeDrawer}>
 		<div class="flex flex-col gap-5 pb-4">
 			<div class="flex flex-col gap-2">
 				<div class="w-full">
@@ -46,24 +46,14 @@ wmill sync pull`)
 									<div class="flex flex-col gap-4">
 										<div class="flex items-start justify-between gap-3 flex-wrap">
 											<div class="flex flex-col gap-1">
-												<h3 class="text-sm font-semibold text-emphasis">Local setup</h3>
+												<h3 class="text-sm font-semibold text-emphasis">本地配置</h3>
 												<p class="text-xs text-secondary max-w-xl">
-													Run this in your local repo to bind the current workspace, create
+													在本地仓库中运行这些命令，绑定当前工作区、创建
 													<code class="rounded bg-surface-secondary px-1 py-0.5 font-mono text-2xs text-emphasis"
 														>wmill.yaml</code
-													>, and pull the latest files.
+													>，并拉取最新文件。
 												</p>
 											</div>
-
-											<Button
-												variant="subtle"
-												unifiedSize="sm"
-												href="https://www.windmill.dev/docs/advanced/cli"
-												target="_blank"
-												startIcon={{ icon: ExternalLink }}
-											>
-												CLI docs
-											</Button>
 										</div>
 
 										<CopyableCodeBlock
@@ -77,15 +67,15 @@ wmill sync pull`)
 											<code class="rounded bg-surface-secondary px-1 py-0.5 font-mono text-2xs text-emphasis"
 												>wmill workspace add</code
 											>
-											will handle authentication,
+											会处理认证，
 											<code class="rounded bg-surface-secondary px-1 py-0.5 font-mono text-2xs text-emphasis"
 												>wmill init</code
 											>
-											bootstraps the local config, and
+											会初始化本地配置，
 											<code class="rounded bg-surface-secondary px-1 py-0.5 font-mono text-2xs text-emphasis"
 												>wmill sync pull</code
 											>
-											fetches the workspace content.
+											会拉取工作区内容。
 										</p>
 									</div>
 								</TabContent>
@@ -96,27 +86,16 @@ wmill sync pull`)
 											<div class="flex flex-col gap-1">
 												<h3 class="text-sm font-semibold text-emphasis">MCP URL</h3>
 												<p class="text-xs text-secondary max-w-xl">
-													Generate an MCP server URL for the current workspace and choose which
-													scripts, flows, and endpoints the client can access.
+													为当前工作区生成 MCP 服务地址，并选择客户端可以访问的脚本、流程和端点。
 												</p>
 											</div>
-
-											<Button
-												variant="subtle"
-												unifiedSize="sm"
-												href="https://www.windmill.dev/docs/core_concepts/mcp"
-												target="_blank"
-												startIcon={{ icon: ExternalLink }}
-											>
-												MCP docs
-											</Button>
 										</div>
 
 										{#key openVersion}
 											<CreateToken
 												mcpOnly
 												lockWorkspace
-												title="Generate MCP URL"
+												title="生成 MCP URL"
 												defaultNewTokenWorkspace={$workspaceStore}
 												onTokenCreated={noop}
 											/>

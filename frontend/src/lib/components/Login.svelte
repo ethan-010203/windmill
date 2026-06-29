@@ -254,7 +254,7 @@
 
 	$effect(() => {
 		if (firstTime && !email && !password) {
-			email = 'admin@windmill.dev'
+			email = 'admin@example.local'
 			password = 'changeme'
 		}
 	})
@@ -558,14 +558,7 @@
 
 			{#if isCloudHosted()}
 				<p class="text-2xs text-secondary mt-10 text-center">
-					By logging in, you agree to our
-					<a href="https://windmill.dev/terms_of_service" target="_blank" rel="noreferrer">
-						Terms of service
-					</a>
-					and
-					<a href="https://windmill.dev/privacy_policy" target="_blank" rel="noreferrer">
-						Privacy policy
-					</a>
+					登录即表示你同意本系统的内部使用规范。
 				</p>
 			{/if}
 		</div>

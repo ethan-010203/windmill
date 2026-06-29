@@ -924,17 +924,14 @@
 					<Skeleton layout={[[2]]} />
 				{/each}
 			{/if}
-		</div>
-		{#if connects && connects.filter(isSharedConnect).length == 0}
-			<div class="text-secondary text-xs w-full"
-				>No OAuth APIs have been set up on this instance. To add OAuth APIs, first sync the resource
-				types with the hub, then add OAuth configuration. See <a
-					href="https://www.windmill.dev/docs/misc/setup_oauth">documentation</a
-				>
 			</div>
-		{/if}
+			{#if connects && connects.filter(isSharedConnect).length == 0}
+				<div class="text-secondary text-xs w-full"
+					>当前实例还没有配置 OAuth API。如需添加 OAuth API，请先在内部资源类型中准备对应资源类型，然后添加 OAuth 配置。
+				</div>
+			{/if}
 
-		<h2 class="mt-8 mb-2 text-sm font-semibold text-emphasis">Others</h2>
+			<h2 class="mt-8 mb-2 text-sm font-semibold text-emphasis">其他</h2>
 
 		{#if connectsManual && connectsManual?.length < 10}
 			<div class="text-secondary text-xs p-2">

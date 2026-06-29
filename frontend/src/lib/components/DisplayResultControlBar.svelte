@@ -74,14 +74,13 @@
 			</a>
 		{/if}
 	{/if}
-	{#if disableTooltips !== true}
-		<Popover documentationLink="https://www.windmill.dev/docs/core_concepts/rich_display_rendering">
-			{#snippet text()}
-				The result renderer in Windmill supports rich display rendering, allowing you to customize
-				the display format of your results.
-			{/snippet}
-			<div>
-				<InfoIcon size={14} />
+		{#if disableTooltips !== true}
+			<Popover documentationLink="https://www.windmill.dev/docs/core_concepts/rich_display_rendering">
+				{#snippet text()}
+					结果渲染器支持富文本展示，可以按需要自定义结果的展示格式。
+				{/snippet}
+				<div>
+					<InfoIcon size={14} />
 			</div>
 		</Popover>
 	{/if}

@@ -568,20 +568,12 @@
 			{@render replaceUnauthorizedWarning()}
 		{:else}
 			<div class="mb-2">
-				<Alert type="info" title="Access to S3 bucket restricted">
-					<p>
-						You don't have access to the S3 bucket resource and your administrator has restricted
-						the access to it. You are not authorized to browse the bucket content. If you think this
-						is incorrect, please contact your workspace administrator.
-					</p>
-					<p>
-						More info in <a
-							href="https://www.windmill.dev/docs/core_concepts/persistent_storage/large_data_files"
-							target="_blank">Windmill's documentation</a
-						></p
-					></Alert
-				>
-			</div>
+					<Alert type="info" title="S3 bucket 访问受限">
+						<p>
+							你没有访问该 S3 bucket 资源的权限，管理员已限制访问。当前账号不能浏览 bucket 内容。如需调整权限，请联系工作区管理员。
+						</p>
+					</Alert>
+				</div>
 		{/if}
 	{/if}
 	<div class="flex flex-row border rounded-md h-full min-h-0 overflow-hidden">

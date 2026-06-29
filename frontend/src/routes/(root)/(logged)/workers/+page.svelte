@@ -637,21 +637,16 @@
 </Drawer>
 
 <Drawer bind:this={yamlConfigDrawer} size="800px">
-	<DrawerContent
-		title="Worker groups config (YAML)"
-		on:close={() => {
-			yamlDiffMode = false
-			yamlConfigDrawer?.toggleDrawer?.()
-		}}
-	>
-		<p class="text-2xs text-tertiary mb-2">
-			Use this YAML to manage worker group configs as code.
-			<a
-				href="https://www.windmill.dev/docs/advanced/instance_settings#kubernetes-operator"
-				target="_blank"
-				rel="noopener noreferrer">Learn more <ExternalLink size={12} class="inline-block" /></a
-			>
-		</p>
+		<DrawerContent
+			title="Worker 组配置（YAML）"
+			on:close={() => {
+				yamlDiffMode = false
+				yamlConfigDrawer?.toggleDrawer?.()
+			}}
+		>
+			<p class="text-2xs text-tertiary mb-2">
+				使用此 YAML 以代码方式管理 worker 组配置。
+			</p>
 		{#if yamlDiffMode}
 			<div class="w-full h-full">
 				{#await import('$lib/components/DiffEditor.svelte')}

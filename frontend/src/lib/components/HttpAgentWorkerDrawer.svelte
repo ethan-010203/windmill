@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AgentWorkersService, type ListBlacklistedAgentTokensResponse } from '$lib/gen'
 	import { sendUserToast } from '$lib/toast'
-	import { ExternalLink, RefreshCw, Trash } from 'lucide-svelte'
+	import { RefreshCw, Trash } from 'lucide-svelte'
 	import { Alert, Button, Tab, Tabs } from './common'
 	import Section from './Section.svelte'
 	import TagsToListenTo from './TagsToListenTo.svelte'
@@ -131,19 +131,15 @@
 </script>
 
 <Tabs bind:selected={selectedTab}>
-	<Tab value="create" label="Create" />
-	<Tab value="blacklist" label="Blacklist" />
+		<Tab value="create" label="创建" />
+		<Tab value="blacklist" label="黑名单" />
 	{#snippet content()}
 		<div class="flex flex-col gap-y-6 pt-2">
-			{#if selectedTab === 'create'}
-				<Description
-					><a href="https://www.windmill.dev/docs/core_concepts/agent_workers" target="_blank"
-						>Agent workers <ExternalLink size={12} class="inline-block" /></a
-					> can be used to run jobs with remote workers with unreliable connectivity, workers behind
-					firewalls (HTTP-only), untrusted environments (no database access), or large deployments (thousands
-					of workers). They have more latency than normal workers. Follow the steps below to create an
-					agent worker.</Description
-				>
+				{#if selectedTab === 'create'}
+					<Description>
+						Agent worker 可用于连接不稳定的远程 worker、防火墙后的 worker（仅 HTTP）、不可信环境（无数据库访问权限）或大规模部署。它比普通
+						worker 延迟更高。按下面步骤创建 agent worker。
+					</Description>
 
 				<Section
 					label="1. Generate an agent worker token"

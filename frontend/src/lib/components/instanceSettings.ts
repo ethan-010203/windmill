@@ -136,7 +136,7 @@ export const settings: Record<string, Setting[]> = {
 				'实例对用户公开访问的基础地址。',
 			key: 'base_url',
 			fieldType: 'text',
-			placeholder: 'https://windmill.com',
+			placeholder: 'https://internal.example.local',
 			storage: 'setting',
 			error: '基础访问地址必须以 http:// 或 https:// 开头，且不能以 / 或空格结尾',
 			isValid: (value: string | undefined) =>
@@ -151,7 +151,7 @@ export const settings: Record<string, Setting[]> = {
 			description: '邮件触发器 Webhook 中展示的域名，应与 MX 记录匹配。',
 			key: 'email_domain',
 			fieldType: 'text',
-			placeholder: 'mail.windmill.com',
+			placeholder: 'mail.example.local',
 			storage: 'setting',
 			triggersRestart: true,
 			error: '必须是有效域名',

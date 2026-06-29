@@ -37,7 +37,7 @@
 	} from '$lib/stores'
 	import { switchWorkspace } from '$lib/storeUtils'
 	import { sendUserToast } from '$lib/toast'
-	import { clone, emptyString, encodeState, hasUnsavedChanges } from '$lib/utils'
+	import { clone, emptyString, hasUnsavedChanges } from '$lib/utils'
 	import { downloadViaClient, shouldDownloadViaClient } from '$lib/utils/downloadFile'
 	import { Slack } from 'lucide-svelte'
 	import SidebarNavigation from '$lib/components/common/sidebar/SidebarNavigation.svelte'
@@ -1293,12 +1293,9 @@
 												sendUserToast('Disconnected Slack')
 											}
 										}}
-										onSelect={editSlackCommand}
-										connectHref="{base}/api/oauth/connect_slack"
-										createScriptHref="{base}/scripts/add?hub=hub%2F28071%2Fslack%2Fexample_of_responding_to_a_slack_command_slack"
-										createFlowHref="{base}/flows/add?hub=28"
-										documentationLink="https://www.windmill.dev/docs/integrations/slack"
-										onLoadSettings={loadSettings}
+											onSelect={editSlackCommand}
+											connectHref="{base}/api/oauth/connect_slack"
+											onLoadSettings={loadSettings}
 										display_name={slack_team_name}
 										hideConnectButton={useCustomSlackApp && !slackOAuthConfigLoaded}
 										isOAuthEnabled={isSlackOAuthEnabled}
@@ -1427,12 +1424,9 @@
 												loadSettings()
 												sendUserToast('Disconnected Teams')
 											}}
-											onSelect={editTeamsCommand}
-											connectHref={undefined}
-											createScriptHref="{base}/scripts/add?hub=hub%2F11591%2Fteams%2FExample%20of%20responding%20to%20a%20Microsoft%20Teams%20command"
-											createFlowHref="{base}/flows/add?hub=58"
-											documentationLink="https://www.windmill.dev/docs/integrations/teams"
-											onLoadSettings={loadSettings}
+												onSelect={editTeamsCommand}
+												connectHref={undefined}
+												onLoadSettings={loadSettings}
 											display_name={teams_team_name}
 											isOAuthEnabled={isTeamsOAuthEnabled}
 										>
@@ -1603,42 +1597,38 @@
 								</Alert>
 							{/if}
 
-							<Section label="Error handler">
+								<Section label="错误处理">
 								<div class="flex flex-col gap-6">
 									<ErrorOrRecoveryHandler
 										noMargin
 										isEditable={true}
 										errorOrRecovery="error"
-										showScriptHelpText={true}
-										bind:handlerSelected={errorHandlerSelected}
-										bind:handlerPath={errorHandlerScriptPath}
-										customScriptTemplate="/scripts/add?hub=hub%2F9083%2Fwindmill%2Fworkspace_error_handler_template"
-										bind:customHandlerKind={errorHandlerItemKind}
-										bind:handlerExtraArgs={errorHandlerExtraArgs}
+											showScriptHelpText={true}
+											bind:handlerSelected={errorHandlerSelected}
+											bind:handlerPath={errorHandlerScriptPath}
+											bind:customHandlerKind={errorHandlerItemKind}
+											bind:handlerExtraArgs={errorHandlerExtraArgs}
 									>
 										{#snippet customTabTooltip()}
 											<Tooltip>
 												<div class="flex gap-20 items-start mt-3">
-													<div class="text-sm">
-														The following args will be passed to the error handler:
-														<ul class="mt-1 ml-2">
-															<li><b>path</b>: The path of the script or flow that errored.</li>
-															<li>
-																<b>email</b>: The email of the user who ran the script or flow that
-																errored.
-															</li>
-															<li><b>error</b>: The error details.</li>
-															<li><b>job_id</b>: The job id.</li>
-															<li><b>is_flow</b>: Whether the error comes from a flow.</li>
-															<li
-																><b>workspace_id</b>: The workspace id of the failed script or flow.</li
-															>
-														</ul>
-														<br />
-														The error handler will be executed by the automatically created group g/error_handler.
-														If your error handler requires variables or resources, you need to add them
-														to the group.
-													</div>
+														<div class="text-sm">
+															以下参数会传递给错误处理器：
+															<ul class="mt-1 ml-2">
+																<li><b>path</b>: 出错脚本或流程的路径。</li>
+																<li>
+																	<b>email</b>: 运行出错脚本或流程的用户邮箱。
+																</li>
+																<li><b>error</b>: 错误详情。</li>
+																<li><b>job_id</b>: 任务 ID。</li>
+																<li><b>is_flow</b>: 错误是否来自流程。</li>
+																<li
+																	><b>workspace_id</b>: 失败脚本或流程所属工作区 ID。</li
+																>
+															</ul>
+															<br />
+															错误处理器会由自动创建的 g/error_handler 组执行。如果处理器需要变量或资源，请把相关权限添加到该组。
+														</div>
 												</div>
 											</Tooltip>
 										{/snippet}
@@ -1651,7 +1641,7 @@
 													!emptyString(errorHandlerScriptPath) &&
 													emptyString(errorHandlerExtraArgs['channel']))}
 											bind:checked={errorHandlerMutedOnCancel}
-											options={{ right: 'Do not run error handler for canceled jobs' }}
+												options={{ right: '取消的任务不运行错误处理器' }}
 										/>
 										<Toggle
 											disabled={!$enterpriseLicense ||
@@ -1659,7 +1649,7 @@
 													!emptyString(errorHandlerScriptPath) &&
 													emptyString(errorHandlerExtraArgs['channel']))}
 											bind:checked={errorHandlerMutedOnUserPath}
-											options={{ right: 'Do not run error handler for u/ scripts and flows' }}
+												options={{ right: 'u/ 路径下的脚本和流程不运行错误处理器' }}
 										/>
 									</SettingCard>
 								</div>
@@ -1670,7 +1660,7 @@
 									hasUnsavedChanges={hasErrorHandlerChanges}
 									onSave={editErrorHandler}
 									onDiscard={discardErrorHandlerSettingsChanges}
-									saveLabel="Save error handler"
+										saveLabel="保存错误处理"
 									disabled={!$enterpriseLicense ||
 										((errorHandlerSelected === 'slack' || errorHandlerSelected === 'teams') &&
 											!emptyString(errorHandlerScriptPath) &&
@@ -1680,7 +1670,7 @@
 
 							<div class="pt-8 border-b mb-8"></div>
 
-							<Section label="Success handler">
+								<Section label="成功处理">
 								<div class="flex flex-col gap-6">
 									<div class="flex flex-col gap-4">
 										<div class="flex flex-row gap-2 items-center">
@@ -1694,50 +1684,7 @@
 												}}
 												clearable
 											/>
-											<Button
-												variant="default"
-												href={`${base}/scripts/add?lang=bun#` +
-													encodeState({
-														path: 'f/success_handler',
-														summary: 'Workspace Success Handler',
-														description:
-															'Called when any job in the workspace completes successfully',
-														content: `//native
-
-// Workspace Success Handler
-// This script is called whenever a job completes successfully in this workspace.
-
-export async function main(
-  path: string,
-  email: string,
-  result: any,
-  job_id: string,
-  is_flow: boolean,
-  workspace_id: string,
-  started_at: string
-) {
-  console.log(\`Job \${job_id} completed successfully\`)
-  console.log(\`Path: \${path}, Is Flow: \${is_flow}\`)
-  console.log(\`Result:\`, result)
-
-  // Add your success handling logic here
-  // Examples:
-  // - Send a notification
-  // - Update an external system
-  // - Log to a database
-  // - Trigger another workflow
-
-  return { handled: true }
-}
-`,
-														language: 'bun',
-														kind: 'script'
-													})}
-												target="_blank"
-											>
-												Create from template
-											</Button>
-										</div>
+											</div>
 									</div>
 								</div>
 
@@ -1749,7 +1696,7 @@ export async function main(
 									onDiscard={() => {
 										successHandlerScriptPath = initialSuccessHandlerScriptPath
 									}}
-									saveLabel="Save success handler"
+										saveLabel="保存成功处理"
 									disabled={!$enterpriseLicense}
 								/>
 							</Section>

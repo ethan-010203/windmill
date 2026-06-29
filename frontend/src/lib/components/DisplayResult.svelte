@@ -1116,10 +1116,9 @@
 							<div class="mt-1 mb-2">
 								<Alert
 									size="xs"
-									title="Large result detected"
+									title="检测到大体积结果"
 									type="warning"
-									tooltip="We recommend using persistent object storage for large result. See docs for setting up an object storage service integration using s3 or any other s3 compatible services."
-									documentationLink="https://www.windmill.dev/docs/core_concepts/persistent_storage#object-storage-for-large-data-s3-r2-minio-azure-blob"
+									tooltip="建议为大体积结果配置持久化对象存储，例如 S3 或其他兼容 S3 的服务。"
 								/>
 							</div>
 						{/if}

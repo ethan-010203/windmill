@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from './common'
-	import { ExternalLink, Loader2, Save } from 'lucide-svelte'
+	import { Loader2, Save } from 'lucide-svelte'
 	import { SettingService, WorkerService, WorkspaceService } from '$lib/gen'
 	import { sendUserToast } from '$lib/toast'
 	import { enterpriseLicense, superadmin } from '$lib/stores'
@@ -120,16 +120,12 @@
 
 <Section label="Default tags">
 	<div class="text-2xs text-secondary mb-2">
-		Jobs that have not been specifically assigned custom tags will use a <a
-			href="https://www.windmill.dev/docs/core_concepts/worker_groups#default-worker-group"
-			target="_blank"
-			class="gap-1 items-baseline">default tags <ExternalLink size={12} class="inline-block" /></a
-		> based on the language they are in or their kind.
+		未单独指定自定义标签的任务，会根据语言或类型使用默认标签。
 	</div>
 
 	{#snippet action()}
 		{#if !$enterpriseLicense}
-			<span class="text-secondary text-xs">Read only</span>
+			<span class="text-secondary text-xs">只读</span>
 		{:else}
 			<Button
 				variant="accent"

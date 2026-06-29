@@ -26,7 +26,7 @@
 </script>
 
 <script lang="ts">
-	import { Check, UserCog, Users, ExternalLink } from 'lucide-svelte'
+	import { Check, UserCog, Users } from 'lucide-svelte'
 	import MeltPopover from './meltComponents/Popover.svelte'
 	import Modal from './common/modal/Modal.svelte'
 	import { userStore } from '$lib/stores'
@@ -73,11 +73,7 @@
 
 	const isTrigger = $derived(kind === 'trigger' || isTriggerOrScheduleKind(kind))
 
-	let label = $derived(
-		isTrigger
-			? 'Set the user this will be permissioned as:'
-			: 'Set the user this will be run on behalf of:'
-	)
+	let label = $derived(isTrigger ? '设置此触发器的执行身份：' : '设置此项的代运行用户：')
 
 	let users = $state<User[]>([])
 	let usersLoaded = $state(false)
@@ -228,32 +224,17 @@
 	{/snippet}
 </MeltPopover>
 
-<!-- User selection modal -->
-<Modal title="Select a user" bind:open={modalOpen} kind="X">
+<Modal title="选择用户" bind:open={modalOpen} kind="X">
 	<div class="flex flex-col gap-4">
 		<div class="text-xs text-secondary">
 			{#if isTrigger}
-				Choose the user this trigger will be permissioned as {isDeployment
-					? 'in the target workspace'
-					: 'in this workspace'}. The selected user's permissions will be used when the trigger
-				fires.
+				选择此触发器在{isDeployment ? '目标工作区' : '当前工作区'}中的执行身份。触发器运行时会使用该用户的权限。
 			{:else}
-				Choose the user this {kind} will run on behalf of {isDeployment
-					? 'in the target workspace'
-					: 'in this workspace'}. The selected user's permissions will be used when executing.
+				选择此 {kind} 在{isDeployment ? '目标工作区' : '当前工作区'}中的代运行用户。执行时会使用该用户的权限。
 			{/if}
-			<a
-				href="https://www.windmill.dev/docs/core_concepts/roles_and_permissions"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="text-blue-500 hover:underline inline-flex items-center gap-0.5"
-			>
-				Learn more
-				<ExternalLink class="w-3 h-3" />
-			</a>
 		</div>
 
-		<TextInput bind:value={searchQuery} inputProps={{ placeholder: 'Search users...' }} />
+		<TextInput bind:value={searchQuery} inputProps={{ placeholder: '搜索用户...' }} />
 
 		<div class="max-h-60 overflow-y-auto border rounded">
 			{#each filteredUsers as user (user.email)}

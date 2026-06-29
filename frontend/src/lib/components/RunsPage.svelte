@@ -571,9 +571,7 @@
 					运行记录
 				</h1>
 
-				<Tooltip
-					documentationLink="https://www.windmill.dev/docs/core_concepts/monitor_past_and_future_runs"
-				>
+				<Tooltip>
 					查看脚本和流程的历史执行、计划执行以及预览执行。非管理员只能看到自己的运行记录，或所属组可访问的运行记录。
 				</Tooltip>
 

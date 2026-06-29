@@ -3,7 +3,6 @@
 	import DrawerContent from './common/drawer/DrawerContent.svelte'
 	import AssignableTagsInner from './AssignableTagsInner.svelte'
 	import DefaultTagsInner from './DefaultTagsInner.svelte'
-	import { ExternalLink } from 'lucide-svelte'
 	import { Section } from './common'
 
 	interface Props {
@@ -34,17 +33,12 @@
 </script>
 
 <Drawer bind:this={drawer} size="800px">
-	<DrawerContent title="Manage tags" on:close={() => drawer?.closeDrawer?.()}>
-		<div class="flex flex-col h-full gap-6">
-			<!-- Overall Description -->
-			<div class="text-xs font-normal text-secondary">
-				Tags determine which worker group will execute a given job. Workers process only those jobs
-				whose tags match those defined in their <a
-					href="https://www.windmill.dev/docs/core_concepts/worker_groups"
-					target="_blank">worker group <ExternalLink size={12} class="inline-block" /></a
-				>
-				configuration.
-			</div>
+		<DrawerContent title="管理标签" on:close={() => drawer?.closeDrawer?.()}>
+			<div class="flex flex-col h-full gap-6">
+				<!-- Overall Description -->
+				<div class="text-xs font-normal text-secondary">
+					标签用于决定由哪个 worker 组执行任务。worker 只会处理与自身标签匹配的任务。
+				</div>
 
 			<!-- Content Sections -->
 			<div class="flex flex-col gap-8 flex-1">

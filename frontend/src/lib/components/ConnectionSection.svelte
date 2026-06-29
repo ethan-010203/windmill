@@ -3,7 +3,7 @@
 	import { Slack, Code2, Unplug, Plug } from 'lucide-svelte'
 	import MsTeamsIcon from '$lib/components/icons/MSTeamsIcon.svelte'
 	import BarsStaggered from '$lib/components/icons/BarsStaggered.svelte'
-	import { hubBaseUrlStore, workspaceStore, enterpriseLicense } from '$lib/stores'
+	import { workspaceStore, enterpriseLicense } from '$lib/stores'
 	import ScriptPicker from '$lib/components/ScriptPicker.svelte'
 	import { WorkspaceService } from '$lib/gen'
 	import { sendUserToast } from '$lib/utils'
@@ -26,9 +26,8 @@
 		onDisconnect,
 		onSelect,
 		connectHref,
-		createScriptHref,
-		createFlowHref,
-		documentationLink,
+		createScriptHref = undefined,
+		createFlowHref = undefined,
 		onLoadSettings,
 		workspaceConfig,
 		hideConnectButton = false,
@@ -44,9 +43,8 @@
 		onDisconnect: () => Promise<void>
 		onSelect: () => Promise<void>
 		connectHref: string | undefined
-		createScriptHref: string
-		createFlowHref: string
-		documentationLink: string
+		createScriptHref?: string | undefined
+		createFlowHref?: string | undefined
 		onLoadSettings: () => void
 		workspaceConfig?: import('svelte').Snippet
 		hideConnectButton?: boolean
@@ -67,11 +65,11 @@
 					team_name: selectedTeam.team_name
 				}
 			})
-			sendUserToast('Connected to Teams successfully')
+			sendUserToast('Teams 连接成功')
 			onLoadSettings()
 		} catch (error) {
 			// Extract the actual error message from the API response
-			let errorMessage = 'Failed to connect to Teams'
+			let errorMessage = '连接 Teams 失败'
 
 			if (typeof error?.body === 'string') {
 				errorMessage = error.body
@@ -89,7 +87,7 @@
 	const capitalizedPlatform = $derived(platform.charAt(0).toUpperCase() + platform.slice(1))
 </script>
 
-<SettingCard label={capitalizedPlatform + ' connection'}>
+<SettingCard label={`${capitalizedPlatform} 连接`}>
 	{#if workspaceConfig}
 		{@render workspaceConfig()}
 	{/if}
@@ -99,7 +97,7 @@
 				{#if display_name}
 					<Badge color="green">
 						<Plug size={14} />
-						Workspace connected to {capitalizedPlatform} team '{display_name}'</Badge
+						工作区已连接到 {capitalizedPlatform} 团队“{display_name}”</Badge
 					>
 				{/if}
 				<Button
@@ -110,7 +108,7 @@
 					destructive
 					variant="subtle"
 				>
-					Disconnect {capitalizedPlatform}
+					断开 {capitalizedPlatform}
 					{!$enterpriseLicense && platform === 'teams' ? '(未开放)' : ''}
 				</Button>
 			</div>
@@ -129,7 +127,7 @@
 									typeof (e as any)?.body === 'string'
 										? (e as any).body
 										: e?.message || 'Unknown error'
-								sendUserToast('Failed to load teams: ' + errorMsg, true)
+								sendUserToast('加载 Teams 失败：' + errorMsg, true)
 							}}
 						/>
 					{/if}
@@ -140,7 +138,7 @@
 						endIcon={{ icon: MsTeamsIcon }}
 						disabled={!selectedTeam || !$enterpriseLicense}
 					>
-						Connect to {platform.charAt(0).toUpperCase() + platform.slice(1)}
+						连接 {platform.charAt(0).toUpperCase() + platform.slice(1)}
 						{$enterpriseLicense ? '' : '(未开放)'}
 					</Button>
 				{:else}
@@ -151,7 +149,7 @@
 						startIcon={{ icon: Slack }}
 						disabled={!isOAuthEnabled}
 					>
-						Connect to {platform.charAt(0).toUpperCase() + platform.slice(1)}
+						连接 {platform.charAt(0).toUpperCase() + platform.slice(1)}
 					</Button>
 				{/if}
 			</div>
@@ -160,8 +158,8 @@
 </SettingCard>
 
 <SettingCard
-	label="Script or flow to run on /windmill command"
-	description="Pick a script or flow meant to be triggered when the `/windmill` command is invoked."
+	label="/windmill 命令运行的脚本或流程"
+	description="选择调用 `/windmill` 命令时要触发的脚本或流程。"
 >
 	<div class="flex flex-row gap-2">
 		<ScriptPicker
@@ -176,13 +174,13 @@
 		/>
 
 		{#if teamName && ($enterpriseLicense || platform === 'slack') && (scriptPath === '' || scriptPath === undefined)}
-			{#if itemKind === 'script'}
+			{#if itemKind === 'script' && createScriptHref}
 				<Button size="sm" endIcon={{ icon: Code2 }} href={createScriptHref}>
-					Create a script from template to handle {platform} commands
+					从模板创建脚本来处理 {platform} 命令
 				</Button>
-			{:else if itemKind === 'flow'}
+			{:else if itemKind === 'flow' && createFlowHref}
 				<Button size="sm" endIcon={{ icon: BarsStaggered }} href={createFlowHref}>
-					Create a flow from template to handle {platform} commands
+					从模板创建流程来处理 {platform} 命令
 				</Button>
 			{/if}
 		{/if}
@@ -190,38 +188,23 @@
 
 	{#if !teamName}
 		<div class="text-red-500 text-xs"
-			>Please connect your workspace to {capitalizedPlatform} to use this feature</div
+			>请先将工作区连接到 {capitalizedPlatform}，再使用此功能</div
 		>
 	{/if}
 
-	<CollapseLink text="How to use">
+	<CollapseLink text="使用说明">
 		<div class="prose text-2xs text-primary">
-			Upon connection, templates for a <a href="{$hubBaseUrlStore}/scripts/{platform}/1405/"
-				>script</a
-			>
-			and <a href="{$hubBaseUrlStore}/flows/28/">flow</a> are available.
+			选择的脚本或流程会收到参数 `response_url: string` 和 `text: string`，分别表示用于回复触发器的地址和命令文本。
 
 			<br /><br />
 
-			The script or flow chosen is passed the parameters `response_url: string` and `text: string`
-			respectively the url to reply directly to the trigger and the text of the command.
-
-			<br /><br />
-
-			It can take additionally the following args: channel_id, user_name, user_id, command,
-			trigger_id, api_app_id
+			还可以接收这些参数：channel_id、user_name、user_id、command、trigger_id、api_app_id。
 
 			<br /><br />
 
 			<span class="font-bold text-xs">
-				The script or flow is permissioned as group "{platform}" that will be automatically created
-				after connection to {platform.charAt(0).toUpperCase() + platform.slice(1)}.
+				连接到 {platform.charAt(0).toUpperCase() + platform.slice(1)} 后，系统会自动创建 “{platform}” 组，脚本或流程会以该组权限运行。
 			</span>
-
-			<br /><br />
-
-			See more on
-			<a href={documentationLink}>documentation</a>.
 		</div>
 	</CollapseLink>
 </SettingCard>

@@ -158,65 +158,64 @@
 		}}
 	/>
 
-	{#if !selfManaged}
-		<p class="text-xs text-secondary">
-			Using the managed Windmill GitHub App via stats.windmill.dev. Enable self-managed mode to
-			configure your own GitHub App (required for GitHub Enterprise Server).
-		</p>
-	{:else}
-		<details class="mt-1">
-			<summary class="text-xs font-medium text-secondary cursor-pointer hover:text-primary"
-				>How to create a GitHub App</summary
-			>
-			<div class="mt-2 p-3 bg-surface rounded text-2xs text-secondary space-y-2">
-				<p>
-					<strong>1.</strong> On your GitHub instance, go to
-					<strong
-						>Settings &rarr; Developer settings &rarr; GitHub Apps &rarr; New GitHub App</strong
-					>.
-				</p>
-				<p><strong>2.</strong> Fill in the required fields:</p>
-				<ul class="list-disc ml-4 space-y-1">
-					<li>
-						<strong>GitHub App name</strong>: e.g. <code>windmill-sync</code> (this becomes the app slug)
-					</li>
-					<li>
-						<strong>Homepage URL</strong>: your Windmill instance URL
-					</li>
-					<li>
-						<strong>Callback URL</strong>: <code>&lt;your-windmill-url&gt;/gh_success</code>
-					</li>
-					<li>
-						<strong>Setup URL</strong> (optional):
-						<code>&lt;your-windmill-url&gt;/gh_success</code> with "Redirect on update" checked
-					</li>
-					<li>Uncheck <strong>Active</strong> under Webhook (not needed)</li>
-				</ul>
-				<p><strong>3.</strong> Set repository permissions:</p>
-				<ul class="list-disc ml-4 space-y-1">
-					<li><strong>Contents</strong>: Read &amp; write</li>
-					<li><strong>Metadata</strong>: Read-only</li>
-				</ul>
-				<p>
-					<strong>4.</strong> Under "Where can this GitHub App be installed?", choose
-					<strong>Any account</strong> (or restrict to your organization).
-				</p>
-				<p>
-					<strong>5.</strong> Click <strong>Create GitHub App</strong>. On the next page, note the
-					<strong>App ID</strong> and <strong>Client ID</strong>.
-				</p>
-				<p>
-					<strong>6.</strong> Scroll down and click <strong>Generate a private key</strong>. Save
-					the downloaded <code>.pem</code> file — paste its contents into the Private Key field below.
-				</p>
-				<p>
-					<strong>7.</strong> The <strong>App Slug</strong> is the URL-friendly name shown in the
-					app's URL (e.g. <code>github.com/apps/<strong>windmill-sync</strong></code>).
-				</p>
-				<p>
-					<strong>8.</strong> The <strong>Base URL</strong> is your GitHub instance root (e.g.
-					<code>https://github.com</code> or <code>https://github.mycompany.com</code>).
-				</p>
+		{#if !selfManaged}
+			<p class="text-xs text-secondary">
+				当前使用托管 GitHub App 流程。内部部署建议启用自管理模式并配置自己的 GitHub App，GitHub Enterprise Server 必须使用自管理模式。
+			</p>
+		{:else}
+			<details class="mt-1">
+				<summary class="text-xs font-medium text-secondary cursor-pointer hover:text-primary"
+					>如何创建 GitHub App</summary
+				>
+				<div class="mt-2 p-3 bg-surface rounded text-2xs text-secondary space-y-2">
+					<p>
+						<strong>1.</strong> 在你的 GitHub 实例中进入
+						<strong
+							>Settings &rarr; Developer settings &rarr; GitHub Apps &rarr; New GitHub App</strong
+						>.
+					</p>
+					<p><strong>2.</strong> 填写必填字段：</p>
+					<ul class="list-disc ml-4 space-y-1">
+						<li>
+							<strong>GitHub App name</strong>：例如 <code>internal-sync</code>（会成为 app slug）
+						</li>
+						<li>
+							<strong>Homepage URL</strong>：你的内部系统访问地址
+						</li>
+						<li>
+							<strong>Callback URL</strong>：<code>&lt;your-internal-url&gt;/gh_success</code>
+						</li>
+						<li>
+							<strong>Setup URL</strong>（可选）：
+							<code>&lt;your-internal-url&gt;/gh_success</code>，并勾选 “Redirect on update”
+						</li>
+						<li>取消勾选 Webhook 下的 <strong>Active</strong>（这里不需要启用）</li>
+					</ul>
+					<p><strong>3.</strong> 设置仓库权限：</p>
+					<ul class="list-disc ml-4 space-y-1">
+						<li><strong>Contents</strong>：Read &amp; write</li>
+						<li><strong>Metadata</strong>：Read-only</li>
+					</ul>
+					<p>
+						<strong>4.</strong> 在 “Where can this GitHub App be installed?” 中选择
+						<strong>Any account</strong>，或限制为你的组织。
+					</p>
+					<p>
+						<strong>5.</strong> 点击 <strong>Create GitHub App</strong>。在下一页记录
+						<strong>App ID</strong> 和 <strong>Client ID</strong>。
+					</p>
+					<p>
+						<strong>6.</strong> 向下滚动并点击 <strong>Generate a private key</strong>。保存下载的
+						<code>.pem</code> 文件，并将内容填入下面的 Private Key 字段。
+					</p>
+					<p>
+						<strong>7.</strong> <strong>App Slug</strong> 是应用 URL 中显示的名称，例如
+						<code>github.com/apps/<strong>internal-sync</strong></code>。
+					</p>
+					<p>
+						<strong>8.</strong> <strong>Base URL</strong> 是 GitHub 实例根地址，例如
+						<code>https://github.com</code> 或 <code>https://github.mycompany.com</code>。
+					</p>
 			</div>
 		</details>
 	{/if}

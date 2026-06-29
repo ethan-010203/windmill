@@ -9,7 +9,7 @@
 	import { fade } from 'svelte/transition'
 	import TriggersBadge from '../graph/renderers/triggers/TriggersBadge.svelte'
 	import AddTriggersButton from '$lib/components/triggers/AddTriggersButton.svelte'
-	import { Plus, BookOpen, ExternalLink } from 'lucide-svelte'
+	import { Plus, BookOpen } from 'lucide-svelte'
 	import Button from '../common/button/Button.svelte'
 	import TriggersWrapperV2 from './TriggersWrapper.svelte'
 	import {
@@ -503,15 +503,9 @@
 		<div class="flex gap-3">
 			<BookOpen size={16} class="text-secondary mt-0.5 flex-shrink-0" />
 			<div class="flex-1">
-				<div class="text-2xs font-normal text-secondary mb-2">
-					<strong class="font-semibold">Triggers</strong> automatically run your flow when events
-					happen. Select one to configure it or create a new one.
-					<a
-						href="https://www.windmill.dev/docs/getting_started/triggers"
-						target="_blank"
-						class="whitespace-nowrap">Learn more <ExternalLink size={14} class="inline-block" /></a
-					>
-				</div>
+					<div class="text-2xs font-normal text-secondary mb-2">
+						<strong class="font-semibold">触发器</strong> 会在事件发生时自动运行流程。选择一个触发器进行配置，或创建新的触发器。
+					</div>
 				<ul class="text-2xs text-hint space-y-1 ml-2">
 					<li class="flex">
 						<span class="mr-2">•</span>

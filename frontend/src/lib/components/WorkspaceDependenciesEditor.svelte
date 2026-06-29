@@ -462,18 +462,9 @@ numpy>=1.24.0
 						/>
 					{/if}
 					<div class="text-sm text-tertiary">
-						<FolderOpen size={16} class="inline mr-2" />
-						Default Enforced Dependencies are used when no specific Dependencies are referenced from
-						runnables. Named dependencies can be referenced by scripts using
-						<a
-							href="https://www.windmill.dev/docs/core_concepts/workspace_dependencies"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="text-accent"
-						>
-							annotations
-						</a>.
-					</div>
+							<FolderOpen size={16} class="inline mr-2" />
+							当可运行项没有引用特定依赖时，会使用默认强制依赖。命名依赖可以通过脚本注解引用。
+						</div>
 				</div>
 			</Section>
 

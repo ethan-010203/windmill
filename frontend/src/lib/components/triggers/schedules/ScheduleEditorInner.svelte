@@ -781,16 +781,16 @@
 			}}
 		/>
 		<div class="flex flex-col gap-8">
-			<Section label="Metadata">
+			<Section label="元数据">
 				<div class="flex flex-col gap-6">
 					<label class="flex flex-col gap-1">
-						<span class="text-xs font-semibold text-emphasis">Summary</span>
+						<span class="text-xs font-semibold text-emphasis">摘要</span>
 						<!-- svelte-ignore a11y_autofocus -->
 						<TextInput
 							inputProps={{
 								autofocus: true,
 								type: 'text',
-								placeholder: 'Short summary to be displayed when listed',
+								placeholder: '列表中显示的简短摘要',
 								disabled: !can_write,
 								onkeyup: () => {
 									if (!edit && summary?.length > 0 && !dirtyPath) {
@@ -810,7 +810,7 @@
 					<LabelsInput bind:labels />
 
 					<div class="flex flex-col gap-1">
-						<label for="path" class="text-xs font-semibold text-emphasis">Path</label>
+							<label for="path" class="text-xs font-semibold text-emphasis">路径</label>
 						{#if !edit && !trigger?.isPrimary}
 							<Path
 								bind:dirty={dirtyPath}
@@ -832,7 +832,7 @@
 										ButtonType.UnifiedMinHeightClasses['md']
 									)}
 								>
-									Schedule path (not editable)
+									定时任务路径（不可编辑）
 								</Badge>
 								<input
 									type="text"
@@ -853,43 +853,36 @@
 					</div>
 
 					<label class="flex flex-col gap-1">
-						<span class="text-xs font-semibold text-emphasis">Description</span>
+						<span class="text-xs font-semibold text-emphasis">描述</span>
 						<textarea
 							rows="4"
 							use:autosize
 							bind:value={description}
-							placeholder="What this schedule does and how to use it"
+							placeholder="说明这个定时任务的用途和使用方式"
 							disabled={!can_write}
 						></textarea>
 					</label>
 				</div>
 			</Section>
 
-			<Section label="Schedule">
+			<Section label="定时任务">
 				{#snippet header()}
 					{#if cronVersion === 'v1'}
-						<Tooltip>Schedules use CRON syntax. Seconds are mandatory.</Tooltip>
+						<Tooltip>定时任务使用 CRON 语法，秒字段必填。</Tooltip>
 					{:else}
-						<Tooltip
-							>Schedules use <a
-								href="https://www.windmill.dev/docs/core_concepts/scheduling#cron-syntax"
-								>extended CRON syntax</a
-							>.</Tooltip
-						>
+						<Tooltip>定时任务使用扩展 CRON 语法。</Tooltip>
 					{/if}
 				{/snippet}
 				<div class="flex flex-col gap-6">
 					{#if initialCronVersion !== 'v2'}
 						<div class="flex flex-row">
 							<AlertTriangle color="orange" class="mr-2" size={16} />
-							<Toggle
-								options={{
-									right: 'enable latest Cron syntax',
-									rightTooltip:
-										'The latest Cron syntax is more flexible and allows for more complex schedules. See the documentation for more information.',
-									rightDocumentationLink:
-										'https://www.windmill.dev/docs/core_concepts/scheduling#cron-syntax'
-								}}
+								<Toggle
+									options={{
+										right: '启用新版 Cron 语法',
+										rightTooltip:
+											'新版 Cron 语法更灵活，适合配置更复杂的定时规则。'
+									}}
 								size="xs"
 								bind:checked={isLatestCron}
 								on:change={onVersionChange}
@@ -905,12 +898,12 @@
 						bind:cronVersion
 					/>
 					<div class="flex flex-col gap-1">
-						<Toggle
-							options={{
-								right: 'Pause schedule until...',
-								rightTooltip:
-									'Pausing the schedule will program the next job to run as if the schedule starts at the time the pause is lifted, instead of now.'
-							}}
+								<Toggle
+									options={{
+										right: '暂停定时任务直到...',
+										rightTooltip:
+											'暂停后，下一次任务会按恢复时间重新计算，而不是从当前时间开始计算。'
+									}}
 							bind:checked={showPauseUntil}
 							disabled={!can_write}
 						/>
@@ -921,7 +914,7 @@
 				</div>
 			</Section>
 
-			<Section label="Runnable">
+			<Section label="执行对象">
 				{#if !hideTarget}
 					{#if fixedScriptPath != ''}
 						<PipelineLockedRunnableInfo path={fixedScriptPath} />
@@ -1027,7 +1020,7 @@
 				{/snippet}
 				{@render errorHandler()}
 			</Section>
-			<div class="pb-8" />
+			<div class="pb-8"></div>
 		</div>
 	{/if}
 {/snippet}
@@ -1036,20 +1029,20 @@
 	<div class="flex flex-col gap-2 min-h-96">
 		{#if !loading}
 			<Tabs bind:selected={optionTabSelected}>
-				<Tab value="error_handler" label="Error Handler" />
-				<Tab value="recovery_handler" label="Recovery Handler" />
-				<Tab value="success_handler" label="Success Handler" />
-				<Tab value="retries" label="Retries" />
-				<Tab value="dynamic_skip" label="Dynamic skip" />
-				{#if itemKind === 'script'}
-					<Tab value="tag" label="Custom tag" />
-				{/if}
+					<Tab value="error_handler" label="错误处理" />
+					<Tab value="recovery_handler" label="恢复处理" />
+					<Tab value="success_handler" label="成功处理" />
+					<Tab value="retries" label="重试" />
+					<Tab value="dynamic_skip" label="动态跳过" />
+					{#if itemKind === 'script'}
+						<Tab value="tag" label="自定义标签" />
+					{/if}
 			</Tabs>
 			{#if optionTabSelected === 'error_handler'}
-				<Section label="Error handler">
+				<Section label="错误处理">
 					{#snippet header()}
 						<div class="flex flex-row gap-2">
-							{#if !$enterpriseLicense}<span class="text-xs text-secondary">(ee only)</span>{/if}
+							{#if !$enterpriseLicense}<span class="text-xs text-secondary">(当前部署未开放)</span>{/if}
 						</div>
 					{/snippet}
 					{#snippet action()}
@@ -1058,11 +1051,11 @@
 								disabled={!can_write}
 								items={[
 									{
-										displayName: `Override future schedules only`,
+										displayName: `仅覆盖未来的定时任务`,
 										action: () => saveAsDefaultErrorHandler(false)
 									},
 									{
-										displayName: 'Override all existing',
+										displayName: '覆盖所有已有定时任务',
 										type: 'delete',
 										action: () => saveAsDefaultErrorHandler(true)
 									}
@@ -1070,7 +1063,7 @@
 							>
 								{#snippet buttonReplacement()}
 									<Save size={12} class="mr-1" />
-									Set as default
+									设为默认
 								{/snippet}
 							</Dropdown>
 						</div>
@@ -1080,7 +1073,7 @@
 							size="xs"
 							disabled={!can_write || !$enterpriseLicense}
 							bind:checked={wsErrorHandlerMuted}
-							options={{ right: 'Mute workspace error handler for this schedule' }}
+							options={{ right: '本定时任务不触发工作区错误处理器' }}
 						/>
 					</div>
 
@@ -1090,8 +1083,7 @@
 						showScriptHelpText={true}
 						bind:handlerSelected={errorHandlerSelected}
 						bind:handlerPath={errorHandlerPath}
-						toggleText="Alert channel on error"
-						customScriptTemplate="/scripts/add?hub=hub%2F19743%2Fwindmill%2Fschedule_error_handler_template"
+						toggleText="出错时通知频道"
 						bind:customHandlerKind={errorHandleritemKind}
 						bind:handlerExtraArgs={errorHandlerExtraArgs}
 					>
@@ -1099,21 +1091,20 @@
 							<Tooltip>
 								<div class="flex gap-20 items-start mt-3">
 									<div class="text-xs"
-										>The following args will be passed to the error handler:
+								>以下参数会传递给错误处理器：
 										<ul class="mt-1 ml-2">
 											<li
-												><b>workspace_id</b>: The ID of the workspace that the schedule belongs to.</li
-											>
-											<li><b>job_id</b>: The UUID of the job that errored.</li>
-											<li><b>path</b>: The path of the script or flow that failed.</li>
-											<li><b>is_flow</b>: Whether the runnable is a flow.</li>
-											<li><b>schedule_path</b>: The path of the schedule.</li>
-											<li><b>error</b>: The error details.</li>
-											<li
-												><b>failed_times</b>: Minimum number of times the schedule failed before
-												calling the error handler.</li
-											>
-											<li><b>started_at</b>: The start datetime of the latest job that failed.</li>
+										><b>workspace_id</b>: 定时任务所属工作区 ID。</li
+									>
+									<li><b>job_id</b>: 出错任务的 UUID。</li>
+									<li><b>path</b>: 失败脚本或流程的路径。</li>
+									<li><b>is_flow</b>: 执行对象是否为流程。</li>
+									<li><b>schedule_path</b>: 定时任务路径。</li>
+									<li><b>error</b>: 错误详情。</li>
+									<li
+										><b>failed_times</b>: 调用错误处理器前，定时任务连续失败的最小次数。</li
+									>
+									<li><b>started_at</b>: 最近一次失败任务的开始时间。</li>
 										</ul>
 									</div>
 								</div>
@@ -1123,7 +1114,7 @@
 					<div class="flex flex-row items-center justify-between">
 						<div class="flex flex-row items-center mt-4 font-semibold text-xs gap-2">
 							<p class={emptyString(errorHandlerPath) ? 'text-primary' : ''}>
-								Triggered when schedule failed</p
+								定时任务失败时触发</p
 							>
 							<select
 								class="!w-14"
@@ -1140,32 +1131,30 @@
 								disabled={!$enterpriseLicense}
 								min="1"
 							/>
-							<p class={emptyString(errorHandlerPath) ? 'text-primary' : ''}
-								>time{failedTimes > 1 ? 's in a row' : ''}</p
-							>
+								<p class={emptyString(errorHandlerPath) ? 'text-primary' : ''}>次</p>
 						</div>
 					</div>
 				</Section>
 			{:else if optionTabSelected === 'recovery_handler'}
 				{@const disabled = !can_write || emptyString($enterpriseLicense)}
-				<Section label="Recovery handler">
+				<Section label="恢复处理">
 					{#snippet header()}
 						<div class="flex flex-row gap-2">
-							{#if !$enterpriseLicense}<span class="text-xs text-secondary">(ee only)</span>{/if}
+							{#if !$enterpriseLicense}<span class="text-xs text-secondary">(当前部署未开放)</span>{/if}
 						</div>
 					{/snippet}
 					{#snippet action()}
 						<div class="flex flex-row items-center text-secondary text-xs gap-2">
-							defaults
+							默认值
 							<Dropdown
 								{disabled}
 								items={[
 									{
-										displayName: `Override future schedules only`,
+										displayName: `仅覆盖未来的定时任务`,
 										action: () => saveAsDefaultRecoveryHandler(false)
 									},
 									{
-										displayName: 'Override all existing',
+										displayName: '覆盖所有已有定时任务',
 										type: 'delete',
 										action: () => saveAsDefaultRecoveryHandler(true)
 									}
@@ -1173,7 +1162,7 @@
 							>
 								{#snippet buttonReplacement()}
 									<Save size={12} class="mr-1" />
-									Set as default
+									设为默认
 								{/snippet}
 							</Dropdown>
 						</div>
@@ -1183,8 +1172,7 @@
 						errorOrRecovery="recovery"
 						bind:handlerSelected={recoveryHandlerSelected}
 						bind:handlerPath={recoveryHandlerPath}
-						toggleText="Alert channel when error recovered"
-						customScriptTemplate="/scripts/add?hub=hub%2F9082%2Fwindmill%2Fschedule_recovery_handler_template"
+						toggleText="错误恢复时通知频道"
 						bind:customHandlerKind={recoveryHandlerItemKind}
 						bind:handlerExtraArgs={recoveryHandlerExtraArgs}
 					>
@@ -1192,23 +1180,22 @@
 							<Tooltip>
 								<div class="flex gap-20 items-start mt-3">
 									<div class="text-xs"
-										>The following args will be passed to the recovery handler:
-										<ul class="mt-1 ml-2">
-											<li><b>path</b>: The path of the script or flow that recovered.</li>
-											<li><b>is_flow</b>: Whether the runnable is a flow.</li>
-											<li><b>schedule_path</b>: The path of the schedule.</li>
-											<li><b>error</b>: The error of the last job that errored</li>
-											<li
-												><b>error_started_at</b>: The start datetime of the last job that errored</li
-											>
-											<li
-												><b>success_times</b>: The number of times the schedule succeeded before
-												calling the recovery handler.</li
-											>
-											<li><b>success_result</b>: The result of the latest successful job</li>
-											<li
-												><b>success_started_at</b>: The start datetime of the latest successful job</li
-											>
+								>以下参数会传递给恢复处理器：
+								<ul class="mt-1 ml-2">
+									<li><b>path</b>: 已恢复脚本或流程的路径。</li>
+									<li><b>is_flow</b>: 执行对象是否为流程。</li>
+									<li><b>schedule_path</b>: 定时任务路径。</li>
+									<li><b>error</b>: 上一次失败任务的错误信息。</li>
+									<li
+										><b>error_started_at</b>: 上一次失败任务的开始时间。</li
+									>
+									<li
+										><b>success_times</b>: 调用恢复处理器前，定时任务连续成功的次数。</li
+									>
+									<li><b>success_result</b>: 最近一次成功任务的结果。</li>
+									<li
+										><b>success_started_at</b>: 最近一次成功任务的开始时间。</li
+									>
 										</ul>
 									</div>
 								</div>
@@ -1223,7 +1210,7 @@
 								? 'text-primary'
 								: ''}"
 						>
-							<p>Triggered when schedule recovered</p>
+							<p>定时任务恢复时触发</p>
 							<input
 								type="number"
 								class="!w-14 mx-2 text-center"
@@ -1231,30 +1218,30 @@
 								min="1"
 								{disabled}
 							/>
-							<p>time{recoveredTimes > 1 ? 's in a row' : ''}</p>
+							<p>次</p>
 						</div>
 					</div>
 				</Section>
 			{:else if optionTabSelected === 'success_handler'}
 				{@const disabled = !can_write || emptyString($enterpriseLicense)}
-				<Section label="Success handler">
+				<Section label="成功处理">
 					{#snippet header()}
 						<div class="flex flex-row gap-2">
-							{#if !$enterpriseLicense}<span class="text-xs text-secondary">(ee only)</span>{/if}
+							{#if !$enterpriseLicense}<span class="text-xs text-secondary">(当前部署未开放)</span>{/if}
 						</div>
 					{/snippet}
 					{#snippet action()}
 						<div class="flex flex-row items-center text-secondary text-xs gap-2">
-							defaults
+							默认值
 							<Dropdown
 								{disabled}
 								items={[
 									{
-										displayName: `Override future schedules only`,
+										displayName: `仅覆盖未来的定时任务`,
 										action: () => saveAsDefaultSuccessHandler(false)
 									},
 									{
-										displayName: 'Override all existing',
+										displayName: '覆盖所有已有定时任务',
 										type: 'delete',
 										action: () => saveAsDefaultSuccessHandler(true)
 									}
@@ -1262,7 +1249,7 @@
 							>
 								{#snippet buttonReplacement()}
 									<Save size={12} class="mr-1" />
-									Set as default
+									设为默认
 								{/snippet}
 							</Dropdown>
 						</div>
@@ -1272,8 +1259,7 @@
 						errorOrRecovery="success"
 						bind:handlerSelected={successHandlerSelected}
 						bind:handlerPath={successHandlerPath}
-						toggleText="Alert channel when successful"
-						customScriptTemplate="/scripts/add?hub=hub%2F9071%2Fwindmill%2Fschedule_success_handler_template"
+						toggleText="成功时通知频道"
 						bind:customHandlerKind={successHandlerItemKind}
 						bind:handlerExtraArgs={successHandlerExtraArgs}
 					>
@@ -1281,14 +1267,14 @@
 							<Tooltip>
 								<div class="flex gap-20 items-start mt-3">
 									<div class="text-xs"
-										>The following args will be passed to the success handler:
-										<ul class="mt-1 ml-2">
-											<li><b>path</b>: The path of the script or flow that succeeded.</li>
-											<li><b>is_flow</b>: Whether the runnable is a flow.</li>
-											<li><b>schedule_path</b>: The path of the schedule.</li>
-											<li><b>success_result</b>: The result of the successful job</li>
-											<li><b>success_started_at</b>: The start datetime of the successful job</li>
-										</ul>
+								>以下参数会传递给成功处理器：
+								<ul class="mt-1 ml-2">
+									<li><b>path</b>: 成功执行的脚本或流程路径。</li>
+									<li><b>is_flow</b>: 执行对象是否为流程。</li>
+									<li><b>schedule_path</b>: 定时任务路径。</li>
+									<li><b>success_result</b>: 成功任务的结果。</li>
+									<li><b>success_started_at</b>: 成功任务的开始时间。</li>
+								</ul>
 									</div>
 								</div>
 							</Tooltip>
@@ -1297,27 +1283,21 @@
 				</Section>
 			{:else if optionTabSelected === 'retries'}
 				{@const disabled = !can_write || emptyString($enterpriseLicense)}
-				<Section label="Retries">
-					{#snippet header()}
-						<div class="flex flex-row gap-2">
-							{#if !$enterpriseLicense}<span class="text-xs text-secondary">(ee only)</span>{/if}
-						</div>
-						<Tooltip>
-							If defined, upon error this schedule will be retried with a delay and a maximum number
-							of attempts as defined below.
-							<br />
-							This is only available for individual script. For flows, retries can be set on each flow
-							step in the flow editor.
-						</Tooltip>
-					{/snippet}
-					{#if itemKind !== 'script'}
-						<Alert type="info" title="Only available for scripts" class="mb-2">
-							Error Handler and Retries are only available for scripts. For flows, use the built-in <a
-								href="https://www.windmill.dev/docs/flows/flow_error_handler"
-								target="_blank">error handler</a
-							>
-							and <a href="https://www.windmill.dev/docs/flows/retries" target="_blank">retries</a>.
-						</Alert>
+			<Section label="重试">
+				{#snippet header()}
+					<div class="flex flex-row gap-2">
+						{#if !$enterpriseLicense}<span class="text-xs text-secondary">(当前部署未开放)</span>{/if}
+					</div>
+					<Tooltip>
+						配置后，定时任务出错时会按下方设置延迟重试，并限制最大重试次数。
+						<br />
+						该设置仅适用于单个脚本。流程的重试规则可以在流程编辑器的每个步骤中单独配置。
+					</Tooltip>
+				{/snippet}
+				{#if itemKind !== 'script'}
+					<Alert type="info" title="仅适用于脚本" class="mb-2">
+						错误处理和重试配置仅适用于脚本。流程请在流程编辑器中配置内置错误处理和步骤重试。
+					</Alert>
 					{:else}
 						<FlowRetries
 							bind:flowModuleRetry={retry}
@@ -1326,16 +1306,15 @@
 					{/if}
 				</Section>
 			{:else if optionTabSelected === 'dynamic_skip'}
-				<Section label="Dynamic skip">
-					{#snippet header()}
-						<Tooltip>
-							Optional script to filter scheduled dates. Receives the proposed datetime and returns
-							boolean. True = run on this date, False = skip to next occurrence.
-						</Tooltip>
-					{/snippet}
-					<div class="flex flex-col gap-6">
-						<Label label="Dynamic skip script">
-							<div class="flex flex-row">
+			<Section label="动态跳过">
+				{#snippet header()}
+					<Tooltip>
+						可选脚本，用于过滤计划执行时间。脚本接收候选时间并返回布尔值：true 表示执行，false 表示跳过本次。
+					</Tooltip>
+				{/snippet}
+				<div class="flex flex-col gap-6">
+					<Label label="动态跳过脚本">
+						<div class="flex flex-row">
 								<ScriptPicker
 									disabled={!can_write}
 									bind:scriptPath={dynamicSkipPath}
@@ -1343,25 +1322,12 @@
 									allowRefresh={can_write}
 									clearable
 								/>
-								{#if !dynamicSkipPath}
-									<Button
-										btnClasses="ml-4 whitespace-nowrap"
-										variant="default"
-										size="xs"
-										href="/scripts/add?hub=hub%2F19822%2Fwindmill%2Fdynamic_skip_template"
-										disabled={!can_write}
-										target="_blank"
-									>
-										Create from template
-									</Button>
-								{/if}
-							</div>
-						</Label>
-						<Alert type="info" size="xs" title="Handler requirements">
-							Handler must return a boolean value. Return true to execute the scheduled job, false
-							to skip.
-						</Alert>
-					</div>
+						</div>
+					</Label>
+					<Alert type="info" size="xs" title="脚本要求">
+						脚本必须返回布尔值。返回 true 表示执行定时任务，返回 false 表示跳过。
+					</Alert>
+				</div>
 				</Section>
 			{:else if optionTabSelected === 'tag'}
 				<Section
@@ -1405,7 +1371,7 @@
 		</DrawerContent>
 	</Drawer>
 {:else}
-	<Section label={!customLabel ? 'Schedule' : ''} headerClass="grow min-w-0 h-[30px]">
+	<Section label={!customLabel ? '定时任务' : ''} headerClass="grow min-w-0 h-[30px]">
 		{#snippet header()}
 			{#if customLabel}
 				{@render customLabel()}

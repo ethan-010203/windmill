@@ -53,14 +53,13 @@
 	}}
 	size="800px"
 	{disableChatOffset}
->
-	<DrawerContent
-		title="Add a resource"
-		id="add-resource-drawer"
-		on:close={drawer?.closeDrawer}
-		tooltip="Resources represent connections to third party systems. Learn more on how to integrate external APIs."
-		documentationLink="https://www.windmill.dev/docs/integrations/integrations_on_windmill"
 	>
+		<DrawerContent
+			title="添加资源"
+			id="add-resource-drawer"
+			on:close={drawer?.closeDrawer}
+			tooltip="资源用于保存第三方系统连接信息，例如 API 凭据和服务配置。"
+		>
 		<AppConnectInner
 			bind:this={appConnectInner}
 			bind:step

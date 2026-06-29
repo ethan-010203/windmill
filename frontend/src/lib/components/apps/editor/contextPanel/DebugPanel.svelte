@@ -4,7 +4,6 @@
 	import Section from '$lib/components/Section.svelte'
 	import Badge from '$lib/components/common/badge/Badge.svelte'
 	import { deleteGridItem, findGridItemParentGrid } from '../appUtils'
-	import { pluralize } from '$lib/utils'
 	import Button from '$lib/components/common/button/Button.svelte'
 	import { Trash } from 'lucide-svelte'
 	import Alert from '$lib/components/common/alert/Alert.svelte'
@@ -42,46 +41,45 @@
 		.filter(Boolean))
 </script>
 
-<div class="flex flex-col gap-8" style="all:none;">
-	{#if unintitializedComponents?.length === 0 && subgridsErrors?.length === 0}
-		<Alert type="success" title="No issues found">
-			The app has no subgrid errors or uninitialized components.
-		</Alert>
-	{:else}
-		<Alert type="error" title="Issues found">
-			The app has {unintitializedComponents.length} uninitialized components and {subgridsErrors.length}
-			subgrid errors.
-			<br />
-			Please contact Windmill support for assistance.
-		</Alert>
-	{/if}
-	{#if unintitializedComponents.length > 0}
-		<Section label="Uninitialized components">
-			<div class="max-w-xl">
-				<div class="text-sm mb-4">
-					There are {pluralize(unintitializedComponents.length, 'uninitialized component')} in the app.
-				</div>
+	<div class="flex flex-col gap-8" style="all:none;">
+		{#if unintitializedComponents?.length === 0 && subgridsErrors?.length === 0}
+			<Alert type="success" title="未发现问题">
+				当前应用没有子网格错误或未初始化组件。
+			</Alert>
+		{:else}
+			<Alert type="error" title="发现问题">
+				当前应用有 {unintitializedComponents.length} 个未初始化组件和 {subgridsErrors.length} 个子网格错误。
+				<br />
+				请联系系统管理员处理。
+			</Alert>
+		{/if}
+		{#if unintitializedComponents.length > 0}
+			<Section label="未初始化组件">
+				<div class="max-w-xl">
+					<div class="text-sm mb-4">
+						当前应用中有 {unintitializedComponents.length} 个未初始化组件。
+					</div>
 
-				<div class="grid grid-cols-4 border rounded-md overflow-hidden">
+					<div class="grid grid-cols-4 border rounded-md overflow-hidden">
 					<!-- Header -->
-					<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
-						>Component Id</div
-					>
-					<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
-						>Type</div
-					>
-					<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
-						>Status</div
-					>
-					<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
-						>Action</div
-					>
+						<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
+							>组件 ID</div
+						>
+						<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
+							>类型</div
+						>
+						<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
+							>状态</div
+						>
+						<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
+							>操作</div
+						>
 
 					<!-- Iterate over uninitializedComponents to display each component in the grid -->
-					{#each unintitializedComponents as c}
+					{#each unintitializedComponents as c (c)}
 						{@const item = findGridItem($app, c)}
-						{#if !item}
-							<div>Item {c} not found</div>
+							{#if !item}
+								<div>未找到项目 {c}</div>
 						{:else}
 							<!-- Component Id -->
 							<div class="text-xs flex items-center px-2 py-2">
@@ -92,12 +90,12 @@
 
 							<div class="text-xs flex items-center px-2 py-2">
 								<Badge color="blue">
-									{item?.data?.type || 'Unknown'}
+										{item?.data?.type || '未知'}
 								</Badge>
 							</div>
 
 							<div class="text-xs flex items-center px-2 py-2">
-								<Badge color="red">Uninitialized</Badge>
+									<Badge color="red">未初始化</Badge>
 							</div>
 							<div class="text-xs flex items-center px-2 py-2">
 								<Button
@@ -112,7 +110,7 @@
 										$app = $app
 									}}
 								>
-									Remove
+										移除
 								</Button>
 							</div>
 						{/if}
@@ -121,27 +119,26 @@
 			</div>
 		</Section>{/if}
 	{#if subgridsErrors.length > 0}
-		<Section label="Subgrids errors">
-			<div class="max-w-xl">
-				<div class="text-sm mb-4">
-					There are
-					{pluralize(subgridsErrors.length, 'subgrid')} with errors in the app.
-				</div>
+			<Section label="子网格错误">
+				<div class="max-w-xl">
+					<div class="text-sm mb-4">
+						当前应用中有 {subgridsErrors.length} 个子网格存在错误。
+					</div>
 
 				<div class="grid grid-cols-3 border rounded-md overflow-hidden">
 					<!-- Header -->
-					<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
-						>Subgrid Id</div
-					>
-					<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
-						>Error</div
-					>
-					<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
-						>Action</div
-					>
+						<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
+							>子网格 ID</div
+						>
+						<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
+							>错误</div
+						>
+						<div class="font-semibold bg-gray-100 dark:bg-gray-900 px-2 py-1 text-xs border-b"
+							>操作</div
+						>
 
 					<!-- Iterate over uninitializedComponents to display each component in the grid -->
-					{#each subgridsErrors as s}
+					{#each subgridsErrors as s (s?.subGridId)}
 						<!-- Component Id -->
 						<div class="text-xs flex items-center px-2 py-2">
 							<Badge>
@@ -169,7 +166,7 @@
 									}
 								}}
 							>
-								Remove
+									移除
 							</Button>
 						</div>
 					{/each}

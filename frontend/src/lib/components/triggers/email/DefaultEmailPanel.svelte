@@ -71,15 +71,12 @@
 	{:else}
 		{#if emailDomain}
 			<DefaultEmailConfigSection {runnableVersion} {token} {path} {isFlow} {userSettings} {emailDomain} />
-		{:else}
-			<div>
-				<Alert title="Email triggers are disabled" size="xs" type="warning">
-					Ask an instance superadmin to setup the instance for email triggering (<a
-						target="_blank"
-						href="https://windmill.dev/docs/advanced/email_triggers">docs</a
-					>) and to set the email domain in the instance settings.
-				</Alert>
-			</div>
+			{:else}
+				<div>
+					<Alert title="邮件触发器已禁用" size="xs" type="warning">
+						请联系实例超级管理员启用邮件触发器，并在实例设置中配置邮件域名。
+					</Alert>
+				</div>
 		{/if}
 
 		{#if !$enterpriseLicense}

@@ -2,7 +2,7 @@
 	import { preventDefault, stopPropagation } from 'svelte/legacy'
 
 	import { Button } from './common'
-	import { ExternalLink, Loader2, X } from 'lucide-svelte'
+	import { Loader2, X } from 'lucide-svelte'
 	import { SettingService, WorkerService } from '$lib/gen'
 	import { sendUserToast } from '$lib/toast'
 	import { superadmin, devopsRole } from '$lib/stores'
@@ -201,40 +201,24 @@
 			{/if}
 		{/if}
 
-		<span class="text-2xs text-secondary leading-relaxed">
-			{#if variant !== 'drawer'}
-				Configure <a
-					href="https://www.windmill.dev/docs/core_concepts/worker_groups"
-					target="_blank"
-					class="inline-flex gap-1 items-baseline"
-					>worker groups <ExternalLink size={12} />
-				</a>
-				to listen to tags.
-				<br />
-			{/if}
+			<span class="text-2xs text-secondary leading-relaxed">
+				{#if variant !== 'drawer'}
+					配置 worker 组监听对应标签。
+					<br />
+				{/if}
 
-			For tags specific to some workspaces, use
-			<pre class="inline text-emphasis">tag(workspace1+workspace2)</pre>
-			<br />{#if variant !== 'drawer'}<br />{/if}
-			To exclude 'workspace1' and 'workspace2' from a tag, use
-			<pre class="inline text-emphasis">tag(^workspace1^workspace2)</pre>
-			<br />{#if variant !== 'drawer'}<br />{/if}
-			For
-			<a
-				href="https://www.windmill.dev/docs/core_concepts/worker_groups#dynamic-tag"
-				target="_blank">dynamic tags <ExternalLink size={12} class="inline-block" /></a
-			>
-			based on the workspace, use <pre class="inline text-emphasis">$workspace</pre>, e.g:
-			<pre class="inline text-emphasis">tag-$workspace</pre><br />
-			{#if variant !== 'drawer'}<br />{/if}
+				如需让标签只作用于部分工作区，使用
+				<pre class="inline text-emphasis">tag(workspace1+workspace2)</pre>
+				<br />{#if variant !== 'drawer'}<br />{/if}
+				如需从标签中排除 'workspace1' 和 'workspace2'，使用
+				<pre class="inline text-emphasis">tag(^workspace1^workspace2)</pre>
+				<br />{#if variant !== 'drawer'}<br />{/if}
+				基于工作区的动态标签可使用 <pre class="inline text-emphasis">$workspace</pre>，例如：
+				<pre class="inline text-emphasis">tag-$workspace</pre><br />
+				{#if variant !== 'drawer'}<br />{/if}
 
-			For
-			<a
-				href="https://www.windmill.dev/docs/core_concepts/worker_groups#dynamic-tag"
-				target="_blank">dynamic tags <ExternalLink size={12} class="inline-block" /></a
-			>
-			based on args input, use <pre class="inline text-emphasis">$args[a.b.c]</pre> where
-			<pre class="inline">a.b.c</pre> is the path to the value in the args object.
-		</span>
+				基于参数输入的动态标签可使用 <pre class="inline text-emphasis">$args[a.b.c]</pre>，其中
+				<pre class="inline">a.b.c</pre> 是参数对象中的值路径。
+			</span>
 	{/if}
 </div>

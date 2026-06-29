@@ -177,31 +177,20 @@
 
 		<Section label="All workspace assets" class="mb-20">
 			<div class="flex gap-4">
-				{#snippet card(props: {
-					title: string
-					assetKind: AssetKind
-					data: ResourceReturn<{ label: string; value: string }[]>
-					settingsHref: string
-					docsHref: string
-					favorites?: { table: string; schema?: string; assetName: string; path: string }[]
-					itemExtra?: import('svelte').Snippet<[{ label: string; value: string }]>
-				})}
+					{#snippet card(props: {
+						title: string
+						assetKind: AssetKind
+						data: ResourceReturn<{ label: string; value: string }[]>
+						settingsHref: string
+						favorites?: { table: string; schema?: string; assetName: string; path: string }[]
+						itemExtra?: import('svelte').Snippet<[{ label: string; value: string }]>
+					})}
 					<div class="flex flex-col bg-surface-tertiary drop-shadow-base rounded-md flex-1">
 						<div class="flex justify-between border-b">
 							<h3 class="text-sm font-bold mb-4 pt-5 pl-6">{props.title}</h3>
 							<div class="flex items-center h-fit gap-2 mt-4 mr-4">
-								<Button
-									wrapperClasses="h-fit"
-									btnClasses="text-accent"
-									variant="subtle"
-									unifiedSize="sm"
-									href={props.docsHref}
-									target="_blank"
-								>
-									See documentation
-								</Button>
-								{#if !($userStore?.operator || (!$userStore?.is_admin && !$superadmin))}
-									<Button
+									{#if !($userStore?.operator || (!$userStore?.is_admin && !$superadmin))}
+										<Button
 										wrapperClasses="h-fit"
 										variant={props.data.current?.length === 0 && !props.data.loading
 											? 'accent'
@@ -232,9 +221,9 @@
 								{/each}
 							</div>
 
-							{#if !props.data.loading && !props.data.error && props.favorites != undefined}
-								<div class="mb-4 pt-2 px-6">
-									<h3 class="text-xs font-bold mb-1"> Favorite tables</h3>
+								{#if !props.data.loading && !props.data.error && props.favorites != undefined}
+									<div class="mb-4 pt-2 px-6">
+										<h3 class="text-xs font-bold mb-1">收藏表</h3>
 									<div class="flex gap-1 flex-wrap">
 										{#each props.favorites as fav}
 											<button
@@ -254,9 +243,9 @@
 											</button>
 										{/each}
 									</div>
-									{#if props.favorites.length === 0}
-										<div class="text-xs text-secondary"> No favorite table yet</div>
-									{/if}
+										{#if props.favorites.length === 0}
+											<div class="text-xs text-secondary">暂无收藏表</div>
+										{/if}
 								</div>
 							{/if}
 						{/if}
@@ -264,33 +253,31 @@
 							<div class="flex items-center gap-2 mt-2 mb-5 px-6 text-sm text-secondary">
 								<Loader2 size={16} class="animate-spin" />
 							</div>
-						{:else if props.data.error}
-							<div class="text-sm text-red-600 mt-2 mb-5 px-6">
-								Error loading {props.title.toLowerCase()}
-							</div>
-						{:else if props.data.current?.length === 0}
-							<div class="text-xs text-secondary mt-2 px-6 mb-3">
-								No {props.title.toLowerCase()} yet
-							</div>
+							{:else if props.data.error}
+								<div class="text-sm text-red-600 mt-2 mb-5 px-6">
+									加载 {props.title} 失败
+								</div>
+							{:else if props.data.current?.length === 0}
+								<div class="text-xs text-secondary mt-2 px-6 mb-3">
+									暂无 {props.title}
+								</div>
 						{/if}
 					</div>
 				{/snippet}
 				{@render card({
-					title: 'Data table',
-					data: allDataTables,
-					assetKind: 'datatable',
-					settingsHref: '/workspace_settings?tab=windmill_data_tables',
-					docsHref: 'https://www.windmill.dev/docs/core_concepts/persistent_storage/data_tables',
-					favorites: extractFavorites('datatable')
-				})}
-				{@render card({
-					title: 'Ducklake',
-					data: allDucklakes,
-					assetKind: 'ducklake',
-					settingsHref: '/workspace_settings?tab=ducklake',
-					docsHref: 'https://www.windmill.dev/docs/core_concepts/persistent_storage/ducklake',
-					favorites: extractFavorites('ducklake')
-				})}
+						title: '数据表',
+						data: allDataTables,
+						assetKind: 'datatable',
+						settingsHref: '/workspace_settings?tab=windmill_data_tables',
+						favorites: extractFavorites('datatable')
+					})}
+					{@render card({
+						title: 'Ducklake',
+						data: allDucklakes,
+						assetKind: 'ducklake',
+						settingsHref: '/workspace_settings?tab=ducklake',
+						favorites: extractFavorites('ducklake')
+					})}
 				{#snippet volumesButton(item: { label: string; value: string })}
 					{#if item.value === '/'}
 						<Button
@@ -299,21 +286,19 @@
 							btnClasses="dark:bg-surface"
 							startIcon={{ icon: HardDriveIcon }}
 							on:click={() => volumesDrawer?.openDrawer()}
-						>
-							{allVolumes.current?.length ?? 0}
-							{(allVolumes.current?.length ?? 0) === 1 ? 'volume' : 'volumes'}
-						</Button>
+							>
+								{allVolumes.current?.length ?? 0}
+								卷
+							</Button>
 					{/if}
 				{/snippet}
 				{@render card({
-					title: 'Object storage',
-					data: allS3Storages,
-					assetKind: 's3object',
-					settingsHref: '/workspace_settings?tab=windmill_lfs',
-					docsHref:
-						'https://www.windmill.dev/docs/core_concepts/persistent_storage/large_data_files',
-					itemExtra: volumesButton
-				})}
+						title: '对象存储',
+						data: allS3Storages,
+						assetKind: 's3object',
+						settingsHref: '/workspace_settings?tab=windmill_lfs',
+						itemExtra: volumesButton
+					})}
 			</div>
 		</Section>
 		<Section label="Latest assets used">

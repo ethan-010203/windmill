@@ -694,21 +694,21 @@
 {/if}
 
 {#if showOssAccountDialog}
-	<ConfirmationModal
-		open={showOssAccountDialog}
-		title="Not available in open-source"
-		confirmationText="Continue with default credentials"
+		<ConfirmationModal
+			open={showOssAccountDialog}
+			title="当前功能未开放"
+			confirmationText="使用默认凭据继续"
 		on:canceled={() => {
 			showOssAccountDialog = false
 		}}
 		on:confirmed={() => {
 			showOssAccountDialog = false
-			sendUserToast('Setup complete. Please log in with the default credentials.')
+				sendUserToast('初始化完成。请使用默认凭据登录。')
 			goto(
 				'/user/logout?rd=' +
 					encodeURIComponent(
-						'/user/login?email=' +
-							encodeURIComponent('admin@windmill.dev') +
+							'/user/login?email=' +
+								encodeURIComponent('admin@example.local') +
 							'&password=' +
 							encodeURIComponent('changeme')
 					)
@@ -716,13 +716,12 @@
 		}}
 	>
 		<div class="flex flex-col w-full space-y-4">
-			<Alert type="error" title="Backend error">
-				{ossAccountError}
-			</Alert>
-			<span>
-				Click "Continue" to finish setup and log in with the default credentials (admin@windmill.dev
-				/ changeme).
-			</span>
+				<Alert type="error" title="后端错误">
+					{ossAccountError}
+				</Alert>
+				<span>
+					点击“继续”完成初始化，并使用默认凭据（admin@example.local / changeme）登录。
+				</span>
 		</div>
 	</ConfirmationModal>
 {/if}

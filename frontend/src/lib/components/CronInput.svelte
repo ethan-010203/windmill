@@ -224,17 +224,10 @@
 				{/if}
 			</div>
 			{#if !validCRON}
-				<div class="text-red-600 text-2xs"> Invalid cron syntax </div>
+				<div class="text-red-600 text-2xs">Cron 表达式格式无效</div>
 			{/if}
-			<div class="flex flex-row-reverse text-2xs text-secondary hover:underline">
-				<a
-					class="text-primary"
-					href="https://www.windmill.dev/docs/core_concepts/scheduling#cron-syntax"
-					target="_blank">Croner</a
-				>
-			</div>
 		</div>
-		<Label label="Timezone">
+		<Label label="时区">
 			{#if disabled}
 				<div>
 					<Badge><span class="text-primary dark:text-primary-inverse">{timezone}</span></Badge>

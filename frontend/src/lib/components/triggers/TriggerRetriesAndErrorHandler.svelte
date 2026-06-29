@@ -27,12 +27,8 @@
 </script>
 
 {#if ['error_handler', 'retries'].includes(optionTabSelected) && itemKind !== 'script'}
-	<Alert type="info" title="Only available for scripts" class="mb-2">
-		Error Handler and Retries are only available for scripts. For flows, use the built-in <a
-			href="https://www.windmill.dev/docs/flows/flow_error_handler"
-			target="_blank">error handler</a
-		>
-		and <a href="https://www.windmill.dev/docs/flows/retries" target="_blank">retries</a>.
+	<Alert type="info" title="仅脚本可用" class="mb-2">
+		错误处理器和重试只适用于脚本。流程请使用内置的错误处理和重试配置。
 	</Alert>
 {:else if optionTabSelected === 'error_handler'}
 	<ErrorOrRecoveryHandler
@@ -41,8 +37,7 @@
 		showScriptHelpText={true}
 		bind:handlerSelected={errorHandlerSelected}
 		bind:handlerPath={error_handler_path}
-		toggleText="Alert channel on error"
-		customScriptTemplate="/scripts/add?hub=hub%2F13953%2Fwindmill%2Ftrigger_error_handler_template"
+		toggleText="出错时通知频道"
 		customHandlerKind="script"
 		bind:handlerExtraArgs={error_handler_args}
 	>
@@ -50,18 +45,15 @@
 			<Tooltip>
 				<div class="flex gap-20 items-start mt-3">
 					<div class="text-sm"
-						>The following args will be passed to the error handler:
+						>以下参数会传递给错误处理器：
 						<ul class="mt-1 ml-2">
-							<li><b>workspace_id</b>: The ID of the workspace that the trigger belongs to.</li>
-							<li><b>job_id</b>: The UUID of the job that errored.</li>
-							<li><b>path</b>: The path of the script or flow that failed.</li>
-							<li><b>is_flow</b>: Whether the runnable is a flow.</li>
-							<li
-								><b>trigger_path</b>: The path of the trigger in the format
-								trigger_type/trigger_path.</li
-							>
-							<li><b>error</b>: The error details.</li>
-							<li><b>started_at</b>: The start datetime of the latest job that failed.</li>
+							<li><b>workspace_id</b>: 触发器所属工作区 ID。</li>
+							<li><b>job_id</b>: 出错任务的 UUID。</li>
+							<li><b>path</b>: 失败脚本或流程的路径。</li>
+							<li><b>is_flow</b>: 执行对象是否为流程。</li>
+							<li><b>trigger_path</b>: 触发器路径，格式为 trigger_type/trigger_path。</li>
+							<li><b>error</b>: 错误详情。</li>
+							<li><b>started_at</b>: 最近一次失败任务的开始时间。</li>
 						</ul>
 					</div>
 				</div>

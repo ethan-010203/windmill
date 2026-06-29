@@ -1689,19 +1689,18 @@
 		{/if}
 		{#if !noSyncFromGithub && customUi?.editorBar?.useVsCode != false && !inSessionPane}
 			<div class="py-1">
-				<Button
-					target="_blank"
-					href="https://www.windmill.dev/docs/cli_local_dev/vscode-extension"
-					variant="subtle"
-					unifiedSize="md"
-					iconOnly={width < EDITOR_BAR_WIDTH_THRESHOLD}
-					title="Use VS Code"
-					startIcon={{
-						icon: Github
-					}}
-				>
-					VScode
-				</Button>
+					<Button
+						href={`${base}/tutorials`}
+						variant="subtle"
+						unifiedSize="md"
+						iconOnly={width < EDITOR_BAR_WIDTH_THRESHOLD}
+						title="VS Code 使用说明"
+						startIcon={{
+							icon: Github
+						}}
+					>
+						VS Code
+					</Button>
 			</div>
 		{/if}
 	</div>

@@ -14,7 +14,7 @@
 	import AnimatedButton from '../common/button/AnimatedButton.svelte'
 	import PulseButton from '../common/button/PulseButton.svelte'
 	import Button from '../common/button/Button.svelte'
-	import { CircleStop, History, Play, Loader2, ExternalLink } from 'lucide-svelte'
+	import { CircleStop, History, Play, Loader2 } from 'lucide-svelte'
 	import ConnectionIndicator, {
 		type ConnectionInfo
 	} from '../common/alert/ConnectionIndicator.svelte'
@@ -472,21 +472,12 @@
 					<Loader2 class="animate-spin" />
 				{:else if selectedCapture?.main_args}
 					<div class="bg-surface rounded-md text-sm" class:animate-highlight={newCaptureReceived}>
-						{#if showRawPayload}
-							<Alert type="info" title="Raw payload displayed" size="xs" class="mt-2 mb-2">
-								<div class="flex flex-col gap-2">
-									<div>
-										Add a preprocessor to use the raw payload data in the flow.
-										<a
-											href="https://www.windmill.dev/docs/core_concepts/preprocessors"
-											target="_blank"
-											rel="noopener noreferrer"
-											class="underline"
-										>
-											Learn more about preprocessors
-											<ExternalLink size={12} class="inline-block" />
-										</a>
-									</div>
+							{#if showRawPayload}
+								<Alert type="info" title="正在显示原始载荷" size="xs" class="mt-2 mb-2">
+									<div class="flex flex-col gap-2">
+										<div>
+											如需在流程中使用原始载荷数据，请添加预处理器。
+										</div>
 									<div class="flex justify-end">
 										<Button
 											size="xs"

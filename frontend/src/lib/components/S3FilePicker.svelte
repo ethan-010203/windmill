@@ -78,16 +78,15 @@
 		s3FilePickerInner?.close?.()
 	}}
 	size="1200px"
->
-	<DrawerContent
-		title="S3 file browser"
-		on:close={() => {
-			s3FilePickerInner?.exit?.()
-			drawer?.closeDrawer?.()
-		}}
-		tooltip="Files present in the Workspace S3 bucket. You can set the workspace S3 bucket in the settings."
-		documentationLink="https://www.windmill.dev/docs/integrations/s3"
 	>
+		<DrawerContent
+			title="S3 文件浏览器"
+			on:close={() => {
+				s3FilePickerInner?.exit?.()
+				drawer?.closeDrawer?.()
+			}}
+			tooltip="工作区 S3 bucket 中的文件。可以在设置中配置工作区 S3 bucket。"
+		>
 		<S3FilePickerInner
 			bind:this={s3FilePickerInner}
 			on:selectAndClose={(e) => {

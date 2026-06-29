@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { Alert } from '$lib/components/common'
-	import ToggleHubWorkspace from '$lib/components/ToggleHubWorkspace.svelte'
 	import Tooltip from '$lib/components/Tooltip.svelte'
 
 	import { createEventDispatcher, getContext, untrack } from 'svelte'
 	import FlowScriptPicker from '../pickers/FlowScriptPicker.svelte'
-	import PickHubScript from '../pickers/PickHubScript.svelte'
 	import WorkspaceScriptPicker from '../pickers/WorkspaceScriptPicker.svelte'
 	import ToggleButtonGroup from '$lib/components/common/toggleButton-v2/ToggleButtonGroup.svelte'
 	import ToggleButton from '$lib/components/common/toggleButton-v2/ToggleButton.svelte'
@@ -44,7 +42,6 @@
 					? 'approval'
 					: 'script'
 	)
-	let pick_existing: 'workspace' | 'hub' = $state('hub')
 	let filter = $state('')
 
 	let langs = $derived(
@@ -108,8 +105,8 @@
 
 <div class="p-4 h-full flex flex-col" id="flow-editor-flow-inputs">
 	{#if summary == 'Terminate flow'}
-		<Alert type="info" title="The flow stops here"
-			>This is an identity step with an early stop that has 'true' for expression</Alert
+		<Alert type="info" title="流程将在这里停止"
+			>这是一个带提前停止条件的占位步骤，表达式结果为 true 时会结束流程。</Alert
 		>
 	{:else}{#if !failureModule && !preprocessorModule}
 			<div class="center-center">
@@ -119,24 +116,24 @@
 							<ToggleButton
 								value="script"
 								icon={Code}
-								label="Action"
-								tooltip="An action script is simply a script that is neither a trigger nor an approval script. Those are the majority of the scripts."
+								label="动作"
+								tooltip="动作脚本是普通执行步骤，不属于触发脚本或审批脚本。大多数脚本都属于这一类。"
 								{item}
 							/>
 							{#if !shouldDisableTriggerScripts}
 								<ToggleButton
-									value="trigger"
-									icon={Zap}
-									label="Trigger"
-									tooltip="Used as a first step most commonly with a state and a schedule to watch for changes on an external system, compute the diff since last time and set the new state. The diffs are then treated one by one with a for-loop."
+										value="trigger"
+										icon={Zap}
+										label="触发"
+										tooltip="通常作为第一个步骤使用，配合状态和定时任务监听外部系统变化，计算和上次运行之间的差异，再逐条处理。"
 									{item}
 								/>
 							{/if}
 							<ToggleButton
 								value="approval"
 								icon={Check}
-								label="Approval"
-								tooltip="An approval step will suspend the execution of a flow until it has been approved through the resume endpoints or the approval page by and solely by the recipients of those secret urls."
+								label="审批"
+								tooltip="审批步骤会暂停流程，直到指定人员通过恢复接口或审批页面完成处理。"
 								{item}
 							/>
 						{/snippet}
@@ -144,84 +141,54 @@
 				</div>
 			</div>
 		{/if}
-		{#if kind == 'trigger'}
-			<div class="mt-2"></div>
-			<Alert title="Trigger scripts" type="info">
-				Trigger scripts are designed to pull data from an external source and return all of the new
-				items since the last run, without resorting to external webhooks.<br /><br />
+			{#if kind == 'trigger'}
+				<div class="mt-2"></div>
+				<Alert title="触发脚本" type="info">
+					触发脚本用于从外部来源拉取数据，并返回上次运行以来新增的内容，不需要依赖外部 webhook。<br
+					/><br />
 
-				A trigger script is intended to be used with
-				<a
-					href="https://www.windmill.dev/docs/core_concepts/scheduling"
-					target="_blank"
-					class="text-blue-400">schedules</a
-				>
-				and
-				<a
-					href="https://www.windmill.dev/docs/core_concepts/resources_and_types#states"
-					target="_blank"
-					class="text-blue-400">states</a
-				>
-				in order to compare the execution to the previous one and process each new item in a
-				<a
-					href="https://www.windmill.dev/docs/flows/flow_loops"
-					target="_blank"
-					class="text-blue-400">for loop</a
-				>. If there are no new items, the flow will be skipped.<br /><br />
+					触发脚本通常和定时任务、状态数据一起使用，用来和上一次执行结果做对比，并在循环步骤中逐条处理新内容。如果没有新内容，流程会自动跳过。<br
+					/><br />
 
-				By default, adding a trigger will set the schedule to 15 minutes. To see all ways to trigger
-				a flow, check
-				<a
-					href="https://www.windmill.dev/docs/getting_started/triggers"
-					target="_blank"
-					class="text-blue-400">Triggering Flows</a
-				>.
-			</Alert>
-		{/if}
+					默认情况下，新增触发器会使用 15 分钟的执行间隔。
+				</Alert>
+			{/if}
 
-		{#if kind == 'script' && !noEditor && !preprocessorModule}
-			<div class="mt-2"></div>
-			<Alert title="Action Scripts" type="info">
-				An action script is simply a script that is neither a trigger nor an approval script. Those
-				are the majority of the scripts.
-			</Alert>
-		{/if}
+			{#if kind == 'script' && !noEditor && !preprocessorModule}
+				<div class="mt-2"></div>
+				<Alert title="动作脚本" type="info">
+					动作脚本是普通执行步骤，不属于触发脚本或审批脚本。大多数脚本都属于这一类。
+				</Alert>
+			{/if}
 
 		{#if kind == 'approval'}
-			{#if !noEditor}
-				<div class="mt-2"></div>
-				<Alert title="Approval/Prompt Step" type="info">
-					An approval/prompt step will suspend the execution of a flow until it has been approved
-					and/or the prompts have been filled in the UI or through the resume endpoints or the
-					approval page by and solely by the recipients of the secret urls. See details in
-					'Advanced' -> 'Suspend' settings of the step. A prompt is a specialized approval step with
-					payload that can be self-approved by the caller.<br /><br />
-					For further details, visit
-					<a
-						href="https://www.windmill.dev/docs/flows/flow_approval"
-						target="_blank"
-						class="text-blue-500">Approval/Prompt Steps Documentation</a
-					>
-					or
-					<div class="inline-flex">
-						<SuspendDrawer text="Approval/Step prompt helpers" />
-					</div>
-				</Alert>
-			{:else}
-				<a
-					href="https://www.windmill.dev/docs/flows/flow_approval"
-					target="_blank"
-					class="text-blue-500">Approval/Prompt Steps Documentation</a
-				>
+				{#if !noEditor}
+					<div class="mt-2"></div>
+					<Alert title="审批/提示步骤" type="info">
+						审批/提示步骤会暂停流程，直到指定人员完成审批或填写表单。详细配置在该步骤的“高级”->“暂停”设置中。提示步骤是一种带输入内容的审批步骤，可以由调用方自行确认。<br
+						/><br />
+						需要辅助配置时，可打开
+						<div class="inline-flex">
+							<SuspendDrawer text="审批/提示步骤助手" />
+						</div>
+					</Alert>
+				{:else}
+					<div class="text-sm text-secondary">审批/提示步骤会暂停流程，直到指定人员完成处理。</div>
+				{/if}
 			{/if}
-		{/if}
-		<h3 class="pb-2 pt-4 flex gap-x-8 flex-wrap">
-			<div>
-				Inline new <span class="text-blue-500 dark:text-blue-400"
-					>{kind == 'script' ? 'action' : kind}</span
-				>
-				script
-				<Tooltip
+			<h3 class="pb-2 pt-4 flex gap-x-8 flex-wrap">
+				<div>
+					内联新增<span class="text-blue-500 dark:text-blue-400"
+						>{kind == 'script'
+							? '动作'
+							: kind == 'trigger'
+								? '触发'
+								: kind == 'approval'
+									? '审批'
+									: kind}</span
+					>
+					脚本
+					<Tooltip
 					documentationLink={kind === 'script'
 						? 'https://www.windmill.dev/docs/flows/editor_components#flow-actions'
 						: kind === 'trigger'
@@ -229,23 +196,20 @@
 							: kind === 'approval'
 								? 'https://www.windmill.dev/docs/flows/flow_approval'
 								: 'https://www.windmill.dev/docs/getting_started/flows_quickstart#flow-editor'}
-				>
-					Embed <span>{kind == 'script' ? 'action' : kind}</span> script directly inside a flow instead
-					of saving the script into your workspace for reuse. You can always save an inline script to
-					your workspace later.
-				</Tooltip>
+					>
+						将脚本直接嵌入流程中，而不是先保存到工作区复用。后续仍然可以把内联脚本保存到工作区。
+					</Tooltip>
 			</div>
 			<DefaultScripts />
 		</h3>
 		{#if noEditor}
 			<div
-				class="py-0.5 text-2xs {summary == undefined || summary == ''
-					? 'text-red-600'
-					: 'text-ternary'}"
-				>Pick a summary first, it will be used to create a separate file whose name will be derived
-				from the summary</div
-			>
-			<input class="w-full" type="text" bind:value={summary} placeholder="Summary" />
+					class="py-0.5 text-2xs {summary == undefined || summary == ''
+						? 'text-red-600'
+						: 'text-ternary'}"
+					>请先填写摘要，系统会用它生成独立文件名。</div
+				>
+				<input class="w-full" type="text" bind:value={summary} placeholder="摘要" />
 			<div class="pb-2"></div>
 		{/if}
 		<div class="flex flex-row flex-wrap gap-2" id="flow-editor-action-script">
@@ -270,7 +234,7 @@
 		</div>
 
 		{#if !failureModule && !preprocessorModule && customUi?.aiSandbox != false}
-			<h3 class="pb-2 pt-4">AI Sandbox</h3>
+				<h3 class="pb-2 pt-4">AI 沙盒</h3>
 			<div class="flex flex-row flex-wrap gap-2">
 				<FlowScriptPicker
 					label="Claude Code"
@@ -287,19 +251,17 @@
 			</div>
 		{/if}
 
-		<h3 class="mb-2 mt-6"
-			>Use pre-made <span class="text-blue-500 dark:text-blue-400"
-				>{kind == 'script' ? 'action' : kind}</span
-			> script</h3
-		>
-		{#if pick_existing == 'hub'}
-			<PickHubScript bind:filter {kind} on:pick>
-				<ToggleHubWorkspace bind:selected={pick_existing} />
-			</PickHubScript>
-		{:else}
-			<WorkspaceScriptPicker displayLock bind:filter {kind} on:pick>
-				<ToggleHubWorkspace bind:selected={pick_existing} />
-			</WorkspaceScriptPicker>
-		{/if}
+			<h3 class="mb-2 mt-6"
+				>使用已有<span class="text-blue-500 dark:text-blue-400"
+					>{kind == 'script'
+						? '动作'
+						: kind == 'trigger'
+							? '触发'
+							: kind == 'approval'
+								? '审批'
+								: kind}</span
+				>脚本</h3
+			>
+			<WorkspaceScriptPicker displayLock bind:filter {kind} on:pick />
 	{/if}
 </div>

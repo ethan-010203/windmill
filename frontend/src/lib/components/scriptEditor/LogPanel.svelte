@@ -227,14 +227,11 @@
 												{#if previewIsLoading}
 													<Loader2 class="animate-spin" />
 												{:else}
-													Test to see the result here
+													运行测试后在这里查看结果
 												{/if}
 											</span>
-											<Tooltip
-												documentationLink="https://www.windmill.dev/docs/core_concepts/rich_display_rendering"
-											>
-												The result renderer in Windmill supports rich display rendering, allowing
-												you to customize the display format of your results.
+											<Tooltip>
+												结果渲染器支持富文本展示，可以按需要自定义结果的展示格式。
 											</Tooltip>
 										</div>
 									{/if}

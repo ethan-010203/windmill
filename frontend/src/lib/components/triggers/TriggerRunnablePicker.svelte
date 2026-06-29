@@ -18,8 +18,6 @@
 		isOperator: boolean
 		promptText?: string
 		promptClass?: string
-		// Per-trigger "Create from template" button (hub URL, variant and any
-		// extra guard/tooltip differ per trigger kind, so the caller owns it).
 		createButton?: Snippet
 	}
 
@@ -31,8 +29,7 @@
 		canWrite,
 		isOperator,
 		promptText = 'Pick a script or flow to be triggered',
-		promptClass = 'text-xs mb-1 text-primary',
-		createButton
+		promptClass = 'text-xs mb-1 text-primary'
 	}: Props = $props()
 </script>
 
@@ -54,6 +51,5 @@
 			allowEdit={!isOperator}
 			clearable
 		/>
-		{@render createButton?.()}
 	</div>
 {/if}

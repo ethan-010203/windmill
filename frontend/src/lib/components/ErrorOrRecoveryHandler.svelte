@@ -45,7 +45,6 @@
 	} from '$lib/gen'
 	import type { ErrorHandler } from '$lib/gen/types.gen'
 	import { inferArgs } from '$lib/infer'
-	import { hubBaseUrlStore } from '$lib/stores'
 
 	import {
 		CheckCircle2,
@@ -77,7 +76,7 @@
 		handlerSelected: ErrorHandler
 		handlerPath: string | undefined
 		handlerExtraArgs: Record<string, any>
-		customScriptTemplate: string
+		customScriptTemplate?: string
 		customHandlerKind?: 'flow' | 'script'
 		customTabTooltip?: import('svelte').Snippet
 		noMargin?: boolean
@@ -86,7 +85,7 @@
 	let {
 		errorOrRecovery,
 		isEditable,
-		toggleText = 'Enable',
+		toggleText = '启用',
 		showScriptHelpText = false,
 		handlerSelected = $bindable('custom'),
 		handlerPath = $bindable(),
@@ -357,11 +356,11 @@
 			<ToggleButton label="Teams" value="teams" {item} disabled={!isEditable} />
 			<ToggleButton label="Email" value="email" {item} disabled={!isEditable} />
 			<ToggleButton
-				label="Custom"
+				label="自定义"
 				value="custom"
 				{item}
 				disabled={!isEditable}
-				tooltip={customTabTooltip ? 'Custom error handler with script or flow' : undefined}
+				tooltip={customTabTooltip ? '使用脚本或流程作为自定义错误处理器' : undefined}
 			/>
 		{/snippet}
 	</ToggleButtonGroup>
@@ -380,7 +379,7 @@
 						clearable
 					/>
 
-					{#if !handlerPath}
+					{#if !handlerPath && customScriptTemplate}
 						<Button
 							btnClasses="ml-4 whitespace-nowrap"
 							variant="default"
@@ -395,12 +394,7 @@
 				</div>
 				{#if showScriptHelpText}
 					<div class="text-2xs text-secondary">
-						可以在资源中心查看错误处理脚本示例：<a
-							target="_blank"
-							href="{$hubBaseUrlStore}/failures"
-						>
-							打开示例</a
-						>
+						请选择工作区中已有的错误处理脚本，或先在脚本页面创建内部处理脚本。
 					</div>
 				{/if}
 			</div>
@@ -419,7 +413,7 @@
 						/>
 					{/await}
 					{#if customHandlerSchema && customHandlerSchema.properties && Object.keys(customHandlerSchema.properties).length === 0}
-						<div class="text-xs text-secondary">This error handler takes no extra arguments</div>
+						<div class="text-xs text-secondary">该错误处理器不需要额外参数</div>
 					{/if}
 				</div>
 			{/if}
